@@ -38,7 +38,7 @@ body {
     align-items: center; /* 中央揃え */
     min-height: 50vh; /* 最小の高さを確保 */
     max-width: 90%; /* スマホでの最大幅 */
-    margin: 20px auto; /* ★ここを修正: 上下20px、左右をautoにして水平方向中央寄せ */
+    margin: 20px; 
 }
 
 .display-area {
