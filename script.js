@@ -143,6 +143,7 @@ const selectedImage = document.getElementById('selectedImage');
 const selectedName = document.getElementById('selectedName'); // これはimg要素
 const honorific = document.getElementById('honorific'); // 新しく追加した要素
 const startButton = document.getElementById('startButton'); // これがbutton要素になる
+const congratulationsMessage = document.getElementById('congratulationsMessage'); // ★修正: これを追加
 
 // 画像が保存されているフォルダのパス
 const imageFolderPath = 'images/';
@@ -166,17 +167,15 @@ function initializeLottery() {
         selectedImage.style.opacity = '0';
     }
     if (selectedName) {
-        selectedName.classList.add('hidden');
-        selectedName.style.transition = 'none';
-        selectedName.style.opacity = '0';
         selectedName.src = ""; // 画像のsrcもクリア
     }
-    if (honorific) { // honorificも初期化
-        honorific.classList.add('hidden');
-        honorific.style.transition = 'none';
-        honorific.style.opacity = '0';
+    const resultActions = document.querySelector('.result-actions');
+    if (resultActions) { // result-actionsも初期化
+        resultActions.classList.add('hidden');
+        resultActions.style.transition = 'none';
+        resultActions.style.opacity = '0';
     }
-    if (congratulationsMessage) { // ここを追加
+    if (congratulationsMessage) {
         congratulationsMessage.classList.add('hidden');
         congratulationsMessage.style.transition = 'none';
         congratulationsMessage.style.opacity = '0';
@@ -191,14 +190,10 @@ function initializeLottery() {
     console.log("initializeLottery: Initialization complete. currentParticipants length:", currentParticipants.length);
 }
 
-
-
-
-
 // 残り人数を更新する関数
 function updateRemainingCount() {
     console.log("updateRemainingCount: Updating count. currentParticipants length:", currentParticipants.length);
-   
+    // TODO: ここに残り人数を表示するロジックを実装する
 }
 
 // --- イベントリスナーの設定 ---
@@ -260,28 +255,25 @@ function handleStartButtonClick() {
 
     startButton.style.pointerEvents = 'none';
 
+    // 全ての表示要素をシャッフル前に非表示・初期状態に戻す
     if (selectedImage) {
         selectedImage.classList.add('hidden');
         selectedImage.style.transition = 'none';
         selectedImage.style.transform = 'scale(0)';
         selectedImage.style.opacity = '0';
     }
-    if (selectedName) {
-        selectedName.classList.add('hidden');
-        selectedName.style.transition = 'none';
-        selectedName.style.opacity = '0';
-        selectedName.src = ""; // シャッフル前に名前画像をクリア
+    const resultActions = document.querySelector('.result-actions');
+    if (resultActions) {
+        resultActions.classList.add('hidden');
+        resultActions.style.transition = 'none';
+        resultActions.style.opacity = '0';
     }
-    if (honorific) { // シャッフル前に「さん」を非表示
-        honorific.classList.add('hidden');
-        honorific.style.transition = 'none';
-        honorific.style.opacity = '0';
-    }
-    if (congratulationsMessage) { // シャッフル前にメッセージを非表示
+    if (congratulationsMessage) {
         congratulationsMessage.classList.add('hidden');
         congratulationsMessage.style.transition = 'none';
         congratulationsMessage.style.opacity = '0';
     }
+
 
     shuffleIntervalId = setInterval(() => {
         const tempRandomIndex = Math.floor(Math.random() * allParticipants.length);
@@ -289,17 +281,12 @@ function handleStartButtonClick() {
 
         if (selectedImage) {
             selectedImage.src = imageFolderPath + tempParticipant.image;
-            selectedImage.classList.remove('hidden');
+            selectedImage.classList.remove('hidden'); // シャッフル中は画像を常に表示
             selectedImage.style.transition = 'none';
-            selectedImage.style.transform = 'scale(1)';
+            selectedImage.style.transform = 'scale(1)'; // シャッフル中は拡大しない
             selectedImage.style.opacity = '1';
         }
-        if (selectedName) {
-            selectedName.src = imageFolderPath + tempParticipant.nameImage; // 名前画像をセット
-            selectedName.classList.remove('hidden');
-            selectedName.style.transition = 'none';
-            selectedName.style.opacity = '1';
-        }
+        // 名前画像と「さん」はシャッフル中は表示しないため、ここでは操作しない
     }, SHUFFLE_INTERVAL);
 
     setTimeout(() => {
@@ -314,22 +301,19 @@ function handleStartButtonClick() {
         if (selectedImage) selectedImage.src = imageFolderPath + selectedParticipant.image;
         if (selectedName) selectedName.src = imageFolderPath + selectedParticipant.nameImage;
 
+
+        // 結果表示のための準備（初期状態に戻してからアニメーション）
         if (selectedImage) {
             selectedImage.style.transition = 'none';
             selectedImage.style.transform = 'scale(0)';
             selectedImage.style.opacity = '0';
         }
-        if (selectedName) {
-            selectedName.style.transition = 'none';
-            selectedName.style.opacity = '0';
-            selectedName.classList.add('hidden');
+        if (resultActions) { // result-actionsも初期状態に戻す
+            resultActions.style.transition = 'none';
+            resultActions.style.opacity = '0';
+            resultActions.classList.add('hidden');
         }
-        if (honorific) { // 結果表示前に「さん」も非表示に戻す
-            honorific.style.transition = 'none';
-            honorific.style.opacity = '0';
-            honorific.classList.add('hidden');
-        }
-        if (congratulationsMessage) { // 結果表示前にメッセージも非表示に戻す
+        if (congratulationsMessage) {
             congratulationsMessage.style.transition = 'none';
             congratulationsMessage.style.opacity = '0';
             congratulationsMessage.classList.add('hidden');
@@ -343,15 +327,10 @@ function handleStartButtonClick() {
                 selectedImage.style.transform = 'scale(1)';
                 selectedImage.style.opacity = '1';
             }
-            if (selectedName) {
-                selectedName.style.transition = 'opacity 1.5s ease-in-out';
-                selectedName.classList.remove('hidden');
-                selectedName.style.opacity = '1';
-            }
-            if (honorific) { // 「さん」を表示
-                honorific.style.transition = 'opacity 1.5s ease-in-out';
-                honorific.classList.remove('hidden');
-                honorific.style.opacity = '1';
+            if (resultActions) { // result-actionsを表示
+                resultActions.style.transition = 'opacity 1.5s ease-in-out';
+                resultActions.classList.remove('hidden');
+                resultActions.style.opacity = '1';
             }
             if (congratulationsMessage) { // メッセージを表示
                 congratulationsMessage.style.transition = 'opacity 1.5s ease-in-out';
@@ -370,8 +349,7 @@ function handleStartButtonClick() {
                 startButton.style.pointerEvents = 'auto';
             }
 
-        }, 50);
+        }, 50); // 短い遅延を入れてtransitionを有効にする
 
     }, SHUFFLE_DURATION);
 }
-
