@@ -166,15 +166,21 @@ function initializeLottery() {
         selectedImage.style.transform = 'scale(0)';
         selectedImage.style.opacity = '0';
     }
-    if (selectedName) {
-        selectedName.src = ""; // 画像のsrcもクリア
-    }
+    // ★修正: result-actionsも初期化
     const resultActions = document.querySelector('.result-actions');
-    if (resultActions) { // result-actionsも初期化
+    if (resultActions) {
         resultActions.classList.add('hidden');
         resultActions.style.transition = 'none';
         resultActions.style.opacity = '0';
     }
+    if (selectedName) { // selectedNameのsrcをクリア
+        selectedName.src = "";
+    }
+    // honorificはresult-actionsにhiddenが付いているので、個別のhiddenは不要
+    // if (honorific) {
+    //     honorific.classList.add('hidden');
+    // }
+
     if (congratulationsMessage) {
         congratulationsMessage.classList.add('hidden');
         congratulationsMessage.style.transition = 'none';
@@ -327,7 +333,7 @@ function handleStartButtonClick() {
                 selectedImage.style.transform = 'scale(1)';
                 selectedImage.style.opacity = '1';
             }
-            if (resultActions) { // result-actionsを表示
+            if (resultActions) { // ★修正: result-actionsを表示
                 resultActions.style.transition = 'opacity 1.5s ease-in-out';
                 resultActions.classList.remove('hidden');
                 resultActions.style.opacity = '1';
