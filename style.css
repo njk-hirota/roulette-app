@@ -40,20 +40,15 @@ body {
 
 .display-area {
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center; /* コンテンツを垂直方向中央に配置 */
-    gap: 15px; /* ★追加: .display-area内の要素間のスペース */
-    /* iPhone向けに調整された最小・最大の高さ */
-    min-height: 400px; /* スマートフォンでの最小高さ */
-    max-height: 90vh;  /* スマートフォンでの最大高さ (画面の90%) */
-    width: 100%; /* 親のcontainerのpaddingを考慮して100%に */
-    background-color: white;
-    border-radius: 8px;
+    flex-direction: column; /* 要素を縦に並べる */
+    align-items: center; /* 水平方向の中央揃え */
+    justify-content: center; /* 垂直方向の中央揃え */
+    flex-grow: 1;
     position: relative;
-    overflow: hidden; /* コンテンツがはみ出したら隠す */
-    box-sizing: border-box; /* paddingをwidth/heightに含める */
-    padding: 20px; /* スマートフォンでのパディング */
+    width: 100%;
+    min-height: 500px; /* ★スマホでの最小高さをさらに増やしてみる (例: 400px -> 500px) */
+    gap: 15px; /* 要素間のスペース */
+    padding: 20px;
 }
 
 /* 抽選メッセージのスタイル */
@@ -76,45 +71,42 @@ body {
     text-align: center; /* ★追加: テキストが複数行になっても中央揃え */
 }
 
-/* 選ばれた画像のスタイル */
+/* 選ばれた画像（顔写真など） */
 #selectedImage {
-    max-width: 200px;  /* スマートフォンでの最大幅 */
-    max-height: 200px; /* スマートフォンでの最大高さ */
-    object-fit: cover; /* 画像が指定されたサイズ内に収まるように調整（トリミングされる場合あり） */
-    object-position: top; /* 画像を上揃えにする */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-    opacity: 0; /* 初期状態では非表示 */
-    transform: scale(0); /* 初期状態では縮小 */
-    transition: transform 1.0s ease-out, opacity 1.0s ease-in; /* アニメーション */
-    will-change: transform, opacity; /* パフォーマンス最適化 */
-    margin-top: 0; /* ★修正: display-areaのgapに任せるため0に */
+    max-width: 250px;
+    max-height: 250px;
+    width: auto;
+    height: auto;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    object-fit: contain;
+    opacity: 0;
+    transform: scale(0);
+    transition: transform 0.5s ease-out, opacity 0.5s ease-in;
+    margin-top: 0; /* selectedImageの上マージンは0でOK */
 }
-
-/* 結果表示アクションのコンテナ (画像と「さん」をまとめる) */
-.result-actions {
-    display: flex; /* ★追加: flexコンテナにする */
-    align-items: center; /* ★追加: 垂直方向中央揃え */
-    justify-content: center; /* ★追加: 水平方向中央揃え */
-    gap: 5px; /* ★追加: 名前画像と「さん」の間のスペース */
-    opacity: 0; /* 初期状態では非表示 */
-    transition: opacity 1.5s ease-in-out;
-    will-change: opacity;
-    /* selectedNameとhonorificのbottom: 2mm; の代わりにこれらを調整 */
-    margin-top: 0; /* display-areaのgapに任せる */
-}
-/* JSで表示・非表示を切り替えるため、初期hiddenはJSに任せる */
-/* .result-actions.hidden { opacity: 0; pointer-events: none; } */
 
 /* 選ばれた名前の画像 */
 #selectedName {
-    max-width: 80%; /* スマホでの最大幅を大きめに設定 */
-    max-height: 180px; /* スマホでの最大高さを設定 */
+    max-width: 80%;
+    max-height: 180px; /* このままでOKか、必要なら調整 */
     width: auto;
     height: auto;
-    object-fit: contain; /* 画像全体を表示し、アスペクト比を維持 */
-    margin-top: 10px; /* 必要に応じて調整 */
-    opacity: 0; /* 初期は非表示 (JSで制御されるのでこれは念のため) */
-    transition: opacity 1.5s ease-in-out; /* フェードインアニメーション用 */
+    object-fit: contain;
+    margin-top: 5px; /* selectedImage との間隔を狭くする */
+    /* opacityはJSで制御されるのでCSSの初期値は気にしなくて良い */
+    /* transitionもJSで制御されるのでCSSの初期値は気にしなくて良い */
+}
+
+/* result-actions コンテナ */
+.result-actions {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    margin-top: 10px; /* selectedImageとの間隔。ここも調整の余地あり */
+    opacity: 0; /* 初期は非表示 */
+    transition: opacity 1.5s ease-in-out;
 }
 
 /* 「さん」の敬称のスタイル */
@@ -182,7 +174,7 @@ body {
     }
 
     .display-area {
-        min-height: 500px; /* PCでの表示エリアの最小高さを大きく */
+        min-height: 600px; /* PCでの表示エリアの最小高さを大きく */
         max-height: 700px; /* PCでの表示エリアの最大高さを固定（任意） */
         padding: 30px; /* PC向けのパディング */
         gap: 20px; /* ★PC向けの要素間のスペースを大きく */
