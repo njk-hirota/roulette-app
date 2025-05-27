@@ -9,7 +9,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 100vh; /* これによりコンテナが垂直方向の中央に配置されます */
+    min-height: 100vh;
     margin: 0;
     background-color: #f0f0f0; /* 背景色を設定 */
     /* overflow: hidden; はPCでスクロールを許可したい場合にコメントアウト解除 */
@@ -28,7 +28,7 @@ body {
 
 .container {
     background-color: white;
-    padding: 20px; /* ★上下左右のパディングを減らす (例: 30px 50px -> 20px) */
+    padding: 30px 50px;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     text-align: center;
@@ -36,7 +36,7 @@ body {
     flex-direction: column; /* 垂直方向に要素を並べる */
     justify-content: space-between; /* 要素間のスペースを均等に */
     align-items: center; /* 中央揃え */
-    min-height: auto; /* ★最小の高さを自動調整に（コンテンツに合わせて変化） */
+    min-height: 50vh; /* 最小の高さを確保 */
     max-width: 90%; /* スマホでの最大幅 */
     margin: 20px; /* 余白を追加 */
 }
@@ -49,9 +49,9 @@ body {
     flex-grow: 1; /* 親要素の残りのスペースを埋める */
     position: relative; /* 子要素の絶対配置の基準 */
     width: 100%;
-    min-height: 350px; /* ★スマホでの最小高さを調整 (例: 500px -> 350px) */
+    min-height: 400px; /* 前回の調整値 */
     gap: 15px; /* 要素間のスペース */
-    padding: 10px; /* ★表示エリアのパディングを減らす */
+    padding: 20px;
 }
 
 #congratulationsMessage {
@@ -81,7 +81,7 @@ body {
     opacity: 0; /* 初期は非表示 */
     transform: scale(0); /* 初期は縮小 */
     transition: transform 0.5s ease-out, opacity 0.5s ease-in; /* アニメーション */
-    margin-top: 0; /* ★調整 */
+    margin-top: 0; /* 調整 */
 }
 
 /* 選ばれた名前の画像 */
@@ -91,12 +91,13 @@ body {
     width: auto;
     height: auto;
     object-fit: contain; /* 画像全体を表示し、アスペクト比を維持 */
-    margin-top: 5px; /* ★調整 */
+    margin-top: 5px; /* 調整 */
     opacity: 0; /* 初期は非表示 (JSで制御されるのでこれは念のため) */
     transition: opacity 1.5s ease-in-out; /* フェードインアニメーション用 */
 }
 
 /* result-actions コンテナ（名前画像と「さん」をまとめる部分） */
+/* ※今回は「さん」を削除しましたが、将来的に追加する可能性やレイアウトの親として残しておくと便利です */
 .result-actions {
     display: flex;
     flex-direction: row; /* 横並び */
@@ -146,15 +147,15 @@ body {
 
 @media (min-width: 769px) {
     .container {
-        padding: 30px 50px; /* ★PC向けのパディングを調整 (例: 40px 70px -> 30px 50px) */
-        max-width: 800px; /* PC向けの最大幅を維持 */
+        padding: 40px 70px; /* PC向けのパディングを大きく */
+        max-width: 800px; /* PC向けの最大幅を大きく */
     }
 
     .display-area {
-        min-height: 450px; /* ★PCでの表示エリアの最小高さを調整 (例: 600px -> 450px) */
-        /* max-height: 700px; */ /* これは任意。もしコンテンツが入りきらないなら調整 */
-        padding: 20px; /* ★PC向けのパディングを減らす */
-        gap: 20px; /* PC向けの要素間のスペース */
+        min-height: 550px; /* PCでの表示エリアの最小高さを大きく */
+        max-height: 700px; /* PCでの表示エリアの最大高さを固定（任意） */
+        padding: 30px; /* PC向けのパディング */
+        gap: 20px; /* PC向けの要素間のスペースを大きく */
     }
 
     #congratulationsMessage {
@@ -170,7 +171,7 @@ body {
     }
 
     #selectedName {
-        max-width: 60%;
+        max-width: 60%; /* PCでの名前画像の最大幅 */
         max-height: 220px; /* PCでの名前画像の最大高さ */
         margin-top: 10px; /* PC側も適宜調整 */
     }
