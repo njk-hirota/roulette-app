@@ -141,9 +141,9 @@ const preloadedNameImages = [];
 // HTML要素の取得
 const selectedImage = document.getElementById('selectedImage');
 const selectedName = document.getElementById('selectedName'); // これはimg要素
-const honorific = document.getElementById('honorific'); // 新しく追加した要素
+// const honorific = document.getElementById('honorific'); // 「さん」を削除したのでこの行は不要
 const startButton = document.getElementById('startButton'); // これがbutton要素になる
-const congratulationsMessage = document.getElementById('congratulationsMessage'); // ★修正: これを追加
+const congratulationsMessage = document.getElementById('congratulationsMessage');
 
 // 画像が保存されているフォルダのパス
 const imageFolderPath = 'images/';
@@ -166,7 +166,6 @@ function initializeLottery() {
         selectedImage.style.transform = 'scale(0)';
         selectedImage.style.opacity = '0';
     }
-    // ★修正: result-actionsも初期化
     const resultActions = document.querySelector('.result-actions');
     if (resultActions) {
         resultActions.classList.add('hidden');
@@ -176,10 +175,7 @@ function initializeLottery() {
     if (selectedName) { // selectedNameのsrcをクリア
         selectedName.src = "";
     }
-    // honorificはresult-actionsにhiddenが付いているので、個別のhiddenは不要
-    // if (honorific) {
-    //     honorific.classList.add('hidden');
-    // }
+    // honorificは削除したので、honorificに関する初期化処理は不要
 
     if (congratulationsMessage) {
         congratulationsMessage.classList.add('hidden');
@@ -292,7 +288,7 @@ function handleStartButtonClick() {
             selectedImage.style.transform = 'scale(1)'; // シャッフル中は拡大しない
             selectedImage.style.opacity = '1';
         }
-        // 名前画像と「さん」はシャッフル中は表示しないため、ここでは操作しない
+        // 名前画像はシャッフル中は表示しないため、ここでは操作しない
     }, SHUFFLE_INTERVAL);
 
     setTimeout(() => {
@@ -333,7 +329,7 @@ function handleStartButtonClick() {
                 selectedImage.style.transform = 'scale(1)';
                 selectedImage.style.opacity = '1';
             }
-            if (resultActions) { // ★修正: result-actionsを表示
+            if (resultActions) { // result-actionsを表示
                 resultActions.style.transition = 'opacity 1.5s ease-in-out';
                 resultActions.classList.remove('hidden');
                 resultActions.style.opacity = '1';
