@@ -34,10 +34,9 @@ body {
     text-align: center;
     display: flex; /* flexboxを有効化 */
     flex-direction: column; /* 垂直方向に要素を並べる */
-    justify-content: space-between; /* 要素間のスペースを均等に */
     align-items: center; /* 中央揃え */
     min-height: 50vh; /* 最小の高さを確保（変更なし） */
-    /* max-width: 90%; */ /* この行はコメントアウトまたは削除された状態を維持 */
+    justify-content: center; /* ★代わりに中央揃えに設定（またはflex-startで上寄せ） */
     width: 360px; /* スマートフォンでの固定幅 */
     margin: 20px auto; /* 上下20px、左右をautoにして水平方向中央寄せ */
 }
