@@ -43,8 +43,7 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: center; /* コンテンツを垂直方向中央に配置 */
-    gap: 15px; /* ★追加: .display-area内の要素間のスペース */
-    /* iPhone向けに調整された最小・最大の高さ */
+    gap: 15px; /* .display-area内の要素間のスペース */
     min-height: 400px; /* スマートフォンでの最小高さ */
     max-height: 90vh;  /* スマートフォンでの最大高さ (画面の90%) */
     width: 100%; /* 親のcontainerのpaddingを考慮して100%に */
@@ -58,9 +57,8 @@ body {
 
 /* 抽選メッセージのスタイル */
 #congratulationsMessage {
-    font-size: 1.8em; /* スマホ向けのフォントサイズ */
-    font-size: 5vw; /* ★修正: 画面幅に合わせてフォントサイズを調整 (スマホで試して最適な値を調整) */
-    max-width: 90%; /* ★追加: 左右見切れを防ぐ */
+    font-size: 5vw; /* 画面幅に合わせてフォントサイズを調整 (スマホで試して最適な値を調整) */
+    max-width: 90%; /* 左右見切れを防ぐ */
     color: #FFD700; /* 金色 */
     font-weight: bold;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* 影を追加 */
@@ -72,8 +70,8 @@ body {
     transition: opacity 1.5s ease-in-out;
     z-index: 3; /* 他の要素より手前に表示 */
     pointer-events: none; /* クリックイベントを無効化 */
-    white-space: nowrap; /* ★修正: 必要であればコメントアウトし、テキストを折り返す */
-    text-align: center; /* ★追加: テキストが複数行になっても中央揃え */
+    white-space: nowrap; /* テキストの折り返しを防ぐ */
+    text-align: center; /* テキストが複数行になっても中央揃え */
 }
 
 /* 選ばれた画像のスタイル */
@@ -87,36 +85,29 @@ body {
     transform: scale(0); /* 初期状態では縮小 */
     transition: transform 1.0s ease-out, opacity 1.0s ease-in; /* アニメーション */
     will-change: transform, opacity; /* パフォーマンス最適化 */
-    margin-top: 0; /* ★修正: display-areaのgapに任せるため0に */
+    margin-top: 0; /* display-areaのgapに任せるため0に */
 }
 
 /* 結果表示アクションのコンテナ (画像と「さん」をまとめる) */
 .result-actions {
-    display: flex; /* ★追加: flexコンテナにする */
-    align-items: center; /* ★追加: 垂直方向中央揃え */
-    justify-content: center; /* ★追加: 水平方向中央揃え */
-    gap: 5px; /* ★追加: 名前画像と「さん」の間のスペース */
-    opacity: 0; /* 初期状態では非表示 */
-    transition: opacity 1.5s ease-in-out;
-    will-change: opacity;
-    /* selectedNameとhonorificのbottom: 2mm; の代わりにこれらを調整 */
+    display: flex; /* flexコンテナにする */
+    align-items: center; /* 垂直方向中央揃え */
+    justify-content: center; /* 水平方向中央揃え */
+    gap: 5px; /* 名前画像と「さん」の間のスペース */
+    /* opacity と transition はJSで子要素に個別に適用するため削除 */
+    will-change: opacity; /* 念のため残しておく */
     margin-top: 0; /* display-areaのgapに任せる */
 }
-/* JSで表示・非表示を切り替えるため、初期hiddenはJSに任せる */
-/* .result-actions.hidden { opacity: 0; pointer-events: none; } */
-
 
 /* 選ばれた名前の画像のスタイル */
 #selectedName {
     max-width: 150px;  /* スマートフォンでの最大幅 (名前の画像) */
     max-height: 50px;  /* スマートフォンでの最大高さ (名前の画像。必要に応じて調整) */
     object-fit: contain; /* アスペクト比を維持しつつ、指定されたサイズ内に収める */
-    /* opacity: 0; は .result-actions でまとめて管理 */
-    /* transition: opacity 1.5s ease-in-out; は .result-actions でまとめて管理 */
-    /* will-change: opacity; は .result-actions でまとめて管理 */
-    /* vertical-align: bottom; は flexbox に任せるため削除 */
+    opacity: 0; /* JSで管理されるため、ここでは初期値として設定 */
+    transition: opacity 1.5s ease-in-out; /* JSで管理されるため、ここでは初期値として設定 */
+    will-change: opacity;
     line-height: 1; /* 行の高さを調整 */
-    /* position: relative; bottom: 2mm; は flexbox に任せるため削除 */
 }
 
 /* 「さん」の敬称のスタイル */
@@ -124,12 +115,10 @@ body {
     font-size: 1.2em;
     color: black;
     font-family: "Yu Gothic", "游ゴシック", YuGothic, "ヒラギノ角ゴ ProN", "Hiragino Kaku Gothic ProN", "メイリオ", Meiryo, sans-serif;
-    /* opacity: 0; は .result-actions でまとめて管理 */
-    /* transition: opacity 1.5s ease-in-out; は .result-actions でまとめて管理 */
-    /* will-change: opacity; は .result-actions でまとめて管理 */
-    /* vertical-align: bottom; は flexbox に任せるため削除 */
+    opacity: 0; /* JSで管理されるため、ここでは初期値として設定 */
+    transition: opacity 1.5s ease-in-out; /* JSで管理されるため、ここでは初期値として設定 */
+    will-change: opacity;
     line-height: 1;
-    /* position: relative; bottom: 2mm; は flexbox に任せるため削除 */
 }
 
 /* 抽選開始ボタンのコンテナスタイル */
@@ -162,10 +151,11 @@ body {
     transform: scale(0.95); /* クリック時に少し縮小 */
 }
 
-/* 隠すクラス */
+/* 隠すクラス - opacityとdisplayの併用でアニメーションの後に完全に消す */
 .hidden {
-    opacity: 0 !important; /* 強制的に透明に */
+    opacity: 0; /* アニメーションのためにopacity:0を維持 */
     pointer-events: none; /* クリックイベントを無効化 */
+    display: none; /* アニメーション後に完全にレイアウトから削除 */
 }
 
 /* スピニング中の表示クラス */
@@ -187,20 +177,20 @@ body {
         min-height: 500px; /* PCでの表示エリアの最小高さを大きく */
         max-height: 700px; /* PCでの表示エリアの最大高さを固定（任意） */
         padding: 30px; /* PC向けのパディング */
-        gap: 20px; /* ★PC向けの要素間のスペースを大きく */
+        gap: 20px; /* PC向けの要素間のスペースを大きく */
     }
 
     #congratulationsMessage {
         font-size: 2.5em; /* PC向けのフォントサイズ */
-        font-size: initial; /* ★修正: PCではvw単位を解除 */
+        font-size: initial; /* PCではvw単位を解除 */
         top: 50px; /* PC向けのトップ位置 */
     }
 
     #selectedImage {
         max-width: 350px;  /* PCでの最大幅 */
         max-height: 350px; /* PCでの最大高さ */
-        margin-top: 0; /* ★修正: display-areaのgapに任せるため0に */
-        margin-bottom: 0; /* ★修正: display-areaのgapに任せるため0に */
+        margin-top: 0; /* display-areaのgapに任せるため0に */
+        margin-bottom: 0; /* display-areaのgapに任せるため0に */
     }
 
     #selectedName {
