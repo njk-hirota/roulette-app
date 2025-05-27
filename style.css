@@ -47,10 +47,10 @@ body {
     align-items: center; /* 水平方向の中央揃え */
     justify-content: center; /* 垂直方向の中央揃え */
     flex-grow: 0; /* 余分な空間を吸収しないようにする */
-    position: relative; /* 子要素の絶対配置の基準 */
+    position: relative; /* 子要素の絶対配置の基準（congratulationsMessageがabsoluteでなくなるので必須ではないが、念のため残す） */
     width: 100%; /* 親の幅に合わせる */
     min-height: auto; /* コンテンツの高さに合わせる */
-    gap: 0px; /* 要素間のスペースを詰める */
+    gap: 10px; /* ★子要素間のスペースを調整 (例: 0px -> 10px) */
     padding: 0px; /* 表示エリアのパディングを維持 (必要であれば微調整) */
 }
 
@@ -58,15 +58,21 @@ body {
     font-size: 1.5em; /* フォントサイズ */
     color: gold; /* 強調色 */
     font-weight: bold;
-    margin-bottom: 0; /* おめでとうメッセージの下マージンを詰める */
-    position: absolute; /* 絶対配置 */
-    top: 5px; /* 上からの位置を詰める */
-    left: 50%;
+    margin-bottom: 0; /* 下マージンを詰める */
+    /* position: absolute; */ /* ★この行をコメントアウトまたは削除 */
+    /* top: 5px; */ /* ★この行をコメントアウトまたは削除 */
+    left: 50%; /* 中央寄せ */
     transform: translateX(-50%); /* 中央寄せ */
     white-space: nowrap; /* 折り返しを防ぐ */
     z-index: 10; /* 他の要素より手前に表示 */
     opacity: 0; /* 初期は非表示 */
     transition: opacity 0.5s ease-in-out;
+    /* position: absolute; を外すと、Flexアイテムとしての配置になるため、left/transformは効果が薄れるか、別の配置が必要になる場合があります。
+       もしメッセージを常に中央上部に固定したい場合は、display-areaの外に出すか、display-areaをposition:relativeにしてcongratulationsMessageはabsoluteのままtopを調整（例: top: -30px;）する方法もありますが、まずはこの通常フローの配置を試しましょう。
+       flexアイテムとして中央に配置されるので、left/transformは不要になります。
+    */
+    position: relative; /* ★Flexアイテムとしての配置にするが、transformを使うためにrelativeに */
+    /* left: 0; transform: none; でも良いですが、中央配置はdisplay-areaのalign-itemsで制御されるため */
 }
 
 /* 選ばれた画像（顔写真など） */
@@ -81,7 +87,7 @@ body {
     opacity: 0; /* 初期は非表示 */
     transform: scale(0); /* 初期は縮小 */
     transition: transform 0.5s ease-out, opacity 0.5s ease-in; /* アニメーション */
-    margin-top: 5px; /* おめでとうメッセージを避けるためのマージンをさらに詰める */
+    margin-top: 0px; /* ★congratulationsMessageがフローに戻るので不要 */
 }
 
 /* 選ばれた名前の画像 */
@@ -108,7 +114,7 @@ body {
 }
 
 .start-button-container {
-    margin-top: 10px; /* display-areaとの余白をさらに詰める */
+    margin-top: 10px; /* display-areaとの余白を維持 */
     width: 100%;
     display: flex;
     justify-content: center;
@@ -158,7 +164,7 @@ body {
         flex-grow: 0; /* PC側も0に変更 */
         min-height: auto; /* コンテンツの高さに合わせる */
         max-height: 700px; /* PCでの表示エリアの最大高さを固定（任意） */
-        gap: 0px; /* PC向けの要素間のスペースを詰める */
+        gap: 15px; /* ★PC向けの子要素間のスペースを調整 */
         padding: 0px; /* PC向けのパディングを維持 (必要であれば微調整) */
     }
 
@@ -167,12 +173,14 @@ body {
         font-size: initial; /* PCではvw単位を解除 */
         top: 10px; /* PC向けのトップ位置を維持 */
         margin-bottom: 0;
+        /* position: absolute; */ /* ★この行をコメントアウトまたは削除 */
+        position: relative; /* ★Flexアイテムとしての配置にするが、transformを使うためにrelativeに */
     }
 
     #selectedImage {
         max-width: 350px;  /* PCでの最大幅 */
         max-height: 350px; /* PCでの最大高さ */
-        margin-top: 15px; /* おめでとうメッセージを避けるためのマージンをさらに詰める */
+        margin-top: 0px; /* congratulationsMessageがフローに戻るので不要 */
     }
 
     #selectedName {
@@ -192,7 +200,7 @@ body {
     }
 
     .start-button-container {
-        margin-top: 15px; /* PC側もdisplay-areaとの余白をさらに詰める */
+        margin-top: 15px; /* PC側もdisplay-areaとの余白を維持 */
     }
 
     .action-button {
