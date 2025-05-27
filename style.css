@@ -108,7 +108,7 @@ body {
 /* 選ばれた名前の画像 */
 #selectedName {
     max-width: 80%; /* スマホでの最大幅を大きめに設定 */
-    max-height: 150px; /* スマホでの最大高さを設定 */
+    max-height: 180px; /* スマホでの最大高さを設定 */
     width: auto;
     height: auto;
     object-fit: contain; /* 画像全体を表示し、アスペクト比を維持 */
