@@ -129,7 +129,22 @@ const allParticipants = [
     { name: "早坂 康佑", image: "126.jpg", "nameImage": "画像126.jpg" },
     { name: "隈川 雛奈子", image: "127.jpg", "nameImage": "画像127.jpg" },
 ];
-ロード時の初期表示設定
+
+let currentParticipants = [...allParticipants]; // 抽選可能な参加者のリスト（スプレッド構文でコピー）
+const imageFolderPath = 'images/'; // 画像フォルダのパス
+
+// DOM要素の取得
+const selectedImage = document.getElementById('selectedImage');
+const selectedName = document.getElementById('selectedName');
+const honorific = document.getElementById('honorific');
+const congratulationsMessage = document.getElementById('congratulationsMessage');
+const startButton = document.getElementById('startButton');
+const displayArea = document.querySelector('.display-area'); // .display-area要素も取得
+const resultActions = document.querySelector('.result-actions'); // .result-actions要素も取得
+
+let spinningInterval; // 抽選中の画像切り替え用インターバルID
+
+// ページロード時の初期表示設定
 document.addEventListener('DOMContentLoaded', () => {
     resetDisplay(); // 画面を初期状態にリセット
 });
@@ -140,9 +155,8 @@ function resetDisplay() {
     selectedImage.style.opacity = '0'; // 画像を非表示に
     selectedImage.src = ''; // 画像URLをクリア
 
-    // ★修正：名前の画像と「さん」をまとめて隠す（display: none; にする）
-    // result-actionsにhiddenクラスを付与することで、名前画像と「さん」をまとめて隠す
-    resultActions.classList.add('hidden');
+    // 名前と「さん」をまとめて隠す
+    resultActions.classList.add('hidden'); // result-actionsにhiddenクラスを付与
     selectedName.src = ''; // 名前画像のURLをクリア
 
     // 「おめでとうございます！」メッセージを非表示に
@@ -168,7 +182,7 @@ function handleStartButtonClick() {
     congratulationsMessage.style.opacity = '0'; // アニメーションのためにopacityで隠す
     congratulationsMessage.classList.add('hidden'); // レイアウトからも削除
 
-    // ★修正：名前の画像と「さん」をまとめて隠す
+    // 名前と「さん」をまとめて隠す
     resultActions.classList.add('hidden'); // result-actionsを隠す
     selectedName.style.opacity = '0'; // 個々の要素のopacityも0に
     honorific.style.opacity = '0'; // 個々の要素のopacityも0に
@@ -255,7 +269,7 @@ function showFinalResult() {
             selectedImage.style.opacity = '1';
         }
 
-        // ★修正：result-actionsを表示し、その中の要素も表示する
+        // result-actionsを表示し、その中の要素も表示する
         if (resultActions) {
             resultActions.classList.remove('hidden'); // result-actionsのhiddenクラスを削除して表示
         }
@@ -263,12 +277,10 @@ function showFinalResult() {
         if (selectedName) {
             selectedName.src = imageFolderPath + selectedParticipant.nameImage; // 名前画像を設定
             selectedName.style.transition = 'opacity 1.5s ease-in-out';
-            // selectedName.classList.remove('hidden'); // hiddenクラスはCSSでdisplay:noneを制御
             selectedName.style.opacity = '1'; // フェードイン
         }
         if (honorific) { // 「さん」を表示
             honorific.style.transition = 'opacity 1.5s ease-in-out';
-            // honorific.classList.remove('hidden'); // hiddenクラスはCSSでdisplay:noneを制御
             honorific.style.opacity = '1'; // フェードイン
         }
         if (congratulationsMessage) { // メッセージを表示
