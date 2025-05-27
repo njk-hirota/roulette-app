@@ -110,17 +110,6 @@ body {
     line-height: 1; /* 行の高さを調整 */
 }
 
-/* 「さん」の敬称のスタイル */
-#honorific {
-    font-size: 1.2em;
-    color: black;
-    font-family: "Yu Gothic", "游ゴシック", YuGothic, "ヒラギノ角ゴ ProN", "Hiragino Kaku Gothic ProN", "メイリオ", Meiryo, sans-serif;
-    opacity: 0; /* JSで管理されるため、ここでは初期値として設定 */
-    transition: opacity 1.5s ease-in-out; /* JSで管理されるため、ここでは初期値として設定 */
-    will-change: opacity;
-    line-height: 1;
-}
-
 /* 抽選開始ボタンのコンテナスタイル */
 .start-button-container {
     position: absolute; /* 親要素 .container を基準に絶対配置 */
