@@ -1,0 +1,162 @@
+/* style.css */
+
+/* ------------------------------------------------ */
+/* デフォルトスタイル (スマートフォンなど、小さい画面向けの設定がベース) */
+/* ------------------------------------------------ */
+
+body {
+    font-family: 'Arial', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    background-color: #f0f0f0;
+    /* overflow: hidden; はPCでスクロールを許可したい場合にコメントアウト解除 */
+}
+
+.container {
+    background-color: white;
+    padding: 30px 50px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 90%;
+    max-width: 600px;
+    position: relative;
+}
+
+.display-area {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    /* iPhone向けに調整された最小・最大の高さ */
+    min-height: 400px; /* スマートフォンでの最小高さ */
+    max-height: 90vh;  /* スマートフォンでの最大高さ (画面の90%) */
+    width: 90%; /* 必要に応じて調整 */
+    background-color: white;
+    border-radius: 8px;
+    position: relative;
+    overflow: hidden;
+    box-sizing: border-box;
+    padding: 20px; /* スマートフォンでのパディング */
+}
+
+/* その他の要素も、必要であればデフォルト（スマホ）向けに調整 */
+#congratulationsMessage {
+    font-size: 1.8em; /* スマホ向けのフォントサイズ */
+    color: #FFD700;
+    font-weight: bold;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    position: absolute;
+    top: 20px; /* スマホ向けのトップ位置 */
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0;
+    transition: opacity 1.5s ease-in-out;
+    z-index: 3;
+    pointer-events: none;
+    white-space: nowrap;
+}
+
+#selectedImage {
+    max-width: 200px; /* スマホ向けの最大幅 */
+    max-height: 200px; /* スマホ向けの最大高さ */
+    object-fit: cover;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    opacity: 0;
+    transform: scale(0);
+    transition: transform 1.0s ease-out, opacity 1.0s ease-in;
+    will-change: transform, opacity;
+    margin-top: 50px; /* スマホ向けの画像トップマージン */
+}
+
+#selectedName {
+    max-width: 150px; /* スマホ向けの最大幅 */
+    object-fit: contain; /* アスペクト比を維持しつつ収める */
+    opacity: 0;
+    transition: opacity 1.5s ease-in-out;
+    will-change: opacity;
+    vertical-align: bottom;
+    line-height: 1;
+    position: relative;
+    bottom: 2mm;
+}
+
+.start-button-container {
+    position: absolute;
+    bottom: 10px; /* スマホ向けの下からの距離 */
+    right: 10px; /* スマホ向けの右からの距離 */
+    z-index: 2;
+}
+
+.action-button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px; /* スマホ向けのパディング */
+    border: none;
+    border-radius: 8px;
+    font-size: 0.9em; /* スマホ向けのフォントサイズ */
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease-in-out;
+    min-width: 100px; /* スマホ向けの最小幅 */
+    box-sizing: border-box;
+}
+
+/* ------------------------------------------------ */
+/* PC/タブレット向けのスタイル (769px以上の画面幅に適用) */
+/* ------------------------------------------------ */
+
+@media (min-width: 769px) {
+    .container {
+        padding: 40px 70px;
+        max-width: 800px;
+    }
+
+    .display-area {
+        min-height: 500px;
+        max-height: 700px;
+        padding: 30px;
+        /* PCでのdisplay-areaのflex-direction: column; と justify-content: center; が重要 */
+        /* 要素間の均等なスペースを確保したい場合は、gapプロパティも検討できます */
+        /* gap: 20px; /* 例えば、要素間に20pxの隙間を空ける */
+    }
+
+    #congratulationsMessage {
+        font-size: 2.5em;
+        top: 50px;
+    }
+
+    #selectedImage {
+        max-width: 350px;
+        max-height: 350px;
+        margin-top: 80px;
+        /* ここを調整: 画像の下に十分なスペースを確保 */
+        margin-bottom: 50px; /* 例: 画像の下に50pxのマージンを追加 */
+    }
+
+    #selectedName {
+        max-width: 250px;
+        font-size: 1.2em;
+    }
+
+    /* .result-actions は #selectedName と #honorific を含む要素です */
+    /* もし #selectedImage の margin-bottom だけでは足りない場合、
+       .result-actions の margin-top も調整できます */
+    .result-actions {
+        margin-top: 20px; /* 必要であれば、さらに値を大きくする */
+    }
+
+
+    .start-button-container {
+        bottom: 30px;
+        right: 30px;
+    }
+
+    .action-button {
+        padding: 18px 35px;
+        font-size: 1.4em;
+        min-width: 180px;
+    }
+}
