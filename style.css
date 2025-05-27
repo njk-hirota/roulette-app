@@ -37,8 +37,9 @@ body {
     justify-content: space-between; /* 要素間のスペースを均等に */
     align-items: center; /* 中央揃え */
     min-height: 50vh; /* 最小の高さを確保 */
-    max-width: 90%; /* スマホでの最大幅 */
-    margin: 20px; 
+    /* max-width: 90%; */ /* ★この行をコメントアウトまたは削除 */
+    width: 360px; /* ★スマートフォンでの固定幅 (例: 360px)。必要に応じて調整してください */
+    margin: 20px auto; /* 上下20px、左右をautoにして水平方向中央寄せ */
 }
 
 .display-area {
@@ -48,8 +49,8 @@ body {
     justify-content: center; /* 垂直方向の中央揃え */
     flex-grow: 1; /* 親要素の残りのスペースを埋める */
     position: relative; /* 子要素の絶対配置の基準 */
-    width: 100%;
-    min-height: 400px; /* 前回の調整値 */
+    width: 100%; /* 親の幅に合わせる */
+    min-height: 400px;
     gap: 15px; /* 要素間のスペース */
     padding: 20px;
 }
@@ -147,8 +148,9 @@ body {
 @media (min-width: 769px) {
     .container {
         padding: 40px 70px; /* PC向けのパディングを大きく */
-        max-width: 800px; /* PC向けの最大幅を大きく */
-        margin: auto; /* ★ここを修正: PCでも水平方向中央寄せ */
+        max-width: 800px; /* PC向けの最大幅を維持（PCでは可変にしたい場合） */
+        width: 600px; /* PCでの固定幅をピクセルで指定 (例: 600px)。必要に応じて調整 */
+        margin: auto; /* PCでも水平方向中央寄せ */
     }
 
     .display-area {
