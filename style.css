@@ -28,16 +28,16 @@ body {
 
 .container {
     background-color: white;
-    padding: 30px 50px;
+    padding: 15px 30px; /* コンテナのパディングを大幅に削減 */
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     text-align: center;
     display: flex; /* flexboxを有効化 */
     flex-direction: column; /* 垂直方向に要素を並べる */
+    justify-content: center; /* 中央揃えを維持 */
     align-items: center; /* 中央揃え */
-    min-height: 50vh; /* 最小の高さを確保（変更なし） */
-    justify-content: center; /* ★代わりに中央揃えに設定（またはflex-startで上寄せ） */
-    width: 360px; /* スマートフォンでの固定幅 */
+    min-height: 400px; /* コンテナの最小高さをさらに調整 */
+    width: 360px; /* スマートフォンでの固定幅を維持 */
     margin: 20px auto; /* 上下20px、左右をautoにして水平方向中央寄せ */
 }
 
@@ -46,21 +46,21 @@ body {
     flex-direction: column; /* 要素を縦に並べる */
     align-items: center; /* 水平方向の中央揃え */
     justify-content: center; /* 垂直方向の中央揃え */
-    flex-grow: 1; /* 親要素の残りのスペースを埋める */
+    flex-grow: 0; /* 余分な空間を吸収しないようにする */
     position: relative; /* 子要素の絶対配置の基準 */
     width: 100%; /* 親の幅に合わせる */
-    min-height: 520px; /* 前回の調整値（変更なし） */
-    gap: 0px; /* ★要素間のスペースを詰める (例: 15px -> 5px) */
-    padding: 0px; /* ★表示エリアのパディングを減らす (例: 20px -> 10px) */
+    min-height: auto; /* コンテンツの高さに合わせる */
+    gap: 0px; /* 要素間のスペースを詰める */
+    padding: 0px; /* 表示エリアのパディングを維持 (必要であれば微調整) */
 }
 
 #congratulationsMessage {
     font-size: 1.5em; /* フォントサイズ */
     color: gold; /* 強調色 */
     font-weight: bold;
-    margin-bottom: 0; /* ★おめでとうメッセージの下マージンを詰める (例: 10px -> 0) */
+    margin-bottom: 0; /* おめでとうメッセージの下マージンを詰める */
     position: absolute; /* 絶対配置 */
-    top: 5px; /* ★上からの位置を詰める (例: 20px -> 5px) */
+    top: 5px; /* 上からの位置を詰める */
     left: 50%;
     transform: translateX(-50%); /* 中央寄せ */
     white-space: nowrap; /* 折り返しを防ぐ */
@@ -81,7 +81,7 @@ body {
     opacity: 0; /* 初期は非表示 */
     transform: scale(0); /* 初期は縮小 */
     transition: transform 0.5s ease-out, opacity 0.5s ease-in; /* アニメーション */
-    margin-top: 20px; /* ★おめでとうメッセージを避けるためのマージンを調整 */
+    margin-top: 5px; /* おめでとうメッセージを避けるためのマージンをさらに詰める */
 }
 
 /* 選ばれた名前の画像 */
@@ -91,7 +91,7 @@ body {
     width: auto;
     height: auto;
     object-fit: contain; /* 画像全体を表示し、アスペクト比を維持 */
-    margin-top: 0px; /* ★画像を詰める (例: 5px -> 0px) */
+    margin-top: 0px; /* 画像を詰める */
     opacity: 0; /* 初期は非表示 (JSで制御されるのでこれは念のため) */
     transition: opacity 1.5s ease-in-out; /* フェードインアニメーション用 */
 }
@@ -102,13 +102,13 @@ body {
     flex-direction: row; /* 横並び */
     align-items: center; /* 垂直方向の中央揃え */
     justify-content: center; /* 水平方向の中央揃え */
-    margin-top: 0px; /* ★selectedImageとの間隔を詰める (例: 10px -> 0px) */
+    margin-top: 0px; /* selectedImageとの間隔を詰める */
     opacity: 0; /* 初期は非表示 */
     transition: opacity 1.5s ease-in-out;
 }
 
 .start-button-container {
-    margin-top: 20px; /* ボタンと表示エリアの間隔 */
+    margin-top: 10px; /* display-areaとの余白をさらに詰める */
     width: 100%;
     display: flex;
     justify-content: center;
@@ -146,40 +146,53 @@ body {
 
 @media (min-width: 769px) {
     .container {
-        padding: 40px 70px; /* PC向けのパディングを大きく */
-        max-width: 800px; /* PC向けの最大幅を維持（PCでは可変にしたい場合） */
-        width: 600px; /* PCでの固定幅をピクセルで指定 (例: 600px) */
+        padding: 20px 40px; /* PC向けのパディングを大幅に削減 */
+        max-width: 800px; /* PC向けの最大幅を維持 */
+        width: 600px; /* PCでの固定幅を維持 */
+        min-height: 550px; /* PC向けのコンテナの最小高さをさらに調整 */
+        justify-content: center; /* 中央揃えを維持 */
         margin: auto; /* PCでも水平方向中央寄せ */
     }
 
     .display-area {
-        min-height: 550px; /* PCでの表示エリアの最小高さを大きく */
+        flex-grow: 0; /* PC側も0に変更 */
+        min-height: auto; /* コンテンツの高さに合わせる */
         max-height: 700px; /* PCでの表示エリアの最大高さを固定（任意） */
-        gap: 10px; /* ★PC向けの要素間のスペースを詰める (例: 20px -> 10px) */
-        padding: 15px; /* ★PC向けのパディングを減らす (例: 30px -> 15px) */
+        gap: 0px; /* PC向けの要素間のスペースを詰める */
+        padding: 0px; /* PC向けのパディングを維持 (必要であれば微調整) */
     }
 
     #congratulationsMessage {
         font-size: 2.5em; /* PC向けのフォントサイズ */
         font-size: initial; /* PCではvw単位を解除 */
-        top: 15px; /* ★PC向けのトップ位置を詰める (例: 50px -> 15px) */
+        top: 10px; /* PC向けのトップ位置を維持 */
         margin-bottom: 0;
     }
 
     #selectedImage {
         max-width: 350px;  /* PCでの最大幅 */
         max-height: 350px; /* PCでの最大高さ */
-        margin-top: 30px; /* ★おめでとうメッセージを避けるためのマージンを調整 */
+        margin-top: 15px; /* おめでとうメッセージを避けるためのマージンをさらに詰める */
     }
 
     #selectedName {
         max-width: 60%; /* PCでの名前画像の最大幅 */
         max-height: 220px; /* PCでの名前画像の最大高さ */
-        margin-top: 0px; /* ★画像を詰める (例: 10px -> 0px) */
+        margin-top: 0px; /* 画像を詰める */
     }
 
     .result-actions {
-        margin-top: 0px; /* ★selectedImageとの間隔を詰める (例: 10px -> 0px) */
+        display: flex;
+        flex-direction: row; /* 横並び */
+        align-items: center; /* 垂直方向の中央揃え */
+        justify-content: center; /* 水平方向の中央揃え */
+        margin-top: 0px; /* selectedImageとの間隔を詰める */
+        opacity: 0; /* 初期は非表示 */
+        transition: opacity 1.5s ease-in-out;
+    }
+
+    .start-button-container {
+        margin-top: 15px; /* PC側もdisplay-areaとの余白をさらに詰める */
     }
 
     .action-button {
