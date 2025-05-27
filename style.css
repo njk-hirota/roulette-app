@@ -73,10 +73,10 @@ body {
 
 /* 選ばれた画像のスタイル */
 #selectedImage {
-    /* ここを修正: max-width/max-height を width/height に変更して固定サイズに */
-    width: 200px;  /* スマートフォンでの固定幅 */
-    height: 200px; /* スマートフォンでの固定高さ */
-    object-fit: cover; /* 指定されたサイズに合わせて画像を切り取る（アスペクト比維持） */
+    /* ここを修正: max-width/max-height に戻し、object-fit: contain; を適用 */
+    max-width: 200px;  /* スマートフォンでの最大幅 */
+    max-height: 200px; /* スマートフォンでの最大高さ */
+    object-fit: contain; /* アスペクト比を維持しつつ、指定されたサイズ内に収める（余白ができても良い） */
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     opacity: 0; /* 初期状態では非表示 */
     transform: scale(0); /* 初期状態では縮小 */
@@ -87,9 +87,9 @@ body {
 
 /* 選ばれた名前の画像のスタイル */
 #selectedName {
-    /* ここを修正: max-width を width/height に変更して固定サイズに */
-    width: 150px;  /* スマートフォンでの固定幅 */
-    height: 50px;  /* スマートフォンでの固定高さ (名前の画像に合わせて調整) */
+    /* ここを修正: max-width/max-height に戻し、object-fit: contain; を適用 */
+    max-width: 150px;  /* スマートフォンでの最大幅 (名前の画像) */
+    max-height: 50px;  /* スマートフォンでの最大高さ (名前の画像。必要に応じて調整) */
     object-fit: contain; /* アスペクト比を維持しつつ、指定されたサイズ内に収める */
     opacity: 0; /* 初期状態では非表示 */
     transition: opacity 1.5s ease-in-out;
@@ -177,17 +177,17 @@ body {
     }
 
     #selectedImage {
-        /* ここを修正: max-width/max-height を width/height に変更して固定サイズに */
-        width: 350px;  /* PCでの固定幅 */
-        height: 350px; /* PCでの固定高さ */
+        /* ここを修正: max-width/max-height に戻す */
+        max-width: 350px;  /* PCでの最大幅 */
+        max-height: 350px; /* PCでの最大高さ */
         margin-top: 80px;
         margin-bottom: 50px;
     }
 
     #selectedName {
-        /* ここを修正: max-width を width/height に変更して固定サイズに */
-        width: 250px;  /* PCでの固定幅 */
-        height: 80px;  /* PCでの固定高さ (名前の画像に合わせて調整) */
+        /* ここを修正: max-width/max-height に戻す */
+        max-width: 250px;  /* PCでの最大幅 */
+        max-height: 80px;  /* PCでの最大高さ (名前の画像に合わせて調整) */
         font-size: 1.2em; /* フォントサイズも維持 */
     }
 
