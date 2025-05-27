@@ -130,228 +130,130 @@ const allParticipants = [
     { name: "隈川 雛奈子", image: "127.jpg", "nameImage": "画像127.jpg" },
 ];
 
-// 抽選に使用する、現在の残りの参加者リスト（重複なし抽選用）
-let currentParticipants = [];
+let currentParticipants = [...allParticipants]; // シャローコピーを作成
 
-// 画像の事前読み込み用配列
-const preloadedImages = [];
-// 名前画像の事前読み込み用配列
-const preloadedNameImages = [];
-
-// HTML要素の取得
+const startButton = document.getElementById('startButton');
+const displayArea = document.querySelector('.display-area');
 const selectedImage = document.getElementById('selectedImage');
-const selectedName = document.getElementById('selectedName'); // これはimg要素
-// const honorific = document.getElementById('honorific'); // 「さん」を削除したのでこの行は不要
-const startButton = document.getElementById('startButton'); // これがbutton要素になる
+const selectedName = document.getElementById('selectedName'); // selectedNameを取得
+const honorific = document.getElementById('honorific'); // honorificを取得
 const congratulationsMessage = document.getElementById('congratulationsMessage');
+const container = document.querySelector('.container');
+const resultActions = document.querySelector('.result-actions'); // result-actionsを取得
 
-// 画像が保存されているフォルダのパス
-const imageFolderPath = 'images/';
-
-// 抽選演出に関する設定
-const SHUFFLE_DURATION = 2000;
-const SHUFFLE_INTERVAL = 100;
-let shuffleIntervalId = null;
-
-// --- 初期化処理 ---
-function initializeLottery() {
-    console.log("initializeLottery: Lottery system initializing.");
-
-    currentParticipants = [...allParticipants]; // 参加者リストを元の状態に戻す
-
-    // 全ての表示要素を初期状態にリセット
-    if (selectedImage) {
-        selectedImage.classList.add('hidden');
-        selectedImage.style.transition = 'none';
-        selectedImage.style.transform = 'scale(0)';
-        selectedImage.style.opacity = '0';
-    }
-    const resultActions = document.querySelector('.result-actions');
-    if (resultActions) {
-        resultActions.classList.add('hidden');
-        resultActions.style.transition = 'none';
+// 初期表示を隠す関数
+function hideAllResults() {
+    selectedImage.classList.add('hidden');
+    selectedImage.style.transform = 'scale(0)';
+    selectedImage.style.opacity = '0';
+    selectedName.classList.add('hidden'); // 名前画像も隠す
+    selectedName.style.opacity = '0';
+    honorific.classList.add('hidden'); // 「さん」も隠す
+    honorific.style.opacity = '0';
+    congratulationsMessage.classList.add('hidden'); // メッセージも隠す
+    congratulationsMessage.style.opacity = '0';
+    if (resultActions) { // result-actionsも隠す
+        resultActions.classList.add('hidden'); // hiddenクラスを付与して完全に非表示に
         resultActions.style.opacity = '0';
     }
-    if (selectedName) { // selectedNameのsrcをクリア
-        selectedName.src = "";
-    }
-    // honorificは削除したので、honorificに関する初期化処理は不要
-
-    if (congratulationsMessage) {
-        congratulationsMessage.classList.add('hidden');
-        congratulationsMessage.style.transition = 'none';
-        congratulationsMessage.style.opacity = '0';
-    }
-
-    // ボタンの表示/非表示をリセット（pointer-eventsも）
-    if (startButton) {
-        startButton.classList.remove('hidden');
-        startButton.style.pointerEvents = 'auto';
-    }
-
-    console.log("initializeLottery: Initialization complete. currentParticipants length:", currentParticipants.length);
 }
 
-// 残り人数を更新する関数
-function updateRemainingCount() {
-    console.log("updateRemainingCount: Updating count. currentParticipants length:", currentParticipants.length);
-    // TODO: ここに残り人数を表示するロジックを実装する
-}
+// ページロード時に全て隠す
+hideAllResults();
 
-// --- イベントリスナーの設定 ---
-document.addEventListener('DOMContentLoaded', () => {
-    console.log("DOMContentLoaded: DOM fully loaded and parsed.");
-    initializeLottery();
-
-    if (startButton) {
-        startButton.addEventListener('click', handleStartButtonClick);
-        console.log("DOMContentLoaded: Start Button event listener added.");
-    } else {
-        console.error("DOMContentLoaded: Start Button element not found!");
-    }
-
-    // 全画像を事前に読み込む
-    preloadAllImages();
-    preloadAllNameImages(); // 名前画像も事前に読み込む
-});
-
-// 画像の事前読み込み関数
-function preloadAllImages() {
-    console.log("Preloading all participant images...");
-    allParticipants.forEach(participant => {
-        const img = new Image();
-        img.src = imageFolderPath + participant.image;
-        preloadedImages.push(img);
-        img.onerror = () => {
-            console.error(`Failed to load image: ${participant.image}`);
-        };
-    });
-    console.log("All participant images preloading initiated.");
-}
-
-// 名前画像の事前読み込み関数
-function preloadAllNameImages() {
-    console.log("Preloading all name images...");
-    allParticipants.forEach(participant => {
-        const img = new Image();
-        img.src = imageFolderPath + participant.nameImage;
-        preloadedNameImages.push(img);
-        img.onerror = () => {
-            console.error(`Failed to load name image: ${participant.nameImage}`);
-        };
-    });
-    console.log("All name images preloading initiated.");
-}
-
-// --- 抽選開始ボタンのクリックハンドラー ---
-function handleStartButtonClick() {
-    console.log("handleStartButtonClick: Start button clicked.");
-
+// 抽選処理
+function getRandomParticipant() {
     if (currentParticipants.length === 0) {
-        alert("すべての参加者が選ばれました！ページをリロードしてください。");
-        startButton.classList.add('hidden');
-        startButton.style.pointerEvents = 'none';
-        console.log("handleStartButtonClick: No participants left. Exiting.");
+        alert("全員が抽選されました！");
+        return null;
+    }
+    const randomIndex = Math.floor(Math.random() * currentParticipants.length);
+    const selected = currentParticipants[randomIndex];
+    currentParticipants.splice(randomIndex, 1); // 抽選された人をリストから削除
+    return selected;
+}
+
+// 抽選開始ボタンのクリックハンドラ
+function handleStartButtonClick() {
+    if (currentParticipants.length === 0) {
+        alert("全員が抽選されました！ページをリロードして再開してください。");
         return;
     }
 
-    startButton.style.pointerEvents = 'none';
+    // 古い結果を隠す
+    hideAllResults();
 
-    // 全ての表示要素をシャッフル前に非表示・初期状態に戻す
-    if (selectedImage) {
-        selectedImage.classList.add('hidden');
-        selectedImage.style.transition = 'none';
-        selectedImage.style.transform = 'scale(0)';
-        selectedImage.style.opacity = '0';
-    }
-    const resultActions = document.querySelector('.result-actions');
-    if (resultActions) {
-        resultActions.classList.add('hidden');
-        resultActions.style.transition = 'none';
-        resultActions.style.opacity = '0';
-    }
-    if (congratulationsMessage) {
-        congratulationsMessage.classList.add('hidden');
-        congratulationsMessage.style.transition = 'none';
-        congratulationsMessage.style.opacity = '0';
-    }
+    // スピニングクラスを付与
+    container.classList.add('spinning');
+    startButton.classList.add('hidden'); // ボタンを隠す
 
+    // 抽選を実行
+    const selected = getRandomParticipant();
 
-    shuffleIntervalId = setInterval(() => {
-        const tempRandomIndex = Math.floor(Math.random() * allParticipants.length);
-        const tempParticipant = allParticipants[tempRandomIndex];
-
-        if (selectedImage) {
-            selectedImage.src = imageFolderPath + tempParticipant.image;
-            selectedImage.classList.remove('hidden'); // シャッフル中は画像を常に表示
-            selectedImage.style.transition = 'none';
-            selectedImage.style.transform = 'scale(1)'; // シャッフル中は拡大しない
-            selectedImage.style.opacity = '1';
-        }
-        // 名前画像はシャッフル中は表示しないため、ここでは操作しない
-    }, SHUFFLE_INTERVAL);
-
+    // スピニングと結果表示の遅延
+    // selectedImageのアニメーション完了後に、congratulationsMessageと名前画像を表示するように変更
     setTimeout(() => {
-        clearInterval(shuffleIntervalId);
-        console.log("handleStartButtonClick: Shuffle animation stopped.");
+        container.classList.remove('spinning'); // スピニングを終了
 
-        const randomIndex = Math.floor(Math.random() * currentParticipants.length);
-        const selectedParticipant = currentParticipants[randomIndex];
+        if (selected) {
+            selectedImage.src = `images/${selected.image}`;
+            selectedName.src = `images/${selected.nameImage}`; // 名前画像のパスを設定
 
-        currentParticipants.splice(randomIndex, 1);
+            selectedImage.style.transition = 'transform 1.0s ease-out, opacity 1.0s ease-in';
+            selectedImage.classList.remove('hidden');
+            selectedImage.style.transform = 'scale(1)';
+            selectedImage.style.opacity = '1';
 
-        if (selectedImage) selectedImage.src = imageFolderPath + selectedParticipant.image;
-        if (selectedName) selectedName.src = imageFolderPath + selectedParticipant.nameImage;
+            // selectedImageのアニメーション完了後に、メッセージと名前画像を表示
+            // transitionendイベントは、selectedImageに設定されたすべてのtransitionプロパティの変更が完了したときに発火します。
+            selectedImage.addEventListener('transitionend', function handler() {
+                // イベントリスナーは一度実行したら削除する
+                selectedImage.removeEventListener('transitionend', handler);
 
+                // おめでとうメッセージを表示
+                if (congratulationsMessage) {
+                    congratulationsMessage.style.transition = 'opacity 1.5s ease-in-out';
+                    congratulationsMessage.classList.remove('hidden');
+                    congratulationsMessage.style.opacity = '1';
+                }
 
-        // 結果表示のための準備（初期状態に戻してからアニメーション）
-        if (selectedImage) {
-            selectedImage.style.transition = 'none';
-            selectedImage.style.transform = 'scale(0)';
-            selectedImage.style.opacity = '0';
+                // 名前画像と「さん」を表示
+                if (resultActions) {
+                    resultActions.style.transition = 'opacity 1.5s ease-in-out';
+                    resultActions.classList.remove('hidden'); // hiddenクラスを解除
+                    resultActions.style.opacity = '1';
+                }
+                if (selectedName) {
+                    selectedName.style.transition = 'opacity 1.5s ease-in-out';
+                    selectedName.classList.remove('hidden');
+                    selectedName.style.opacity = '1';
+                }
+                if (honorific) {
+                    honorific.style.transition = 'opacity 1.5s ease-in-out';
+                    honorific.classList.remove('hidden');
+                    honorific.style.opacity = '1';
+                }
+
+                console.log("handleStartButtonClick: Final result displayed with zoom-in.");
+
+                // 残り人数によってボタンの表示を切り替える
+                if (currentParticipants.length === 0) {
+                    startButton.classList.add('hidden');
+                    startButton.style.pointerEvents = 'none'; // クリックできないようにする
+                } else {
+                    startButton.classList.remove('hidden');
+                    startButton.style.pointerEvents = 'auto'; // クリックできるようにする
+                }
+
+            }, { once: true }); // イベントが一度だけ実行されるように設定
+        } else {
+            // selectedがnullの場合（全員抽選済みの場合）
+            console.log("No more participants to draw.");
+            // 全員抽選済みの場合はボタンを再表示しない
+            startButton.classList.add('hidden');
+            startButton.style.pointerEvents = 'none';
         }
-        if (resultActions) { // result-actionsも初期状態に戻す
-            resultActions.style.transition = 'none';
-            resultActions.style.opacity = '0';
-            resultActions.classList.add('hidden');
-        }
-        if (congratulationsMessage) {
-            congratulationsMessage.style.transition = 'none';
-            congratulationsMessage.style.opacity = '0';
-            congratulationsMessage.classList.add('hidden');
-        }
-
-
-        setTimeout(() => {
-            if (selectedImage) {
-                selectedImage.style.transition = 'transform 1.0s ease-out, opacity 1.0s ease-in';
-                selectedImage.classList.remove('hidden');
-                selectedImage.style.transform = 'scale(1)';
-                selectedImage.style.opacity = '1';
-            }
-            if (resultActions) { // result-actionsを表示
-                resultActions.style.transition = 'opacity 1.5s ease-in-out';
-                resultActions.classList.remove('hidden');
-                resultActions.style.opacity = '1';
-            }
-            if (congratulationsMessage) { // メッセージを表示
-                congratulationsMessage.style.transition = 'opacity 1.5s ease-in-out';
-                congratulationsMessage.classList.remove('hidden');
-                congratulationsMessage.style.opacity = '1';
-            }
-            console.log("handleStartButtonClick: Final result displayed with zoom-in.");
-
-            // 残り人数によってボタンの表示を切り替える
-            if (currentParticipants.length === 0) {
-                startButton.classList.add('hidden');
-                startButton.style.pointerEvents = 'none';
-            } else {
-                // まだ参加者が残っている場合
-                startButton.classList.remove('hidden');
-                startButton.style.pointerEvents = 'auto';
-            }
-
-        }, 50); // 短い遅延を入れてtransitionを有効にする
-
-    }, SHUFFLE_DURATION);
+    }, 50); // スピニング表示のための短い遅延（必要に応じて調整）
 }
+
+startButton.addEventListener('click', handleStartButtonClick);
