@@ -136,7 +136,7 @@ const imageFolderPath = 'images/'; // 画像フォルダのパス
 // DOM要素の取得
 const selectedImage = document.getElementById('selectedImage');
 const selectedName = document.getElementById('selectedName');
-const honorific = document.getElementById('honorific');
+// ★削除: const honorific = document.getElementById('honorific');
 const congratulationsMessage = document.getElementById('congratulationsMessage');
 const startButton = document.getElementById('startButton');
 const displayArea = document.querySelector('.display-area'); // .display-area要素も取得
@@ -155,7 +155,7 @@ function resetDisplay() {
     selectedImage.style.opacity = '0'; // 画像を非表示に
     selectedImage.src = ''; // 画像URLをクリア
 
-    // 名前と「さん」をまとめて隠す
+    // 名前をまとめて隠す
     resultActions.classList.add('hidden'); // result-actionsにhiddenクラスを付与
     selectedName.src = ''; // 名前画像のURLをクリア
 
@@ -182,10 +182,10 @@ function handleStartButtonClick() {
     congratulationsMessage.style.opacity = '0'; // アニメーションのためにopacityで隠す
     congratulationsMessage.classList.add('hidden'); // レイアウトからも削除
 
-    // 名前と「さん」をまとめて隠す
+    // 名前をまとめて隠す
     resultActions.classList.add('hidden'); // result-actionsを隠す
     selectedName.style.opacity = '0'; // 個々の要素のopacityも0に
-    honorific.style.opacity = '0'; // 個々の要素のopacityも0に
+    // ★削除: honorific.style.opacity = '0'; // 個々の要素のopacityも0に
 
     // ボタンを無効化し、テキストを変更
     startButton.textContent = '抽選中...';
@@ -223,10 +223,10 @@ function handleStartButtonClick() {
         selectedImage.style.opacity = '1';
         selectedImage.classList.remove('hidden'); // hiddenクラスを削除して表示
 
-        // スピニング中は名前の画像と「さん」は非表示
+        // スピニング中は名前の画像は非表示
         resultActions.classList.add('hidden');
         selectedName.style.opacity = '0';
-        honorific.style.opacity = '0';
+        // ★削除: honorific.style.opacity = '0';
 
         spinCount++;
     }, spinDuration);
@@ -257,10 +257,9 @@ function showFinalResult() {
     selectedImage.style.opacity = '0';
     selectedImage.style.transform = 'scale(0)';
 
-    // ★追加: 名前と「さん」の初期状態をopacity: 0に設定
-    // これにより、hiddenクラスが解除された直後にopacity: 1で一瞬表示されるのを防ぎます
+    // 名前画像の初期状態をopacity: 0に設定
     selectedName.style.opacity = '0'; 
-    honorific.style.opacity = '0';
+    // ★削除: honorific.style.opacity = '0';
 
     // 少し間を置いて画像を更新し、アニメーションを開始
     setTimeout(() => {
@@ -284,10 +283,10 @@ function showFinalResult() {
             selectedName.style.transition = 'opacity 1.5s ease-in-out';
             selectedName.style.opacity = '1'; // フェードイン
         }
-        if (honorific) { // 「さん」を表示
-            honorific.style.transition = 'opacity 1.5s ease-in-out';
-            honorific.style.opacity = '1'; // フェードイン
-        }
+        // ★削除: if (honorific) { // 「さん」を表示
+        // ★削除:     honorific.style.transition = 'opacity 1.5s ease-in-out';
+        // ★削除:     honorific.style.opacity = '1'; // フェードイン
+        // ★削除: }
         if (congratulationsMessage) { // メッセージを表示
             congratulationsMessage.style.transition = 'opacity 1.5s ease-in-out';
             congratulationsMessage.classList.remove('hidden'); // hiddenクラスを削除して表示
