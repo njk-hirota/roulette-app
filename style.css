@@ -51,13 +51,13 @@ body {
     position: relative; /* 子要素の絶対配置の基準 */
     width: 100%; /* 親の幅に合わせる */
     min-height: 520px; /* 前回の調整値（変更なし） */
-    gap: 5px; /* ★要素間のスペースを詰める (例: 15px -> 5px) */
-    padding: 10px; /* ★表示エリアのパディングを減らす (例: 20px -> 10px) */
+    gap: 0px; /* ★要素間のスペースを詰める (例: 15px -> 5px) */
+    padding: 0px; /* ★表示エリアのパディングを減らす (例: 20px -> 10px) */
 }
 
 #congratulationsMessage {
     font-size: 1.5em; /* フォントサイズ */
-    color: #e44d26; /* 強調色 */
+    color: gold; /* 強調色 */
     font-weight: bold;
     margin-bottom: 0; /* ★おめでとうメッセージの下マージンを詰める (例: 10px -> 0) */
     position: absolute; /* 絶対配置 */
