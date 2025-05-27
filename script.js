@@ -257,6 +257,11 @@ function showFinalResult() {
     selectedImage.style.opacity = '0';
     selectedImage.style.transform = 'scale(0)';
 
+    // ★追加: 名前と「さん」の初期状態をopacity: 0に設定
+    // これにより、hiddenクラスが解除された直後にopacity: 1で一瞬表示されるのを防ぎます
+    selectedName.style.opacity = '0'; 
+    honorific.style.opacity = '0';
+
     // 少し間を置いて画像を更新し、アニメーションを開始
     setTimeout(() => {
         selectedImage.src = imageFolderPath + selectedParticipant.image; // 顔画像を設定
