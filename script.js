@@ -136,7 +136,7 @@ const imageFolderPath = 'images/'; // 画像フォルダのパス
 // DOM要素の取得
 const selectedImage = document.getElementById('selectedImage');
 const selectedName = document.getElementById('selectedName');
-// ★削除: const honorific = document.getElementById('honorific');
+// ★削除済み: const honorific = document.getElementById('honorific');
 const congratulationsMessage = document.getElementById('congratulationsMessage');
 const startButton = document.getElementById('startButton');
 const displayArea = document.querySelector('.display-area'); // .display-area要素も取得
@@ -158,6 +158,7 @@ function resetDisplay() {
     // 名前をまとめて隠す
     resultActions.classList.add('hidden'); // result-actionsにhiddenクラスを付与
     selectedName.src = ''; // 名前画像のURLをクリア
+    selectedName.style.opacity = '0'; // 名前画像も非表示に
 
     // 「おめでとうございます！」メッセージを非表示に
     congratulationsMessage.style.opacity = '0';
@@ -185,7 +186,10 @@ function handleStartButtonClick() {
     // 名前をまとめて隠す
     resultActions.classList.add('hidden'); // result-actionsを隠す
     selectedName.style.opacity = '0'; // 個々の要素のopacityも0に
-    // ★削除: honorific.style.opacity = '0'; // 個々の要素のopacityも0に
+    // ★削除済み: honorific.style.opacity = '0'; // 個々の要素のopacityも0に
+
+    // ★追加: 抽選開始時に、selectedImageのトランジションを一時的に無効化
+    selectedImage.classList.add('no-transition');
 
     // ボタンを無効化し、テキストを変更
     startButton.textContent = '抽選中...';
@@ -197,7 +201,8 @@ function handleStartButtonClick() {
     // 抽選アニメーションの開始
     let spinCount = 0;
     const totalSpins = 30; // 合計で表示を切り替える回数（多ければ多いほど時間がかかる）
-    const spinDuration = 50; // 各画像の表示時間（ミリ秒）
+    // ★変更: 各画像の表示時間を少し長くして、カクつきを軽減
+    const spinDuration = 80; // 50msから80msに延長 (必要なら100msも試す)
 
     // インターバルをクリア（念のため）
     if (spinningInterval) {
@@ -223,10 +228,10 @@ function handleStartButtonClick() {
         selectedImage.style.opacity = '1';
         selectedImage.classList.remove('hidden'); // hiddenクラスを削除して表示
 
-        // スピニング中は名前の画像は非表示
+        // スピニング中は名前は非表示
         resultActions.classList.add('hidden');
         selectedName.style.opacity = '0';
-        // ★削除: honorific.style.opacity = '0';
+        // ★削除済み: honorific.style.opacity = '0';
 
         spinCount++;
     }, spinDuration);
@@ -259,15 +264,18 @@ function showFinalResult() {
 
     // 名前画像の初期状態をopacity: 0に設定
     selectedName.style.opacity = '0'; 
-    // ★削除: honorific.style.opacity = '0';
+    // ★削除済み: honorific.style.opacity = '0';
 
     // 少し間を置いて画像を更新し、アニメーションを開始
     setTimeout(() => {
+        // ★追加: ここでno-transitionクラスを削除して、再度トランジションを有効化
+        selectedImage.classList.remove('no-transition');
+        
         selectedImage.src = imageFolderPath + selectedParticipant.image; // 顔画像を設定
 
         // 要素を再表示（トランジションでフェードイン＆ズームイン）
         if (selectedImage) {
-            selectedImage.style.transition = 'transform 1.0s ease-out, opacity 1.0s ease-in';
+            // selectedImage.style.transition = 'transform 1.0s ease-out, opacity 1.0s ease-in'; // この行は不要になります
             selectedImage.classList.remove('hidden'); // hiddenクラスを削除して表示
             selectedImage.style.transform = 'scale(1)';
             selectedImage.style.opacity = '1';
@@ -283,10 +291,10 @@ function showFinalResult() {
             selectedName.style.transition = 'opacity 1.5s ease-in-out';
             selectedName.style.opacity = '1'; // フェードイン
         }
-        // ★削除: if (honorific) { // 「さん」を表示
-        // ★削除:     honorific.style.transition = 'opacity 1.5s ease-in-out';
-        // ★削除:     honorific.style.opacity = '1'; // フェードイン
-        // ★削除: }
+        // ★削除済み: if (honorific) { // 「さん」を表示
+        // ★削除済み:     honorific.style.transition = 'opacity 1.5s ease-in-out';
+        // ★削除済み:     honorific.style.opacity = '1'; // フェードイン
+        // ★削除済み: }
         if (congratulationsMessage) { // メッセージを表示
             congratulationsMessage.style.transition = 'opacity 1.5s ease-in-out';
             congratulationsMessage.classList.remove('hidden'); // hiddenクラスを削除して表示
@@ -305,6 +313,9 @@ function showFinalResult() {
         }
 
     }, 500); // 抽選アニメーションの約半分で結果を表示 (ここでは最終表示までの遅延として機能)
+}
+
+// 初期化時にリセット関数を呼ぶ（DOMContentLoadedリスナーが呼び出す）
 }
 
 // 初期化時にリセット関数を呼ぶ（DOMContentLoadedリスナーが呼び出す）
