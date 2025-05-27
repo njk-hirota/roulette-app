@@ -105,18 +105,16 @@ body {
 /* JSで表示・非表示を切り替えるため、初期hiddenはJSに任せる */
 /* .result-actions.hidden { opacity: 0; pointer-events: none; } */
 
-
-/* 選ばれた名前の画像のスタイル */
+/* 選ばれた名前の画像 */
 #selectedName {
-    max-width: 150px;  /* スマートフォンでの最大幅 (名前の画像) */
-    max-height: 50px;  /* スマートフォンでの最大高さ (名前の画像。必要に応じて調整) */
-    object-fit: contain; /* アスペクト比を維持しつつ、指定されたサイズ内に収める */
-    /* opacity: 0; は .result-actions でまとめて管理 */
-    /* transition: opacity 1.5s ease-in-out; は .result-actions でまとめて管理 */
-    /* will-change: opacity; は .result-actions でまとめて管理 */
-    /* vertical-align: bottom; は flexbox に任せるため削除 */
-    line-height: 1; /* 行の高さを調整 */
-    /* position: relative; bottom: 2mm; は flexbox に任せるため削除 */
+    max-width: 80%; /* スマホでの最大幅を大きめに設定 */
+    max-height: 150px; /* スマホでの最大高さを設定 */
+    width: auto;
+    height: auto;
+    object-fit: contain; /* 画像全体を表示し、アスペクト比を維持 */
+    margin-top: 10px; /* 必要に応じて調整 */
+    opacity: 0; /* 初期は非表示 (JSで制御されるのでこれは念のため) */
+    transition: opacity 1.5s ease-in-out; /* フェードインアニメーション用 */
 }
 
 /* 「さん」の敬称のスタイル */
