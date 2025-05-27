@@ -46,7 +46,7 @@ body {
     flex-grow: 1;
     position: relative;
     width: 100%;
-    min-height: 500px; /* ★スマホでの最小高さをさらに増やしてみる (例: 400px -> 500px) */
+    min-height: 450px; /* ★スマホでの最小高さをさらに増やしてみる (例: 400px -> 500px) */
     gap: 15px; /* 要素間のスペース */
     padding: 20px;
 }
