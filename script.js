@@ -130,16 +130,30 @@ const allParticipants = [
     { name: "隈川 雛奈子", image: "127.jpg", "nameImage": "画像127.jpg" },
 ];
 
-let currentParticipants = [...allParticipants]; // シャローコピーを作成
+let currentParticipants = [...allParticipants]; // 抽選可能な参加者リスト（毎回リセット）
 
+// DOM要素の取得
 const startButton = document.getElementById('startButton');
-const displayArea = document.querySelector('.display-area');
 const selectedImage = document.getElementById('selectedImage');
-const selectedName = document.getElementById('selectedName'); // selectedNameを取得
-const honorific = document.getElementById('honorific'); // honorificを取得
+const selectedName = document.getElementById('selectedName');
+const honorific = document.getElementById('honorific'); // 「さん」
 const congratulationsMessage = document.getElementById('congratulationsMessage');
-const container = document.querySelector('.container');
-const resultActions = document.querySelector('.result-actions'); // result-actionsを取得
+const container = document.querySelector('.container'); // ルーレットコンテナ
+const resultActions = document.querySelector('.result-actions'); // 名前画像と「さん」のコンテナ
+
+// ページロード時に実行される初期化処理
+document.addEventListener('DOMContentLoaded', () => {
+    resetParticipants(); // 参加者リストを初期化
+    hideAllResults(); // 全ての表示結果を隠す
+});
+
+// 参加者リストをリセットする関数
+function resetParticipants() {
+    currentParticipants = [...allParticipants];
+    startButton.classList.remove('hidden'); // ボタンを再表示
+    startButton.style.pointerEvents = 'auto'; // ボタンを有効化
+    console.log("Participants list reset.");
+}
 
 // 初期表示を隠す関数
 function hideAllResults() {
@@ -152,59 +166,61 @@ function hideAllResults() {
     honorific.style.opacity = '0';
     congratulationsMessage.classList.add('hidden'); // メッセージも隠す
     congratulationsMessage.style.opacity = '0';
-    if (resultActions) { // result-actionsも隠す
+    if (resultActions) {
         resultActions.classList.add('hidden'); // hiddenクラスを付与して完全に非表示に
-        resultActions.style.opacity = '0';
+        resultActions.style.opacity = '0'; // opacityも0に
     }
 }
 
-// ページロード時に全て隠す
-hideAllResults();
 
-// 抽選処理
+// ランダムに一人選び、リストから削除する関数
 function getRandomParticipant() {
     if (currentParticipants.length === 0) {
-        alert("全員が抽選されました！");
-        return null;
+        return null; // 全員抽選済み
     }
     const randomIndex = Math.floor(Math.random() * currentParticipants.length);
     const selected = currentParticipants[randomIndex];
-    currentParticipants.splice(randomIndex, 1); // 抽選された人をリストから削除
+    currentParticipants.splice(randomIndex, 1); // 選ばれた人をリストから削除
+    console.log(`Selected: ${selected.name}, Remaining participants: ${currentParticipants.length}`);
     return selected;
 }
 
 // 結果表示関連の要素を表示するヘルパー関数
 function showResultElements() {
+    // 各要素のhiddenクラスを削除し、opacityを1にする
+    // transitionはCSSで定義されているので、opacityを1にするだけでアニメーションが開始される
+
     if (congratulationsMessage) {
-        congratulationsMessage.style.transition = 'opacity 1.5s ease-in-out';
         congratulationsMessage.classList.remove('hidden');
         congratulationsMessage.style.opacity = '1';
     }
 
+    // resultActionsの表示をトリガー
     if (resultActions) {
-        resultActions.style.transition = 'opacity 1.5s ease-in-out';
         resultActions.classList.remove('hidden'); // hiddenクラスを解除
         resultActions.style.opacity = '1';
     }
+
+    // resultActionsがopacity:1になってから、子要素であるselectedNameとhonorificを続けて表示
+    // これにより、名前と「さん」が同時にフェードインする
     if (selectedName) {
-        selectedName.style.transition = 'opacity 1.5s ease-in-out';
         selectedName.classList.remove('hidden');
         selectedName.style.opacity = '1';
     }
     if (honorific) {
-        honorific.style.transition = 'opacity 1.5s ease-in-out';
         honorific.classList.remove('hidden');
         honorific.style.opacity = '1';
     }
+
     console.log("handleStartButtonClick: Final result displayed with zoom-in.");
 
     // 残り人数によってボタンの表示を切り替える
     if (currentParticipants.length === 0) {
         startButton.classList.add('hidden');
-        startButton.style.pointerEvents = 'none'; // クリックできないようにする
+        startButton.style.pointerEvents = 'none';
     } else {
         startButton.classList.remove('hidden');
-        startButton.style.pointerEvents = 'auto'; // クリックできるようにする
+        startButton.style.pointerEvents = 'auto';
     }
 }
 
@@ -216,10 +232,10 @@ function handleStartButtonClick() {
         return;
     }
 
-    // 古い結果を隠す
+    // 古い結果を完全に隠す
     hideAllResults();
 
-    // スピニングクラスを付与
+    // スピニングクラスを付与し、ボタンを隠す
     container.classList.add('spinning');
     startButton.classList.add('hidden'); // ボタンを隠す
 
@@ -227,18 +243,15 @@ function handleStartButtonClick() {
     const selected = getRandomParticipant();
 
     // スピニングと結果表示の遅延
+    // スピニングのアニメーション時間に合わせて調整 (例: 100ms程度の短い遅延)
     setTimeout(() => {
         container.classList.remove('spinning'); // スピニングを終了
-        // ここでボタンを再表示することで、アニメーションが完了しなくてもボタンが機能する
-        // ※showResultElements() 内にもボタン表示ロジックがあるため、後ほど調整を検討
-        // ここでのボタン再表示は一時的にコメントアウト。showResultElements() 内のものが確実に発動するようにする。
-        // startButton.classList.remove('hidden');
-        // startButton.style.pointerEvents = 'auto';
 
         if (selected) {
             selectedImage.src = `images/${selected.image}`;
             selectedName.src = `images/${selected.nameImage}`; // 名前画像のパスを設定
 
+            // selectedImageの表示アニメーション
             selectedImage.style.transition = 'transform 1.0s ease-out, opacity 1.0s ease-in';
             selectedImage.classList.remove('hidden');
             selectedImage.style.transform = 'scale(1)';
@@ -256,14 +269,15 @@ function handleStartButtonClick() {
             }, { once: true });
 
             // フォールバック: transitionendが発火しない場合に備え、少し遅れて強制的に表示
+            // selectedImageのtransitionが1.0sなので、それより少し長めに設定
             setTimeout(() => {
                 if (!animationFinished) {
                     animationFinished = true;
                     // transitionendリスナーを削除（すでに発火していなければ）
-                    selectedImage.removeEventListener('transitionend', arguments.callee); // この参照は非推奨ですが、ここでは簡易的に
+                    // selectedImage.removeEventListener('transitionend', arguments.callee); // この参照は非推奨
                     showResultElements(); // ヘルパー関数を呼び出す
                 }
-            }, 1200); // selectedImageのtransitionが1.0sなので、それより少し長めに設定
+            }, 1200); // 1.0秒のアニメーションに加えて、200msの余裕を持たせる
 
         } else {
             // selectedがnullの場合（全員抽選済みの場合）
@@ -272,7 +286,9 @@ function handleStartButtonClick() {
             startButton.classList.add('hidden');
             startButton.style.pointerEvents = 'none';
         }
-    }, 50); // スピニング表示のための短い遅延（必要に応じて調整）
+    }, 50); // スピニング表示のための短い遅延
 }
 
+
+// ボタンのクリックイベントリスナー
 startButton.addEventListener('click', handleStartButtonClick);
