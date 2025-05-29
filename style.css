@@ -32,7 +32,7 @@ body {
     /* ↑↑↑ ここを追加 ↑↑↑ */
     max-width: 500px; /* コンテナの最大幅 */
     width: 90%; /* コンテナの幅 */
-    min-height: 250px; /* 開始画面の縦方向の大きさを半分にするために、min-heightを大幅に削減 */
+    min-height: 150px; /* 開始画面の縦方向の大きさを半分にするために、min-heightを大幅に削減 */
     box-sizing: border-box;
 }
 
