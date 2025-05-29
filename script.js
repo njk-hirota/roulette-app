@@ -130,6 +130,7 @@ const allParticipants = [
     { name: "隈川 雛奈子", image: "127.jpg", "nameImage": "画像127.jpg" },
 ];
 
+
 let currentParticipants = [...allParticipants]; // シャローコピーを作成
 let spinningInterval; // スピニング中の画像を切り替えるためのインターバルID
 
@@ -282,42 +283,32 @@ function displayFinalResult() {
     container.classList.remove('spinning');
 
     if (selected) {
-        // 最終結果の画像を設定 (アニメーション付きで表示するためtransitionを有効に戻す)
+        // 最終結果の画像を設定
         selectedImage.src = `images/${selected.image}`;
-        
-        // ★重要: ここでリフローを強制的に発生させる
-        // これにより、srcの変更が一度ブラウザに反映され、その後のtransitionが適用される
-        selectedImage.offsetHeight; // この行がブラウザに再計算を強制します
+        selectedName.src = `images/${selected.nameImage}`; // 名前画像もここで設定
 
-        selectedImage.style.transition = 'transform 1.0s ease-out, opacity 1.0s ease-in'; // transitionを有効に戻す
-        // selectedImageのtransformとopacityを初期状態に設定（再度アニメーションさせるため）
-        selectedImage.style.transform = 'scale(0)'; // ズームインアニメーションを再実行するために、一度初期状態に戻す
-        selectedImage.style.opacity = '0'; // フェードインアニメーションを再実行するために、一度初期状態に戻す
+        // transitionを一時的に無効にして、アニメーションの初期状態（scale(0), opacity(0)）を瞬時に設定
+        selectedImage.style.transition = 'none';
+        selectedImage.style.transform = 'scale(0)';
+        selectedImage.style.opacity = '0';
 
-        // わずかな遅延の後、アニメーションを開始
+        // 強制リフロー: これにより、上記 'none' と scale(0)/opacity(0) の状態がブラウザに適用される
+        selectedImage.offsetHeight; // この行が重要！
+
+        // わずかな遅延の後、アニメーションを開始するための最終状態を設定
+        // ここでtransitionを再有効化し、目的の状態（scale(1), opacity(1)）へ移行させる
         setTimeout(() => {
+            selectedImage.style.transition = 'transform 1.0s ease-out, opacity 1.0s ease-in'; // transitionを有効に戻す
             selectedImage.style.transform = 'scale(1)';
             selectedImage.style.opacity = '1';
         }, 50); // 短い遅延
 
-        // selectedImageのアニメーションが完了するのを待つ（またはフォールバック）
-        let animationFinished = false;
-
-        // transitionend イベントは、selectedImageがhiddenクラスを解除された後、
-        // 初めてscale(0)からscale(1)に変化する時に発火するため、
-        // このリスナーはhandleStartButtonClickで既にセットされているかもしれません。
-        // ここでは、明示的にtransitionendを待つ新しいロジックを追加します。
-        // ※selectedImage.addEventListener('transitionend', ...) は handleStartButtonClick で既に設定されているため、
-        //   displayFinalResult で再度設定する必要はありません。
-        //   ただし、showResultElements() の表示タイミングはselectedImageのトランジション完了後にしたいので、
-        //   以下の setTimeout でフォールバックさせるのが確実です。
-
         // フォールバック: selectedImageの表示アニメーション完了を待つ
-        // (selectedImageのtransitionendは、hideAllResultsでhiddenに戻した後に再度表示する際に有効になる)
+        // その後、結果関連の要素（メッセージ、名前、敬称）を表示
         setTimeout(() => {
             showResultElements(); // 結果のメッセージと名前画像を表示
         }, 1200); // selectedImageのtransitionが1.0sなので、それより少し長めに設定
-        
+
     } else {
         console.log("No more participants to draw for final result.");
         // 全員抽選済みの場合はボタンを非表示に
