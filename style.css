@@ -47,7 +47,8 @@ body {
     align-items: center;
     flex-grow: 0;
     flex-shrink: 0;
-    max-height: 90px;
+    /* 導入画像のコンテナの最大高さをさらに制限 */
+    max-height: 90px; /* 以前の100pxからさらに縮小 */
     overflow: hidden;
 }
 
@@ -56,7 +57,8 @@ body {
     max-width: 100%;
     height: auto;
     display: block;
-    max-height: 90px;
+    /* 画像自体の最大高さをコンテナに合わせてさらに制限 */
+    max-height: 90px; /* 以前の100pxからさらに縮小 */
     object-fit: contain;
 }
 
