@@ -258,7 +258,7 @@ function handleStartButtonClick() {
     selectedImage.style.transition = 'none';
 
     let spinningCounter = 0;
-    const finalSpinDuration = 3000; // シャッフル時間を3秒に固定 (ミリ秒)
+    const finalSpinDuration = 2000; // シャッフル時間を3秒に固定 (ミリ秒)
     const imageChangeInterval = 80; // 画像を切り替える間隔（ミリ秒）
 
     spinningInterval = setInterval(() => {
