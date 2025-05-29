@@ -130,6 +130,7 @@ const allParticipants = [
     { name: "隈川 雛奈子", image: "127.jpg", "nameImage": "画像127.jpg" },
 ];
 
+
 let currentParticipants = [...allParticipants]; // シャローコピーを作成
 let spinningInterval; // スピニング中の画像を切り替えるためのインターバルID
 
@@ -249,26 +250,24 @@ function handleStartButtonClick() {
 
     // selectedImageをすぐに表示状態にする（アニメーション開始のため）
     selectedImage.classList.remove('hidden');
-    selectedImage.style.transform = 'scale(1)'; // スケールを1に戻す
-    selectedImage.style.opacity = '1'; // 透明度を1に戻す
+    selectedImage.style.transform = 'scale(1)';
+    selectedImage.style.opacity = '1';
 
     // 抽選中の画像をランダムに表示するための準備
     // スピニング中はtransitionを無効にする
-    selectedImage.style.transition = 'none'; // ランダム表示中はトランジションを無効化
+    selectedImage.style.transition = 'none';
 
     let spinningCounter = 0;
-    const minSpinDuration = 2000; // 抽選アニメーションの最短時間（ミリ秒）
-    const maxSpinDuration = 4000; // 抽選アニメーションの最長時間（ミリ秒）
-    const finalSpinDuration = Math.random() * (maxSpinDuration - minSpinDuration) + minSpinDuration; // ランダムな抽選時間
+    const finalSpinDuration = 3000; // シャッフル時間を3秒に固定 (ミリ秒)
     const imageChangeInterval = 80; // 画像を切り替える間隔（ミリ秒）
 
     spinningInterval = setInterval(() => {
-        // 全参加者の中からランダムな画像を表示
+        // 全参加者の中からランダムな画像を表示（抽選済みは除く）
         const randomParticipant = allParticipants[Math.floor(Math.random() * allParticipants.length)];
         selectedImage.src = `images/${randomParticipant.image}`;
         
         spinningCounter += imageChangeInterval;
-        if (spinningCounter >= finalSpinDuration) {
+        if (spinningCounter >= finalSpinDuration) { // 最終的な抽選時間で停止
             clearInterval(spinningInterval); // ランダム表示を停止
             displayFinalResult(); // 最終結果を表示する関数を呼び出す
         }
@@ -284,28 +283,16 @@ function displayFinalResult() {
     container.classList.remove('spinning');
 
     if (selected) {
-        // フェードイン効果のために一度透明度を0にする
-        selectedImage.style.opacity = '0'; // ★追加: 一度透明度を0に
-
-        // transitionを有効に戻す
-        selectedImage.style.transition = 'transform 1.0s ease-out, opacity 1.0s ease-in'; // ★修正
-
-        // 最終結果の画像を設定
+        // 最終結果の画像を設定 (アニメーション付きで表示するためtransitionを有効に戻す)
+        selectedImage.style.transition = 'transform 1.0s ease-out, opacity 1.0s ease-in';
         selectedImage.src = `images/${selected.image}`;
         selectedName.src = `images/${selected.nameImage}`;
         
-        // 短い遅延を入れてから透明度を1に戻し、フェードインアニメーションをトリガー
-        setTimeout(() => {
-            selectedImage.style.opacity = '1'; // ★修正: ここでopacityを1に戻す
-        }, 50); // 短い遅延（ブラウザがopacity:0を認識するのに必要）
-
         // selectedImageのアニメーションが完了するのを待つ（またはフォールバック）
-        // opacityのtransitionもここで完了を待つ
         let animationFinished = false;
 
-        selectedImage.addEventListener('transitionend', function handler(event) {
-            // opacityのtransitionendイベントのみを対象にする
-            if (event.propertyName === 'opacity' && !animationFinished) { // ★修正：propertyNameをチェック
+        selectedImage.addEventListener('transitionend', function handler() {
+            if (!animationFinished) {
                 animationFinished = true;
                 selectedImage.removeEventListener('transitionend', handler);
                 showResultElements(); // 結果のメッセージと名前画像を表示
