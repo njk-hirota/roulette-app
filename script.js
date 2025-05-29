@@ -131,6 +131,7 @@ const allParticipants = [
 ];
 
 let currentParticipants = [...allParticipants]; // 抽選可能な参加者リスト（毎回リセット）
+let shufflingInterval; // シャッフル表示のためのインターバルID
 
 // DOM要素の取得
 const startButton = document.getElementById('startButton');
@@ -157,9 +158,12 @@ function resetParticipants() {
 
 // 初期表示を隠す関数
 function hideAllResults() {
+    // selectedImageのtransitionプロパティを一時的に無効化し、表示状態を即座にリセット
+    selectedImage.style.transition = 'none';
     selectedImage.classList.add('hidden');
     selectedImage.style.transform = 'scale(0)';
     selectedImage.style.opacity = '0';
+    
     selectedName.classList.add('hidden'); // 名前画像も隠す
     selectedName.style.opacity = '0';
     honorific.classList.add('hidden'); // 「さん」も隠す
@@ -170,6 +174,10 @@ function hideAllResults() {
         resultActions.classList.add('hidden'); // hiddenクラスを付与して完全に非表示に
         resultActions.style.opacity = '0'; // opacityも0に
     }
+    // 少し遅延させてからtransitionを元に戻すことで、次回の表示アニメーションを有効にする
+    setTimeout(() => {
+        selectedImage.style.transition = 'transform 1.0s ease-out, opacity 1.0s ease-in';
+    }, 50); // 短い遅延
 }
 
 
@@ -239,19 +247,36 @@ function handleStartButtonClick() {
     container.classList.add('spinning');
     startButton.classList.add('hidden'); // ボタンを隠す
 
+    // シャッフル表示を開始
+    selectedImage.classList.remove('hidden'); // 画像要素を表示状態にする
+    selectedImage.style.opacity = '1'; // シャッフル中はopacityを1に保つ
+    selectedImage.style.transform = 'scale(1)'; // シャッフル中は拡大しない
+
+    shufflingInterval = setInterval(() => {
+        const tempRandomIndex = Math.floor(Math.random() * allParticipants.length);
+        selectedImage.src = `images/${allParticipants[tempRandomIndex].image}`;
+        // selectedName.srcもシャッフル対象にする場合はここに追加
+        // selectedName.src = `images/${allParticipants[tempRandomIndex].nameImage}`;
+    }, 100); // 100msごとに画像を切り替える
+
     // 抽選を実行
     const selected = getRandomParticipant();
 
     // スピニングと結果表示の遅延
-    // スピニングのアニメーション時間に合わせて調整 (例: 100ms程度の短い遅延)
+    // シャッフル表示の秒数 + 最終結果表示アニメーションの時間
+    const spinDuration = 3000; // 3秒間シャッフル表示
+    const finalDisplayDelay = 100; // シャッフル停止から最終表示までの短い遅延
+
     setTimeout(() => {
+        clearInterval(shufflingInterval); // シャッフル表示を停止
         container.classList.remove('spinning'); // スピニングを終了
 
         if (selected) {
-            selectedImage.src = `images/${selected.image}`;
+            selectedImage.src = `images/${selected.image}`; // 最終的な画像をセット
             selectedName.src = `images/${selected.nameImage}`; // 名前画像のパスを設定
 
-            // selectedImageの表示アニメーション
+            // selectedImageの表示アニメーション（ズームイン）
+            // transitionプロパティはhideAllResultsで一時的に解除されている可能性があるので、ここで再設定
             selectedImage.style.transition = 'transform 1.0s ease-out, opacity 1.0s ease-in';
             selectedImage.classList.remove('hidden');
             selectedImage.style.transform = 'scale(1)';
@@ -286,9 +311,214 @@ function handleStartButtonClick() {
             startButton.classList.add('hidden');
             startButton.style.pointerEvents = 'none';
         }
-    }, 50); // スピニング表示のための短い遅延
+    }, spinDuration); // シャッフル表示時間
 }
 
 
 // ボタンのクリックイベントリスナー
 startButton.addEventListener('click', handleStartButtonClick);
+style (5).css コード全文 (変更なし、前回の修正版)
+style (5).css については、画像がシャッフルされているような表示のロジックは JavaScript 側で実装するため、前回の修正版から変更はありません。
+
+CSS
+
+/* style.css */
+
+/* ------------------------------------------------ */
+/* デフォルトスタイル (スマートフォンなど、小さい画面向けの設定がベース) */
+/* ------------------------------------------------ */
+
+body {
+    font-family: 'Arial', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    background-color: #f0f0f0; /* 背景色を設定 */
+    /* overflow: hidden; はPCでスクロールを許可したい場合にコメントアウト解除 */
+    /* overflow: hidden; */ /* スクロールバーが出ないように */
+
+
+    /* 背景画像を設定する場合の例（必要に応じてコメントを解除し、パスを修正） */
+    /* background-image: url('images/your_background_image.jpg'); */
+    /* background-size: cover; */
+    /* background-position: center center; */
+    /* background-repeat: no-repeat; */
+    /* background-attachment: fixed; */
+    /* background-color: rgba(0, 0, 0, 0.3); */ /* 画像の上に半透明のオーバーレイをかける場合 */
+    /* background-blend-mode: overlay; */
+}
+
+.container {
+    background-color: white;
+    padding: 15px 30px; /* コンテナのパディングを大幅に削減 */
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    display: flex; /* Flexboxコンテナ */
+    flex-direction: column; /* 縦方向にアイテムを並べる */
+    align-items: center; /* 中央揃え */
+    width: 90%; /* スマートフォンでの幅を固定 */
+    max-width: 500px; /* 最大幅を設定 */
+    min-height: 450px; /* スマートフォンでの最小高さを固定 */
+    box-sizing: border-box; /* パディングを幅に含める */
+    justify-content: space-between; /* コンテンツとボタンを上下に分離 */
+}
+
+.display-area {
+    width: 100%;
+    flex-grow: 1; /* 残りのスペースを埋める */
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* 子要素を中央揃え */
+    justify-content: center; /* 子要素を中央に配置 */
+    position: relative; /* 子要素（メッセージ）のabsolute配置の基準 */
+    overflow: hidden; /* 画像の溢れを隠す */
+    margin-bottom: 20px; /* ボタンとの間隔 */
+    padding: 0px; /* パディングを調整 */
+    gap: 10px; /* 子要素間のスペース */
+}
+
+#congratulationsMessage {
+    font-size: 1.5em; /* フォントサイズ */
+    color: gold; /* 強調色 */
+    font-weight: bold;
+    margin-bottom: 0;
+    /* position: absolute; */ /* この行をコメントアウトまたは削除 */
+    /* top: 5px; */ /* この行をコメントアウトまたは削除 */
+    /* left: 50%; */ /* 中央寄せ */
+    /* transform: translateX(-50%); */ /* 中央寄せ */
+    white-space: nowrap; /* 折り返しを防ぐ */
+    z-index: 10;
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+    position: relative; /* Flexアイテムとしての配置にするが、transformを使うためにrelativeに */
+}
+
+#selectedImage {
+    max-width: 90%; /* 画像の最大幅 */
+    max-height: 250px; /* 画像の最大高さ */
+    object-fit: contain; /* 画像をアスペクト比を保ちつつ表示 */
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    opacity: 0;
+    transform: scale(0);
+    transition: transform 1.0s ease-out, opacity 1.0s ease-in;
+    margin-top: 0px; /* congratulationsMessageがフローに戻るので不要 */
+}
+
+/* result-actions コンテナ（名前画像と「さん」をまとめる部分） */
+.result-actions {
+    display: flex;
+    flex-direction: row; /* 横並び */
+    align-items: center; /* 垂直方向の中央揃え */
+    justify-content: center; /* 水平方向の中央揃え */
+    margin-top: 0px; /* selectedImageとの間隔を詰める */
+    opacity: 0; /* 初期は非表示 */
+    transition: opacity 1.5s ease-in-out; /* フェードインアニメーション */
+}
+
+#selectedName {
+    max-width: 70%; /* 名前画像の最大幅 */
+    max-height: 100px; /* 名前画像の最大高さ */
+    object-fit: contain;
+    margin-top: 0px; /* 画像を詰める */
+    margin-right: 5px; /* 「さん」との間隔 */
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+}
+
+#honorific {
+    font-size: 1.2em;
+    color: #333;
+    font-weight: bold;
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+}
+
+/* hidden クラス */
+.hidden {
+    display: none !important; /* !important を付けて他のスタイルに優先させる */
+}
+
+/* スピニング中のコンテナスタイル */
+.container.spinning .display-area {
+    /* ここにスピニング中のアニメーションやスタイルを追加 */
+    /* 例えば、ボーダーを光らせたり、背景を動かしたり */
+    /* background-color: #e0e0e0; */
+}
+
+.start-button-container {
+    width: 100%;
+    text-align: center;
+}
+
+.action-button {
+    background-color: #4CAF50; /* ボタンの背景色 */
+    color: white; /* ボタンの文字色 */
+    padding: 12px 25px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1.2em;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    width: 80%; /* スマートフォンでの幅を固定 */
+    max-width: 300px; /* 最大幅を設定 */
+}
+
+.action-button:hover {
+    background-color: #45a049;
+}
+
+
+/* ------------------------------------------------ */
+/* レスポンシブデザイン (PC/タブレット向け) */
+/* ------------------------------------------------ */
+@media (min-width: 768px) {
+    .container {
+        padding: 30px 60px; /* PCでのパディング */
+        max-width: 700px; /* PCでのコンテナの最大幅 */
+        min-height: 600px; /* PCでの最小高さを固定 */
+    }
+
+    .display-area {
+        flex-grow: 0; /* PC側も0に変更 */
+        min-height: auto; /* コンテンツの高さに合わせる */
+        max-height: 700px; /* PCでの表示エリアの最大高さを固定（任意） */
+        gap: 15px; /* ★PC向けの子要素間のスペースを調整 */
+        padding: 0px; /* PC向けのパディングを維持 (必要であれば微調整) */
+    }
+
+    #congratulationsMessage {
+        font-size: 2.5em; /* PC向けのフォントサイズ */
+        /* font-size: initial; */ /* PCではvw単位を解除 - 既にem単位なので不要 */
+        /* top: 10px; */ /* PC向けのトップ位置を維持 - position:relative に変更したため不要 */
+        margin-bottom: 0;
+        /* position: absolute; */ /* ★この行をコメントアウトまたは削除 */
+        position: relative; /* ★Flexアイテムとしての配置にするが、transformを使うためにrelativeに */
+    }
+
+    #selectedImage {
+        max-width: 350px;  /* PCでの最大幅 */
+        max-height: 350px; /* PCでの最大高さ */
+        margin-top: 0px; /* congratulationsMessageがフローに戻るので不要 */
+    }
+
+    #selectedName {
+        max-width: 60%; /* PCでの名前画像の最大幅 */
+        max-height: 220px; /* PCでの名前画像の最大高さ */
+        margin-top: 0px; /* 画像を詰める */
+    }
+
+    #honorific {
+        font-size: 1.8em; /* PCでの「さん」のフォントサイズ */
+    }
+
+    .action-button {
+        padding: 15px 30px;
+        font-size: 1.5em;
+        width: auto; /* PCでは幅を固定せず、コンテンツに合わせる */
+        min-width: 250px;
+    }
+}
