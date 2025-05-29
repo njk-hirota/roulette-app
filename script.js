@@ -131,29 +131,30 @@ const allParticipants = [
 ];
 
 let currentParticipants = [...allParticipants]; // シャローコピーを作成
+let spinningInterval; // スピニング中の画像を切り替えるためのインターバルID
 
 const startButton = document.getElementById('startButton');
 const displayArea = document.querySelector('.display-area');
 const selectedImage = document.getElementById('selectedImage');
-const selectedName = document.getElementById('selectedName'); // selectedNameを取得
-const honorific = document.getElementById('honorific'); // honorificを取得
+const selectedName = document.getElementById('selectedName');
+const honorific = document.getElementById('honorific');
 const congratulationsMessage = document.getElementById('congratulationsMessage');
 const container = document.querySelector('.container');
-const resultActions = document.querySelector('.result-actions'); // result-actionsを取得
+const resultActions = document.querySelector('.result-actions');
 
 // 初期表示を隠す関数
 function hideAllResults() {
     selectedImage.classList.add('hidden');
     selectedImage.style.transform = 'scale(0)';
     selectedImage.style.opacity = '0';
-    selectedName.classList.add('hidden'); // 名前画像も隠す
+    selectedName.classList.add('hidden');
     selectedName.style.opacity = '0';
-    honorific.classList.add('hidden'); // 「さん」も隠す
+    honorific.classList.add('hidden');
     honorific.style.opacity = '0';
-    congratulationsMessage.classList.add('hidden'); // メッセージも隠す
+    congratulationsMessage.classList.add('hidden');
     congratulationsMessage.style.opacity = '0';
-    if (resultActions) { // result-actionsも隠す
-        resultActions.classList.add('hidden'); // hiddenクラスを付与して完全に非表示に
+    if (resultActions) {
+        resultActions.classList.add('hidden');
         resultActions.style.opacity = '0';
     }
 }
@@ -183,7 +184,7 @@ function showResultElements() {
 
     if (resultActions) {
         resultActions.style.transition = 'opacity 1.5s ease-in-out';
-        resultActions.classList.remove('hidden'); // hiddenクラスを解除
+        resultActions.classList.remove('hidden');
         resultActions.style.opacity = '1';
     }
     if (selectedName) {
@@ -201,10 +202,10 @@ function showResultElements() {
     // 残り人数によってボタンの表示を切り替える
     if (currentParticipants.length === 0) {
         startButton.classList.add('hidden');
-        startButton.style.pointerEvents = 'none'; // クリックできないようにする
+        startButton.style.pointerEvents = 'none';
     } else {
         startButton.classList.remove('hidden');
-        startButton.style.pointerEvents = 'auto'; // クリックできるようにする
+        startButton.style.pointerEvents = 'auto';
     }
 }
 
@@ -223,52 +224,57 @@ function handleStartButtonClick() {
     container.classList.add('spinning');
     startButton.classList.add('hidden'); // ボタンを隠す
 
-    // 抽選を実行
-    const selected = getRandomParticipant();
+    // selectedImageをすぐに表示状態にする（アニメーション開始のため）
+    selectedImage.classList.remove('hidden');
+    selectedImage.style.transform = 'scale(1)'; // スケールを1に戻す（hiddenクラスが外れることでCSSアニメーションが適用される）
+    selectedImage.style.opacity = '1'; // 透明度を1に戻す
 
-    // スピニングと結果表示の遅延
-    setTimeout(() => {
-        container.classList.remove('spinning'); // スピニングを終了
+    // 抽選中の画像をランダムに表示
+    let spinningCounter = 0;
+    const maxSpinDuration = 3000; // 抽選アニメーションの合計時間（ミリ秒）
+    const imageChangeInterval = 100; // 画像を切り替える間隔（ミリ秒）
 
-        if (selected) {
-            selectedImage.src = `images/${selected.image}`;
-            selectedName.src = `images/${selected.nameImage}`; // 名前画像のパスを設定
-
-            selectedImage.style.transition = 'transform 1.0s ease-out, opacity 1.0s ease-in';
-            selectedImage.classList.remove('hidden');
-            selectedImage.style.transform = 'scale(1)';
-            selectedImage.style.opacity = '1';
-
-            let animationFinished = false; // アニメーション完了フラグ
-
-            // selectedImageのアニメーション完了後に、メッセージと名前画像を表示
-            selectedImage.addEventListener('transitionend', function handler() {
-                if (!animationFinished) { // 二重発火防止
-                    animationFinished = true;
-                    selectedImage.removeEventListener('transitionend', handler);
-                    showResultElements(); // ヘルパー関数を呼び出す
-                }
-            }, { once: true }); // イベントが一度だけ実行されるように設定
-
-            // フォールバック: transitionendが発火しない場合に備え、少し遅れて強制的に表示
-            setTimeout(() => {
-                if (!animationFinished) {
-                    animationFinished = true;
-                    // ここではイベントリスナーの削除は不要。
-                    // { once: true } のため、発火していれば自動的に削除される。
-                    // 発火していなければ、この時点で表示処理を行うだけ。
-                    showResultElements(); // ヘルパー関数を呼び出す
-                }
-            }, 1200); // selectedImageのtransitionが1.0sなので、それより少し長めに設定
-
-        } else {
-            // selectedがnullの場合（全員抽選済みの場合）
-            console.log("No more participants to draw.");
-            // 全員抽選済みの場合はボタンを再表示しない
-            startButton.classList.add('hidden');
-            startButton.style.pointerEvents = 'none';
+    spinningInterval = setInterval(() => {
+        // 全参加者の中からランダムな画像を表示（抽選済みは除く）
+        const randomParticipant = allParticipants[Math.floor(Math.random() * allParticipants.length)];
+        selectedImage.src = `images/${randomParticipant.image}`;
+        
+        spinningCounter += imageChangeInterval;
+        if (spinningCounter >= maxSpinDuration) {
+            clearInterval(spinningInterval); // ランダム表示を停止
+            displayFinalResult(); // 最終結果を表示する関数を呼び出す
         }
-    }, 50); // スピニング表示のための短い遅延（必要に応じて調整）
+    }, imageChangeInterval);
 }
+
+
+// 最終結果を表示する関数
+function displayFinalResult() {
+    const selected = getRandomParticipant(); // 最終的な抽選結果を取得
+
+    if (selected) {
+        // 最終結果の画像を設定 (アニメーションなしで即座に切り替わるように)
+        selectedImage.style.transition = 'none'; // 一時的にトランジションを無効にする
+        selectedImage.src = `images/${selected.image}`;
+        selectedName.src = `images/${selected.nameImage}`;
+        
+        // 最終画像が表示された後にアニメーションを再度有効にする
+        // (次の抽選のために設定しておくが、今回は即座に表示される)
+        setTimeout(() => {
+            selectedImage.style.transition = 'transform 1.0s ease-out, opacity 1.0s ease-in';
+            // スピニングクラスを削除 (スピニング中の状態が解除される)
+            container.classList.remove('spinning');
+            showResultElements(); // 結果のメッセージと名前画像を表示
+        }, 50); // 短い遅延を入れてtransitionの設定が反映されるようにする
+        
+    } else {
+        console.log("No more participants to draw for final result.");
+        // 全員抽選済みの場合はボタンを非表示に
+        startButton.classList.add('hidden');
+        startButton.style.pointerEvents = 'none';
+        container.classList.remove('spinning'); // スピニングを終了
+    }
+}
+
 
 startButton.addEventListener('click', handleStartButtonClick);
