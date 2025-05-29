@@ -24,26 +24,30 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: space-between;
+    /* ↓↓↓ ここを修正: 要素間の余白をgapで制御するためcenterに変更 ↓↓↓ */
+    justify-content: center; /* space-between から center に変更 */
+    /* ↑↑↑ ここを修正 ↑↑↑ */
+    /* ↓↓↓ ここを追加: 要素間の垂直方向の隙間を定義 ↓↓↓ */
+    gap: 15px; /* 各要素間の隙間を15pxに設定 */
+    /* ↑↑↑ ここを追加 ↑↑↑ */
     max-width: 500px; /* コンテナの最大幅 */
     width: 90%; /* コンテナの幅 */
-    /* 開始画面の縦方向の大きさを半分にするために、min-heightを大幅に削減 */
-    min-height: 250px; /* 以前の500pxから半分に */
+    min-height: 250px; /* 開始画面の縦方向の大きさを半分にするために、min-heightを大幅に削減 */
     box-sizing: border-box;
 }
 
 /* 導入画像のコンテナスタイル */
 .top-image-container {
-    /* 画像と次の要素（ボタン）の間の余白を調整 */
-    margin-bottom: 10px; /* 開始画面のボタンとの間に少しスペースを確保 */
+    /* ↓↓↓ ここを修正: gapでスペースを制御するためmargin-bottomを0に ↓↓↓ */
+    margin-bottom: 0; /* 以前の10pxから0に */
+    /* ↑↑↑ ここを修正 ↑↑↑ */
     width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
     flex-grow: 0;
     flex-shrink: 0;
-    /* 導入画像のコンテナの最大高さをさらに制限 */
-    max-height: 90px; /* 以前の100pxからさらに縮小 */
+    max-height: 90px;
     overflow: hidden;
 }
 
@@ -52,8 +56,7 @@ body {
     max-width: 100%;
     height: auto;
     display: block;
-    /* 画像自体の最大高さをコンテナに合わせてさらに制限 */
-    max-height: 90px; /* 以前の100pxからさらに縮小 */
+    max-height: 90px;
     object-fit: contain;
 }
 
@@ -67,7 +70,9 @@ body {
     align-items: center;
     position: relative;
     gap: 5px;
-    margin-bottom: 10px; /* 表示エリアと次の要素（ボタン）の間の余白 */
+    /* ↓↓↓ ここを修正: gapでスペースを制御するためmargin-bottomを0に ↓↓↓ */
+    margin-bottom: 0; /* 以前の10pxから0に */
+    /* ↑↑↑ ここを修正 ↑↑↑ */
     min-height: 160px; /* 結果表示画面の最小高さを設定 (開始画面には影響しない) */
     max-width: 300px; /* 結果表示画面の最大幅を設定 (開始画面には影響しない) */
     width: 100%;
@@ -126,7 +131,9 @@ body {
 .start-button-container {
     width: 100%;
     text-align: center;
-    margin-top: 10px; /* 開始画面のボタンの上のスペース */
+    /* ↓↓↓ ここを修正: gapでスペースを制御するためmargin-topを0に ↓↓↓ */
+    margin-top: 0; /* 以前の10pxから0に */
+    /* ↑↑↑ ここを修正 ↑↑↑ */
     flex-shrink: 0;
 }
 
@@ -163,32 +170,36 @@ body {
 
 @media (min-width: 769px) {
     .container {
-        /* PC: コンテナのパディングを調整 */
-        padding: 15px 30px 15px; /* 上15px, 左右30px, 下15px */
+        padding: 15px 30px 15px;
         max-width: 450px;
-        /* PC: 開始画面の縦方向の大きさを半分にするために、min-heightを大幅に削減 */
-        min-height: 325px; /* 以前の650pxから半分に */
+        min-height: 325px;
+        /* ↓↓↓ ここを追加: PCでもgapを適用 ↓↓↓ */
+        gap: 20px; /* PCでの要素間の隙間を20pxに設定 */
+        /* ↑↑↑ ここを追加 ↑↑↑ */
     }
 
     /* 導入画像のコンテナスタイル (PC向け) */
     .top-image-container {
-        margin-bottom: 15px;
-        max-height: 100px; /* 以前の120pxからさらに縮小 */
+        /* ↓↓↓ ここを修正: gapでスペースを制御するためmargin-bottomを0に ↓↓↓ */
+        margin-bottom: 0; /* 以前の15pxから0に */
+        /* ↑↑↑ ここを修正 ↑↑↑ */
+        max-height: 100px;
     }
 
     /* 導入画像のスタイル (PC向け) */
     #introImage {
-        max-height: 100px; /* 以前の120pxからさらに縮小 */
+        max-height: 100px;
         max-width: 90%;
     }
 
     .display-area {
-        /* このエリアは開始画面では非表示ですが、念のためサイズを小さめに設定 */
-        min-height: 180px; /* 結果表示画面の最小高さを設定 (開始画面には影響しない) */
-        max-width: 350px; /* 結果表示画面の最大幅を設定 (開始画面には影響しない) */
+        min-height: 180px;
+        max-width: 350px;
         padding: 10px;
         gap: 5px;
-        margin-bottom: 10px;
+        /* ↓↓↓ ここを修正: gapでスペースを制御するためmargin-bottomを0に ↓↓↓ */
+        margin-bottom: 0; /* 以前の10pxから0に */
+        /* ↑↑↑ ここを修正 ↑↑↑ */
     }
 
     #congratulationsMessage {
@@ -214,7 +225,9 @@ body {
     }
 
     .start-button-container {
-        margin-top: 15px;
+        /* ↓↓↓ ここを修正: gapでスペースを制御するためmargin-topを0に ↓↓↓ */
+        margin-top: 0; /* 以前の15pxから0に */
+        /* ↑↑↑ ここを修正 ↑↑↑ */
     }
     
     .action-button {
