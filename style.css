@@ -18,7 +18,7 @@ body {
 
 .container {
     background-color: white;
-    padding: 30px 50px;
+    padding: 15px 30px; /* コンテナのパディングを調整 */
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     text-align: center;
@@ -32,7 +32,7 @@ body {
     box-sizing: border-box; /* パディングとボーダーを幅に含める */
 }
 
-/* 新しく追加するスタイル */
+/* 導入画像のコンテナスタイル */
 .top-image-container {
     margin-bottom: 20px; /* 画像とボタンの間の余白 */
     width: 100%; /* コンテナ幅いっぱいに広げる */
@@ -40,19 +40,19 @@ body {
     justify-content: center; /* 画像を中央に配置 */
     align-items: center;
     flex-grow: 0; /* 画像コンテナが伸張しないように */
+    flex-shrink: 0; /* 画像コンテナが縮小されないように */
 }
 
+/* 導入画像のスタイル */
 #introImage {
     max-width: 100%; /* 親要素の幅に合わせて最大幅を設定 */
     height: auto; /* アスペクト比を維持 */
     display: block; /* 余分なスペースをなくす */
-    margin-bottom: 20px; /* 必要に応じて、画像とボタンの間に余白を追加 */
-    /* アニメーション中は非表示にするため、初期状態は hidden にしない */
+    /* JavaScriptでhiddenクラスを制御するため、初期のopacityやtransformは不要 */
 }
 
 
 .display-area {
-    /* 既存のdisplay-areaスタイル */
     flex-grow: 1; /* 残りのスペースを埋めるように伸張 */
     display: flex;
     flex-direction: column;
@@ -64,6 +64,7 @@ body {
     min-height: 200px; /* 必要に応じて調整 */
     width: 100%;
 }
+
 #congratulationsMessage {
     position: absolute; /* 親要素display-areaに対して絶対配置 */
     top: 50%; /* 縦方向中央 */
@@ -109,17 +110,6 @@ body {
     transition: opacity 1.0s ease-in-out;
 }
 
-/* 「さん」を削除したため、このスタイルは不要になります */
-/* #honorific {
-    font-size: 1.2em;
-    font-weight: bold;
-    color: #333;
-    opacity: 0;
-    transition: opacity 1.0s ease-in-out;
-    margin-left: 5px;
-} */
-
-
 .start-button-container {
     width: 100%; /* 親要素に合わせて幅を確保 */
     text-align: center; /* ボタンを中央寄せ */
@@ -149,9 +139,11 @@ body {
 }
 
 /* スピニング中の表示クラス */
-.spinning .hidden {
-    display: none !important; /* スピニング中は隠す */
+/* スピニング中は表示エリア全体が変化するため、hiddenクラスの制御はJavaScriptで行う */
+.spinning .display-area #selectedImage {
+    display: block; /* スピニング中はselectedImageを表示 */
 }
+
 
 /* ------------------------------------------------ */
 /* PC/タブレット向けのスタイル (769px以上の画面幅に適用) */
@@ -165,17 +157,15 @@ body {
         min-height: 650px; /* PCでのコンテナの最小高さを調整 */
     }
 
-    /* 新しく追加するスタイル (PC向け) */
+    /* 導入画像のコンテナスタイル (PC向け) */
     .top-image-container {
         margin-bottom: 30px; /* PCでの画像とボタンの間の余白を大きく */
     }
 
+    /* 導入画像のスタイル (PC向け) */
     #introImage {
         max-width: 80%; /* PCでの画像の最大幅を調整 */
-        /* height: auto; */ /* 既に設定済み */
-        margin-bottom: 0; /* 親コンテナのマージンを使うため、個別のマージンは0に */
     }
-
 
     .display-area {
         min-height: 550px; /* PCでの表示エリアの最小高さを大きく */
@@ -186,15 +176,11 @@ body {
 
     #congratulationsMessage {
         font-size: 2.5em; /* PC向けのフォントサイズ */
-        /* font-size: initial; */ /* PCではvw単位を解除 */
-        top: 50%; /* PC向けのトップ位置を維持 */
-        left: 50%; /* PC向けの左位置を維持 */
     }
 
     #selectedImage {
         max-width: 350px;  /* PCでの最大幅 */
         max-height: 350px; /* PCでの最大高さ */
-        margin-top: 0; /* PCで上部マージンを調整 */
     }
 
     .result-actions {
@@ -205,13 +191,7 @@ body {
         max-width: 300px; /* PCでの名前画像の最大幅 */
         margin-top: 15px; /* PCでの選ばれた画像との間の余白 */
     }
-
-    /* 「さん」を削除したため、このスタイルは不要になります */
-    /* #honorific {
-        font-size: 1.5em;
-        margin-left: 8px;
-    } */
-
+    
     .start-button-container {
         margin-top: 30px; /* PCでのボタンの上のスペースを大きく */
     }
