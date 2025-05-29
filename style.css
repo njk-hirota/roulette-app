@@ -16,39 +16,39 @@ body {
 
 .container {
     background-color: white;
-    /* パディングを調整し、開始画面の上部の白い部分を減らす */
-    padding: 10px 20px 10px; /* 上10px, 左右20px, 下10px */
+    /* ↓↓↓ ここを修正: 上下のパディングを調整 ↓↓↓ */
+    padding: 10px 20px 10px; /* 上下10px (以前は5px) */
+    /* ↑↑↑ ここを修正 ↑↑↑ */
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     text-align: center;
     display: flex;
     flex-direction: column;
     align-items: center;
-    /* ↓↓↓ ここを修正: 要素間の余白をgapで制御するためcenterに変更 ↓↓↓ */
-    justify-content: center; /* space-between から center に変更 */
+    justify-content: center;
+    /* ↓↓↓ ここを修正: gapを調整 ↓↓↓ */
+    gap: 15px; /* 各要素間の隙間を15pxに設定 (以前は10px) */
     /* ↑↑↑ ここを修正 ↑↑↑ */
-    /* ↓↓↓ ここを追加: 要素間の垂直方向の隙間を定義 ↓↓↓ */
-    gap: 0px; /* 各要素間の隙間を15pxに設定 */
-    /* ↑↑↑ ここを追加 ↑↑↑ */
     max-width: 500px; /* コンテナの最大幅 */
     width: 90%; /* コンテナの幅 */
-    min-height: 150px; /* 開始画面の縦方向の大きさを半分にするために、min-heightを大幅に削減 */
+    /* ↓↓↓ ここを修正: min-heightを調整 ↓↓↓ */
+    min-height: 240px; /* 以前の180pxから大きく */
+    /* ↑↑↑ ここを修正 ↑↑↑ */
     box-sizing: border-box;
 }
 
 /* 導入画像のコンテナスタイル */
 .top-image-container {
-    /* ↓↓↓ ここを修正: gapでスペースを制御するためmargin-bottomを0に ↓↓↓ */
-    margin-bottom: 0; /* 以前の10pxから0に */
-    /* ↑↑↑ ここを修正 ↑↑↑ */
+    margin-bottom: 0;
     width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
     flex-grow: 0;
     flex-shrink: 0;
-    /* 導入画像のコンテナの最大高さをさらに制限 */
-    max-height: 90px; /* 以前の100pxからさらに縮小 */
+    /* ↓↓↓ ここを修正: 導入画像コンテナの最大高さを1.5倍に ↓↓↓ */
+    max-height: 120px; /* 以前の80pxの1.5倍 */
+    /* ↑↑↑ ここを修正 ↑↑↑ */
     overflow: hidden;
 }
 
@@ -57,14 +57,14 @@ body {
     max-width: 100%;
     height: auto;
     display: block;
-    /* 画像自体の最大高さをコンテナに合わせてさらに制限 */
-    max-height: 90px; /* 以前の100pxからさらに縮小 */
+    /* ↓↓↓ ここを修正: 画像自体の最大高さを1.5倍に ↓↓↓ */
+    max-height: 120px; /* 以前の80pxの1.5倍 */
+    /* ↑↑↑ ここを修正 ↑↑↑ */
     object-fit: contain;
 }
 
 
 .display-area {
-    /* このエリアは開始画面では非表示ですが、念のためサイズを小さめに設定 */
     flex-grow: 0;
     display: flex;
     flex-direction: column;
@@ -72,9 +72,7 @@ body {
     align-items: center;
     position: relative;
     gap: 5px;
-    /* ↓↓↓ ここを修正: gapでスペースを制御するためmargin-bottomを0に ↓↓↓ */
-    margin-bottom: 0; /* 以前の10pxから0に */
-    /* ↑↑↑ ここを修正 ↑↑↑ */
+    margin-bottom: 0;
     min-height: 160px; /* 結果表示画面の最小高さを設定 (開始画面には影響しない) */
     max-width: 300px; /* 結果表示画面の最大幅を設定 (開始画面には影響しない) */
     width: 100%;
@@ -133,9 +131,7 @@ body {
 .start-button-container {
     width: 100%;
     text-align: center;
-    /* ↓↓↓ ここを修正: gapでスペースを制御するためmargin-topを0に ↓↓↓ */
-    margin-top: 0; /* 以前の10pxから0に */
-    /* ↑↑↑ ここを修正 ↑↑↑ */
+    margin-top: 0;
     flex-shrink: 0;
 }
 
@@ -172,25 +168,31 @@ body {
 
 @media (min-width: 769px) {
     .container {
-        padding: 15px 30px 15px;
+        /* ↓↓↓ ここを修正: 上下のパディングを調整 ↓↓↓ */
+        padding: 15px 30px 15px; /* 上下15px (以前は10px) */
+        /* ↑↑↑ ここを修正 ↑↑↑ */
         max-width: 450px;
-        min-height: 325px;
-        /* ↓↓↓ ここを追加: PCでもgapを適用 ↓↓↓ */
-        gap: 20px; /* PCでの要素間の隙間を20pxに設定 */
-        /* ↑↑↑ ここを追加 ↑↑↑ */
+        /* ↓↓↓ ここを修正: min-heightを調整 ↓↓↓ */
+        min-height: 320px; /* 以前の250pxから大きく */
+        /* ↑↑↑ ここを修正 ↑↑↑ */
+        /* ↓↓↓ ここを修正: gapを調整 ↓↓↓ */
+        gap: 20px; /* PCでの要素間の隙間を20pxに設定 (以前は10px) */
+        /* ↑↑↑ ここを修正 ↑↑↑ */
     }
 
     /* 導入画像のコンテナスタイル (PC向け) */
     .top-image-container {
-        /* ↓↓↓ ここを修正: gapでスペースを制御するためmargin-bottomを0に ↓↓↓ */
-        margin-bottom: 0; /* 以前の15pxから0に */
+        margin-bottom: 0;
+        /* ↓↓↓ ここを修正: 導入画像コンテナの最大高さを1.5倍に ↓↓↓ */
+        max-height: 135px; /* 以前の90pxの1.5倍 */
         /* ↑↑↑ ここを修正 ↑↑↑ */
-        max-height: 100px;
     }
 
     /* 導入画像のスタイル (PC向け) */
     #introImage {
-        max-height: 100px;
+        /* ↓↓↓ ここを修正: 画像自体の最大高さを1.5倍に ↓↓↓ */
+        max-height: 135px; /* 以前の90pxの1.5倍 */
+        /* ↑↑↑ ここを修正 ↑↑↑ */
         max-width: 90%;
     }
 
@@ -199,9 +201,7 @@ body {
         max-width: 350px;
         padding: 10px;
         gap: 5px;
-        /* ↓↓↓ ここを修正: gapでスペースを制御するためmargin-bottomを0に ↓↓↓ */
-        margin-bottom: 0; /* 以前の10pxから0に */
-        /* ↑↑↑ ここを修正 ↑↑↑ */
+        margin-bottom: 0;
     }
 
     #congratulationsMessage {
@@ -227,9 +227,7 @@ body {
     }
 
     .start-button-container {
-        /* ↓↓↓ ここを修正: gapでスペースを制御するためmargin-topを0に ↓↓↓ */
-        margin-top: 0; /* 以前の15pxから0に */
-        /* ↑↑↑ ここを修正 ↑↑↑ */
+        margin-top: 0;
     }
     
     .action-button {
