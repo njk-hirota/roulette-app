@@ -130,7 +130,6 @@ const allParticipants = [
     { name: "隈川 雛奈子", image: "127.jpg", "nameImage": "画像127.jpg" },
 ];
 
-
 let currentParticipants = [...allParticipants]; // シャローコピーを作成
 let spinningInterval; // スピニング中の画像を切り替えるためのインターバルID
 
@@ -200,28 +199,30 @@ function getRandomParticipant() {
 
 // 結果表示関連の要素を表示するヘルパー関数
 function showResultElements() {
+    // これらの要素もアニメーションを始めるために、初期状態から最終状態へ移行させる
+    // opacity 0 -> 1 の transition は CSS で設定されている前提
     if (congratulationsMessage) {
-        congratulationsMessage.style.transition = 'opacity 1.5s ease-in-out';
+        congratulationsMessage.style.transition = 'opacity 1.0s ease-in-out'; // selectedImageと合わせる
         congratulationsMessage.classList.remove('hidden');
         congratulationsMessage.style.opacity = '1';
     }
 
     if (resultActions) {
-        resultActions.style.transition = 'opacity 1.5s ease-in-out';
+        resultActions.style.transition = 'opacity 1.0s ease-in-out'; // selectedImageと合わせる
         resultActions.classList.remove('hidden');
         resultActions.style.opacity = '1';
     }
     if (selectedName) {
-        selectedName.style.transition = 'opacity 1.5s ease-in-out';
+        selectedName.style.transition = 'opacity 1.0s ease-in-out'; // selectedImageと合わせる
         selectedName.classList.remove('hidden');
         selectedName.style.opacity = '1';
     }
     if (honorific) {
-        honorific.style.transition = 'opacity 1.5s ease-in-out';
+        honorific.style.transition = 'opacity 1.0s ease-in-out'; // selectedImageと合わせる
         honorific.classList.remove('hidden');
         honorific.style.opacity = '1';
     }
-    console.log("handleStartButtonClick: Final result displayed with zoom-in.");
+    console.log("showResultElements: All result elements are now visible.");
 
     // 残り人数によってボタンの表示を切り替える
     if (currentParticipants.length === 0) {
@@ -283,9 +284,9 @@ function displayFinalResult() {
     container.classList.remove('spinning');
 
     if (selected) {
-        // 最終結果の画像を設定
+        // 最終結果の画像と名前画像を設定
         selectedImage.src = `images/${selected.image}`;
-        selectedName.src = `images/${selected.nameImage}`; // 名前画像もここで設定
+        selectedName.src = `images/${selected.nameImage}`;
 
         // transitionを一時的に無効にして、アニメーションの初期状態（scale(0), opacity(0)）を瞬時に設定
         selectedImage.style.transition = 'none';
@@ -301,13 +302,13 @@ function displayFinalResult() {
             selectedImage.style.transition = 'transform 1.0s ease-out, opacity 1.0s ease-in'; // transitionを有効に戻す
             selectedImage.style.transform = 'scale(1)';
             selectedImage.style.opacity = '1';
-        }, 50); // 短い遅延
+        }, 50); // 短い遅延 (この遅延は、上記のスタイル設定がブラウザに適用される時間を与えるためのもの)
 
-        // フォールバック: selectedImageの表示アニメーション完了を待つ
-        // その後、結果関連の要素（メッセージ、名前、敬称）を表示
+        // selectedImageのアニメーションと同時に、他の要素も表示開始
+        // selectedImageのsetTimeoutと同じタイミングで呼び出すことで同期
         setTimeout(() => {
-            showResultElements(); // 結果のメッセージと名前画像を表示
-        }, 1200); // selectedImageのtransitionが1.0sなので、それより少し長めに設定
+            showResultElements(); // 結果のメッセージと名前画像、敬称を表示
+        }, 50); // selectedImageのsetTimeoutと同じ短い遅延
 
     } else {
         console.log("No more participants to draw for final result.");
