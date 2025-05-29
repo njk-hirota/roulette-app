@@ -129,7 +129,6 @@ const allParticipants = [
     { name: "早坂 康佑", image: "126.jpg", "nameImage": "画像126.jpg" },
     { name: "隈川 雛奈子", image: "127.jpg", "nameImage": "画像127.jpg" },
 ];
-
 let currentParticipants = [...allParticipants]; // シャローコピーを作成
 let spinningInterval; // スピニング中の画像を切り替えるためのインターバルID
 
@@ -158,7 +157,7 @@ function preloadAllImages() {
         // 名前画像
         const nameImg = new Image();
         nameImg.src = `images/${participant.nameImage}`;
-        nameImg.onload = () => console.log(`Preloaded: ${participant.nameImage}`);
+        img.onload = () => console.log(`Preloaded: ${participant.nameImage}`); // Fix: img -> nameImg
         nameImg.onerror = () => console.error(`Error preloading: ${participant.nameImage}`);
         preloadedImages[participant.nameImage] = nameImg; // 後で参照できるように格納
     });
@@ -228,15 +227,9 @@ function showResultElements() {
         console.log("showResultElements: No more participants, button hidden.");
     } else {
         // まだ参加者が残っている場合、ボタンを再表示し、クリックを有効にする
-        startButton.classList.remove('hidden');
+        startButton.classList.remove('hidden'); // hiddenクラスを削除
         startButton.style.pointerEvents = 'auto'; // クリック有効化
         console.log("showResultElements: Participants remain, button visible.");
-        
-        // ここから introImage の再表示ロジックを削除します
-        // if (introImage) {
-        //     introImage.classList.remove('hidden');
-        //     console.log("showResultElements: introImage re-displayed for next draw.");
-        // }
     }
 }
 
@@ -370,23 +363,15 @@ document.addEventListener('DOMContentLoaded', () => {
     // 導入画像を初期表示
     if (introImage) {
         introImage.classList.remove('hidden');
+        // introImageがZ-indexでボタンの上に重ならないように注意
+        // CSSでz-indexを調整するか、position: relative; + z-index: 1; などで調整
         console.log("DOMContentLoaded: introImage displayed.");
     }
     // 初期状態で抽選結果関連の要素は隠しておく
     hideAllResults();
+    
     // ボタンは常に表示されている状態から始める
     startButton.classList.remove('hidden');
-    startButton.style.pointerEvents = 'auto';
-    console.log("DOMContentLoaded: Initial setup complete.");
+    startButton.style.pointerEvents = 'auto'; // これが重要！
+    console.log("DOMContentLoaded: Initial setup complete. Start button is enabled.");
 });
-
-変更点:
-
-showResultElements() 関数内の以下の部分を削除しました。
-JavaScript
-
-// ここから introImage の再表示ロジックを削除します
-// if (introImage) {
-//     introImage.classList.remove('hidden');
-//     console.log("showResultElements: introImage re-displayed for next draw.");
-// }
