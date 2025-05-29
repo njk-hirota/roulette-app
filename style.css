@@ -16,10 +16,10 @@ body {
     /* overflow: hidden; */ /* スクロールバーが出ないように */
 
 
-    /* 背景画像を設定する */
-    background-image: url('images/background.jpg'); */
+    /* 背景画像を設定する場合 */
+    /* background-image: url('images/background.jpg'); */
     /* background-size: cover; */
-    background-position: center center;
+    /* background-position: center center;
     /* background-repeat: no-repeat; */
     /* background-attachment: fixed; */
     /* background-color: rgba(0, 0, 0, 0.3); */ /* 画像の上に半透明のオーバーレイをかける場合 */
