@@ -130,6 +130,7 @@ const allParticipants = [
     { name: "隈川 雛奈子", image: "127.jpg", "nameImage": "画像127.jpg" },
 ];
 
+
 let currentParticipants = [...allParticipants]; // シャローコピーを作成
 let spinningInterval; // スピニング中の画像を切り替えるためのインターバルID
 
@@ -140,9 +141,7 @@ const selectedName = document.getElementById('selectedName');
 const congratulationsMessage = document.getElementById('congratulationsMessage');
 const container = document.querySelector('.container');
 const resultActions = document.querySelector('.result-actions');
-// 新しく追加する要素の参照
-const introImage = document.getElementById('introImage');
-
+const introImage = document.getElementById('introImage'); // 導入画像の要素を取得
 
 // すべての画像をプリロードするための配列
 const preloadedImages = {}; // 画像オブジェクトを保持する連想配列
@@ -153,55 +152,45 @@ function preloadAllImages() {
         // 通常の画像
         const img = new Image();
         img.src = `images/${participant.image}`;
+        img.onload = () => console.log(`Preloaded: ${participant.image}`);
+        img.onerror = () => console.error(`Error preloading: ${participant.image}`);
         preloadedImages[participant.image] = img; // 後で参照できるように格納
 
         // 名前画像
         const nameImg = new Image();
         nameImg.src = `images/${participant.nameImage}`;
+        nameImg.onload = () => console.log(`Preloaded: ${participant.nameImage}`);
+        nameImg.onerror = () => console.error(`Error preloading: ${participant.nameImage}`);
         preloadedImages[participant.nameImage] = nameImg; // 後で参照できるように格納
     });
     // 導入画像もプリロード対象に含める
     if (introImage) {
         const introImg = new Image();
         introImg.src = introImage.src; // introImageの現在のsrcを使用
+        introImg.onload = () => console.log(`Preloaded: introImage (${introImage.src})`);
+        introImg.onerror = () => console.error(`Error preloading: introImage (${introImage.src})`);
         preloadedImages['introImage'] = introImg;
     }
-    console.log("All images preloaded.");
+    console.log("All images preloading initiated.");
 }
-
-// ページロード時に画像をプリロード
-preloadAllImages();
-
 
 // 初期表示を隠す関数 (introImageは含めない)
 function hideAllResults() {
-    selectedImage.classList.add('hidden');
     selectedImage.style.transform = 'scale(0)';
     selectedImage.style.opacity = '0';
-    selectedName.classList.add('hidden');
+    selectedImage.classList.add('hidden'); // hiddenクラスを付けて表示を完全に消す
+
     selectedName.style.opacity = '0';
-    congratulationsMessage.classList.add('hidden');
+    selectedName.classList.add('hidden'); // hiddenクラスを付けて表示を完全に消す
+
     congratulationsMessage.style.opacity = '0';
+    congratulationsMessage.classList.add('hidden'); // hiddenクラスを付けて表示を完全に消す
+
     if (resultActions) {
-        resultActions.classList.add('hidden');
         resultActions.style.opacity = '0';
+        resultActions.classList.add('hidden'); // hiddenクラスを付けて表示を完全に消す
     }
-}
-
-// ページロード時に全て隠す（introImageは表示のまま）
-hideAllResults();
-
-
-// 抽選処理
-function getRandomParticipant() {
-    if (currentParticipants.length === 0) {
-        alert("全員が抽選されました！");
-        return null;
-    }
-    const randomIndex = Math.floor(Math.random() * currentParticipants.length);
-    const selected = currentParticipants[randomIndex];
-    currentParticipants.splice(randomIndex, 1); // 抽選された人をリストから削除
-    return selected;
+    console.log("hideAllResults: All result elements are now hidden.");
 }
 
 // 結果表示関連の要素を表示するヘルパー関数
@@ -209,23 +198,25 @@ function showResultElements() {
     // 導入画像を隠す
     if (introImage) {
         introImage.classList.add('hidden');
+        console.log("showResultElements: introImage hidden.");
     }
 
-    // これらの要素もアニメーションを始めるために、初期状態から最終状態へ移行させる
+    // これらの要素をアニメーションを始めるために、初期状態から最終状態へ移行させる
+    // hiddenクラスを削除してdisplay:block/flexにする
     if (congratulationsMessage) {
-        congratulationsMessage.style.transition = 'opacity 1.0s ease-in-out';
         congratulationsMessage.classList.remove('hidden');
+        congratulationsMessage.style.transition = 'opacity 1.0s ease-in-out';
         congratulationsMessage.style.opacity = '1';
     }
 
     if (resultActions) {
-        resultActions.style.transition = 'opacity 1.0s ease-in-out';
         resultActions.classList.remove('hidden');
+        resultActions.style.transition = 'opacity 1.0s ease-in-out';
         resultActions.style.opacity = '1';
     }
     if (selectedName) {
-        selectedName.style.transition = 'opacity 1.0s ease-in-out';
         selectedName.classList.remove('hidden');
+        selectedName.style.transition = 'opacity 1.0s ease-in-out';
         selectedName.style.opacity = '1';
     }
     
@@ -235,13 +226,17 @@ function showResultElements() {
     if (currentParticipants.length === 0) {
         startButton.classList.add('hidden');
         startButton.style.pointerEvents = 'none'; // クリック無効化
+        console.log("showResultElements: No more participants, button hidden.");
     } else {
         // まだ参加者が残っている場合、ボタンを再表示し、クリックを有効にする
         startButton.classList.remove('hidden');
         startButton.style.pointerEvents = 'auto'; // クリック有効化
-        // 次の抽選に備えて、再度introImageを表示する（最初の画面状態に戻る）
+        console.log("showResultElements: Participants remain, button visible.");
+        
+        // 次の抽選に備えて、introImageを再表示する（最初の画面状態に戻る）
         if (introImage) {
             introImage.classList.remove('hidden');
+            console.log("showResultElements: introImage re-displayed for next draw.");
         }
     }
 }
@@ -252,30 +247,36 @@ function handleStartButtonClick() {
     // 導入画像を隠す
     if (introImage) {
         introImage.classList.add('hidden');
+        console.log("handleStartButtonClick: introImage hidden.");
     }
 
     // ボタンがクリックされたら、まずボタンを隠して無効化
     startButton.classList.add('hidden');
     startButton.style.pointerEvents = 'none'; // クリック無効化
+    console.log("handleStartButtonClick: button hidden and disabled.");
+
 
     if (currentParticipants.length === 0) {
         alert("全員が抽選されました！ページをリロードして再開してください。");
         // 全員抽選済みの場合はボタンを表示せず、無効のままにする
         startButton.classList.add('hidden');
         startButton.style.pointerEvents = 'none';
+        console.log("handleStartButtonClick: No participants left, preventing draw.");
         return;
     }
 
     // 古い結果を隠す
     hideAllResults();
+    console.log("handleStartButtonClick: Old results hidden.");
 
     // スピニングクラスを付与
     container.classList.add('spinning');
+    console.log("handleStartButtonClick: Spinning class added to container.");
 
     // selectedImageをすぐに表示状態にする（アニメーション開始のため）
-    selectedImage.classList.remove('hidden');
-    selectedImage.style.transform = 'scale(1)';
-    selectedImage.style.opacity = '1';
+    selectedImage.classList.remove('hidden'); // hiddenクラスを削除
+    selectedImage.style.transform = 'scale(1)'; // スピニング中の状態を維持
+    selectedImage.style.opacity = '1'; // スピニング中の状態を維持
 
     // 抽選中の画像をランダムに表示するための準備
     // スピニング中はtransitionを無効にする
@@ -296,6 +297,7 @@ function handleStartButtonClick() {
             displayFinalResult(); // 最終結果を表示する関数を呼び出す
         }
     }, imageChangeInterval);
+    console.log("handleStartButtonClick: Spinning started.");
 }
 
 
@@ -305,6 +307,7 @@ function displayFinalResult() {
 
     // まずはスピニングクラスを削除（スピニング中の状態が解除される）
     container.classList.remove('spinning');
+    console.log("displayFinalResult: Spinning class removed from container.");
 
     if (selected) {
         // 最終結果の画像と名前画像を設定
@@ -325,25 +328,13 @@ function displayFinalResult() {
             selectedImage.style.transition = 'transform 1.0s ease-out, opacity 1.0s ease-in'; // transitionを有効に戻す
             selectedImage.style.transform = 'scale(1)';
             selectedImage.style.opacity = '1';
+            console.log("displayFinalResult: selectedImage animation started.");
         }, 50); // 短い遅延 (この遅延は、上記のスタイル設定がブラウザに適用される時間を与えるためのもの)
 
         // selectedImageのアニメーションと同時に、他の要素も表示開始
         // selectedImageのsetTimeoutと同じタイミングで呼び出すことで同期
         setTimeout(() => {
             showResultElements(); // 結果のメッセージと名前画像を表示
-            // ここで、抽選が完了したのでボタンを再表示し、有効にする
-            if (currentParticipants.length > 0) { // まだ抽選可能な参加者がいる場合のみ
-                startButton.classList.remove('hidden');
-                startButton.style.pointerEvents = 'auto';
-            } else {
-                // 全員抽選済みの場合はボタンを非表示に
-                startButton.classList.add('hidden');
-                startButton.style.pointerEvents = 'none';
-                // 全員抽選済みの場合、introImageは表示しない
-                if (introImage) {
-                    introImage.classList.add('hidden');
-                }
-            }
         }, 50); // selectedImageのsetTimeoutと同じ短い遅延
 
     } else {
@@ -354,6 +345,7 @@ function displayFinalResult() {
         // 全員抽選済みの場合、introImageは表示しない
         if (introImage) {
             introImage.classList.add('hidden');
+            console.log("displayFinalResult: No participants left, introImage hidden.");
         }
     }
 }
@@ -363,14 +355,18 @@ startButton.addEventListener('click', handleStartButtonClick);
 
 // ページロード時に導入画像を表示 (初期状態)
 document.addEventListener('DOMContentLoaded', () => {
-    // showResultElements() から introImage の表示ロジックが分離されたため、
-    // ここで明示的に表示する
+    // プリロードを開始
+    preloadAllImages();
+
+    // 導入画像を初期表示
     if (introImage) {
         introImage.classList.remove('hidden');
+        console.log("DOMContentLoaded: introImage displayed.");
     }
     // 初期状態で抽選結果関連の要素は隠しておく
     hideAllResults();
     // ボタンは常に表示されている状態から始める
     startButton.classList.remove('hidden');
     startButton.style.pointerEvents = 'auto';
+    console.log("DOMContentLoaded: Initial setup complete.");
 });
