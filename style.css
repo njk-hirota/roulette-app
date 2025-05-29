@@ -32,74 +32,56 @@ body {
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     text-align: center;
-    display: flex; /* flexboxを有効化 */
-    flex-direction: column; /* 垂直方向に要素を並べる */
-    justify-content: center; /* 中央揃えを維持 */
+    display: flex; /* Flexboxコンテナ */
+    flex-direction: column; /* 縦方向にアイテムを並べる */
     align-items: center; /* 中央揃え */
-    min-height: 400px; /* コンテナの最小高さをさらに調整 */
-    width: 360px; /* スマートフォンでの固定幅を維持 */
-    margin: 20px auto; /* 上下20px、左右をautoにして水平方向中央寄せ */
+    width: 90%; /* スマートフォンでの幅を固定 */
+    max-width: 500px; /* 最大幅を設定 */
+    min-height: 450px; /* スマートフォンでの最小高さを固定 */
+    box-sizing: border-box; /* パディングを幅に含める */
+    justify-content: space-between; /* コンテンツとボタンを上下に分離 */
 }
 
 .display-area {
+    width: 100%;
+    flex-grow: 1; /* 残りのスペースを埋める */
     display: flex;
-    flex-direction: column; /* 要素を縦に並べる */
-    align-items: center; /* 水平方向の中央揃え */
-    justify-content: center; /* 垂直方向の中央揃え */
-    flex-grow: 0; /* 余分な空間を吸収しないようにする */
-    position: relative; /* 子要素の絶対配置の基準（congratulationsMessageがabsoluteでなくなるので必須ではないが、念のため残す） */
-    width: 100%; /* 親の幅に合わせる */
-    min-height: auto; /* コンテンツの高さに合わせる */
-    gap: 10px; /* ★子要素間のスペースを調整 (例: 0px -> 10px) */
-    padding: 0px; /* 表示エリアのパディングを維持 (必要であれば微調整) */
+    flex-direction: column;
+    align-items: center; /* 子要素を中央揃え */
+    justify-content: center; /* 子要素を中央に配置 */
+    position: relative; /* 子要素（メッセージ）のabsolute配置の基準 */
+    overflow: hidden; /* 画像の溢れを隠す */
+    margin-bottom: 20px; /* ボタンとの間隔 */
+    padding: 0px; /* パディングを調整 */
+    gap: 10px; /* 子要素間のスペース */
 }
 
 #congratulationsMessage {
     font-size: 1.5em; /* フォントサイズ */
     color: gold; /* 強調色 */
     font-weight: bold;
-    margin-bottom: 0; /* 下マージンを詰める */
-    /* position: absolute; */ /* ★この行をコメントアウトまたは削除 */
-    /* top: 5px; */ /* ★この行をコメントアウトまたは削除 */
-    left: 50%; /* 中央寄せ */
-    transform: translateX(-50%); /* 中央寄せ */
+    margin-bottom: 0;
+    /* position: absolute; */ /* この行をコメントアウトまたは削除 */
+    /* top: 5px; */ /* この行をコメントアウトまたは削除 */
+    /* left: 50%; */ /* 中央寄せ */
+    /* transform: translateX(-50%); */ /* 中央寄せ */
     white-space: nowrap; /* 折り返しを防ぐ */
-    z-index: 10; /* 他の要素より手前に表示 */
-    opacity: 0; /* 初期は非表示 */
+    z-index: 10;
+    opacity: 0;
     transition: opacity 0.5s ease-in-out;
-    /* position: absolute; を外すと、Flexアイテムとしての配置になるため、left/transformは効果が薄れるか、別の配置が必要になる場合があります。
-       もしメッセージを常に中央上部に固定したい場合は、display-areaの外に出すか、display-areaをposition:relativeにしてcongratulationsMessageはabsoluteのままtopを調整（例: top: -30px;）する方法もありますが、まずはこの通常フローの配置を試しましょう。
-       flexアイテムとして中央に配置されるので、left/transformは不要になります。
-    */
-    position: relative; /* ★Flexアイテムとしての配置にするが、transformを使うためにrelativeに */
-    /* left: 0; transform: none; でも良いですが、中央配置はdisplay-areaのalign-itemsで制御されるため */
+    position: relative; /* Flexアイテムとしての配置にするが、transformを使うためにrelativeに */
 }
 
-/* 選ばれた画像（顔写真など） */
 #selectedImage {
-    max-width: 250px;  /* スマホでの最大幅 */
-    max-height: 250px; /* スマホでの最大高さ */
-    width: auto;
-    height: auto;
-    border-radius: 10px; /* 角を丸くする */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    object-fit: contain; /* 画像全体を表示し、アスペクト比を維持 */
-    opacity: 0; /* 初期は非表示 */
-    transform: scale(0); /* 初期は縮小 */
-    transition: transform 0.5s ease-out, opacity 0.5s ease-in; /* アニメーション */
-    margin-top: 0px; /* ★congratulationsMessageがフローに戻るので不要 */
-}
-
-/* 選ばれた名前の画像 */
-#selectedName {
-    max-width: 80%; /* スマホでの最大幅を大きめに設定 */
-    max-height: 180px; /* スマホでの最大高さを設定 */
-    width: auto;
-    height: auto;
-    object-fit: contain; /* 画像全体を表示し、アスペクト比を維持 */
-    margin-top: 0px; /* 画像を詰める */
-    opacity: 0; /* 初期は非表示 (JSで制御されるのでこれは念のため) */
-    transition: opacity 1.5s ease-in-out; /* フェードインアニメーション用 */
+    max-width: 90%; /* 画像の最大幅 */
+    max-height: 250px; /* 画像の最大高さ */
+    object-fit: contain; /* 画像をアスペクト比を保ちつつ表示 */
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    opacity: 0;
+    transform: scale(0);
+    transition: transform 1.0s ease-out, opacity 1.0s ease-in;
+    margin-top: 0px; /* congratulationsMessageがフローに戻るので不要 */
 }
 
 /* result-actions コンテナ（名前画像と「さん」をまとめる部分） */
@@ -110,30 +92,25 @@ body {
     justify-content: center; /* 水平方向の中央揃え */
     margin-top: 0px; /* selectedImageとの間隔を詰める */
     opacity: 0; /* 初期は非表示 */
-    transition: opacity 1.5s ease-in-out;
+    transition: opacity 1.5s ease-in-out; /* フェードインアニメーション */
 }
 
-.start-button-container {
-    margin-top: 10px; /* display-areaとの余白を維持 */
-    width: 100%;
-    display: flex;
-    justify-content: center;
+#selectedName {
+    max-width: 70%; /* 名前画像の最大幅 */
+    max-height: 100px; /* 名前画像の最大高さ */
+    object-fit: contain;
+    margin-top: 0px; /* 画像を詰める */
+    margin-right: 5px; /* 「さん」との間隔 */
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
 }
 
-.action-button {
-    background-color: #4CAF50; /* ボタンの背景色 */
-    color: white; /* ボタンのテキスト色 */
-    padding: 15px 30px;
-    border: none;
-    border-radius: 5px;
+#honorific {
     font-size: 1.2em;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    width: auto; /* ボタンの幅を自動調整 */
-}
-
-.action-button:hover {
-    background-color: #45a049;
+    color: #333;
+    font-weight: bold;
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
 }
 
 /* hidden クラス */
@@ -141,23 +118,44 @@ body {
     display: none !important; /* !important を付けて他のスタイルに優先させる */
 }
 
-/* スピニング中の表示クラス */
-.spinning .hidden {
-    display: none !important; /* スピニング中は隠す */
+/* スピニング中のコンテナスタイル */
+.container.spinning .display-area {
+    /* ここにスピニング中のアニメーションやスタイルを追加 */
+    /* 例えば、ボーダーを光らせたり、背景を動かしたり */
+    /* background-color: #e0e0e0; */
 }
 
-/* ------------------------------------------------ */
-/* PC/タブレット向けのスタイル (769px以上の画面幅に適用) */
-/* ------------------------------------------------ */
+.start-button-container {
+    width: 100%;
+    text-align: center;
+}
 
-@media (min-width: 769px) {
+.action-button {
+    background-color: #4CAF50; /* ボタンの背景色 */
+    color: white; /* ボタンの文字色 */
+    padding: 12px 25px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1.2em;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    width: 80%; /* スマートフォンでの幅を固定 */
+    max-width: 300px; /* 最大幅を設定 */
+}
+
+.action-button:hover {
+    background-color: #45a049;
+}
+
+
+/* ------------------------------------------------ */
+/* レスポンシブデザイン (PC/タブレット向け) */
+/* ------------------------------------------------ */
+@media (min-width: 768px) {
     .container {
-        padding: 20px 40px; /* PC向けのパディングを大幅に削減 */
-        max-width: 800px; /* PC向けの最大幅を維持 */
-        width: 600px; /* PCでの固定幅を維持 */
-        min-height: 550px; /* PC向けのコンテナの最小高さをさらに調整 */
-        justify-content: center; /* 中央揃えを維持 */
-        margin: auto; /* PCでも水平方向中央寄せ */
+        padding: 30px 60px; /* PCでのパディング */
+        max-width: 700px; /* PCでのコンテナの最大幅 */
+        min-height: 600px; /* PCでの最小高さを固定 */
     }
 
     .display-area {
@@ -170,8 +168,8 @@ body {
 
     #congratulationsMessage {
         font-size: 2.5em; /* PC向けのフォントサイズ */
-        font-size: initial; /* PCではvw単位を解除 */
-        top: 10px; /* PC向けのトップ位置を維持 */
+        /* font-size: initial; */ /* PCではvw単位を解除 - 既にem単位なので不要 */
+        /* top: 10px; */ /* PC向けのトップ位置を維持 - position:relative に変更したため不要 */
         margin-bottom: 0;
         /* position: absolute; */ /* ★この行をコメントアウトまたは削除 */
         position: relative; /* ★Flexアイテムとしての配置にするが、transformを使うためにrelativeに */
@@ -189,22 +187,14 @@ body {
         margin-top: 0px; /* 画像を詰める */
     }
 
-    .result-actions {
-        display: flex;
-        flex-direction: row; /* 横並び */
-        align-items: center; /* 垂直方向の中央揃え */
-        justify-content: center; /* 水平方向の中央揃え */
-        margin-top: 0px; /* selectedImageとの間隔を詰める */
-        opacity: 0; /* 初期は非表示 */
-        transition: opacity 1.5s ease-in-out;
-    }
-
-    .start-button-container {
-        margin-top: 15px; /* PC側もdisplay-areaとの余白を維持 */
+    #honorific {
+        font-size: 1.8em; /* PCでの「さん」のフォントサイズ */
     }
 
     .action-button {
-        padding: 18px 40px; /* PC向けのボタンのパディング */
-        font-size: 1.4em; /* PC向けのボタンのフォントサイズ */
+        padding: 15px 30px;
+        font-size: 1.5em;
+        width: auto; /* PCでは幅を固定せず、コンテンツに合わせる */
+        min-width: 250px;
     }
 }
