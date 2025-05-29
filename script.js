@@ -130,7 +130,6 @@ const allParticipants = [
     { name: "隈川 雛奈子", image: "127.jpg", "nameImage": "画像127.jpg" },
 ];
 
-
 let currentParticipants = [...allParticipants]; // シャローコピーを作成
 let spinningInterval; // スピニング中の画像を切り替えるためのインターバルID
 
@@ -195,7 +194,7 @@ function hideAllResults() {
 
 // 結果表示関連の要素を表示するヘルパー関数
 function showResultElements() {
-    // 導入画像を隠す
+    // 導入画像を隠す (抽選開始時に隠れるので、ここでは再度隠す必要はないが、念のため)
     if (introImage) {
         introImage.classList.add('hidden');
         console.log("showResultElements: introImage hidden.");
@@ -233,11 +232,11 @@ function showResultElements() {
         startButton.style.pointerEvents = 'auto'; // クリック有効化
         console.log("showResultElements: Participants remain, button visible.");
         
-        // 次の抽選に備えて、introImageを再表示する（最初の画面状態に戻る）
-        if (introImage) {
-            introImage.classList.remove('hidden');
-            console.log("showResultElements: introImage re-displayed for next draw.");
-        }
+        // ここから introImage の再表示ロジックを削除します
+        // if (introImage) {
+        //     introImage.classList.remove('hidden');
+        //     console.log("showResultElements: introImage re-displayed for next draw.");
+        // }
     }
 }
 
@@ -350,6 +349,16 @@ function displayFinalResult() {
     }
 }
 
+// 参加者の中からランダムに一人選ぶ関数
+function getRandomParticipant() {
+    if (currentParticipants.length === 0) {
+        return null;
+    }
+    const randomIndex = Math.floor(Math.random() * currentParticipants.length);
+    const selected = currentParticipants[randomIndex];
+    currentParticipants.splice(randomIndex, 1); // 選ばれた人を配列から削除
+    return selected;
+}
 
 startButton.addEventListener('click', handleStartButtonClick);
 
@@ -370,3 +379,14 @@ document.addEventListener('DOMContentLoaded', () => {
     startButton.style.pointerEvents = 'auto';
     console.log("DOMContentLoaded: Initial setup complete.");
 });
+
+変更点:
+
+showResultElements() 関数内の以下の部分を削除しました。
+JavaScript
+
+// ここから introImage の再表示ロジックを削除します
+// if (introImage) {
+//     introImage.classList.remove('hidden');
+//     console.log("showResultElements: introImage re-displayed for next draw.");
+// }
