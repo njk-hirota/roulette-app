@@ -129,6 +129,8 @@ const allParticipants = [
     { name: "早坂 康佑", image: "126.jpg", "nameImage": "画像126.jpg" },
     { name: "隈川 雛奈子", image: "127.jpg", "nameImage": "画像127.jpg" },
 ];
+
+
 let currentParticipants = [...allParticipants]; // シャローコピーを作成
 let spinningInterval; // スピニング中の画像を切り替えるためのインターバルID
 
