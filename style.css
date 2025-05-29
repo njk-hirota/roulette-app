@@ -28,7 +28,7 @@ body {
     justify-content: center; /* space-between から center に変更 */
     /* ↑↑↑ ここを修正 ↑↑↑ */
     /* ↓↓↓ ここを追加: 要素間の垂直方向の隙間を定義 ↓↓↓ */
-    gap: 15px; /* 各要素間の隙間を15pxに設定 */
+    gap: 0px; /* 各要素間の隙間を15pxに設定 */
     /* ↑↑↑ ここを追加 ↑↑↑ */
     max-width: 500px; /* コンテナの最大幅 */
     width: 90%; /* コンテナの幅 */
