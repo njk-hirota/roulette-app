@@ -158,6 +158,24 @@ body {
     transition: background-color 0.3s ease;
     width: 80%; /* ボタンの幅 */
     max-width: 250px; /* ボタンの最大幅 */
+    
+    /* ★ここから追加・修正（ボタンを画像にするためのスタイル）★ */
+    background-image: url('images/startbutton.png'); /* ⬅︎ここに使う画像へのパスを指定 */
+    background-size: contain; /* 画像をボタンサイズに合わせて表示 */
+    background-repeat: no-repeat; /* 画像の繰り返しをしない */
+    background-position: center; /* 画像を中央に配置 */
+    background-color: transparent; /* 背景色を透明にする（画像が隠れないように） */
+    color: transparent; /* ボタンの文字を透明にする */
+    text-indent: -9999px; /* ボタンの文字を画面外に飛ばす (SEO的にも良い) */
+    overflow: hidden; /* 画面外に飛ばした文字がはみ出さないように */
+
+    /* ボタンのサイズを画像に合わせて調整（例：画像が横200px、縦80pxの場合） */
+    width: 250px; /* max-widthと合わせて調整 */
+    height: 80px; /* 画像の縦のサイズに合わせる */
+    padding: 0; /* パディングを0にする（画像サイズに合わせるため） */
+    border: none; /* もし枠線が不要なら */
+    box-shadow: none; /* もし影が不要なら */
+    /* ★ここまで追加・修正★ */
 }
 
 .action-button:hover {
@@ -249,8 +267,9 @@ body {
     }
 
     .action-button {
-        padding: 12px 25px; /* PCでのボタンのパディング */
-        font-size: 1.4em; /* PCでのボタンのフォントサイズ */
-        max-width: 300px; /* PCでのボタンの最大幅 */
+        width: 300px; /* PCでのボタンの最大幅に合わせて調整 */
+        height: 100px; /* PC向けの画像サイズに合わせる */
+        padding: 0; /* PC向けもパディングを0に */
+        font-size: 0; /* PCでも文字を非表示に */
     }
 }
