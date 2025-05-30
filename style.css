@@ -32,28 +32,73 @@ body {
     max-width: 500px; /* コンテナの最大幅 */
     width: 90%; /* コンテナの幅 */
     /* ↓↓↓ ここを修正: min-heightを調整 ↓↓↓ */
-    min-height: 240px; /* 以前の180pxから大きく */
+    min-height: 250px; /* 以前の300pxから小さく */
     /* ↑↑↑ ここを修正 ↑↑↑ */
-    box-sizing: border-box;
 }
 
 /* 導入画像のコンテナスタイル */
 .top-image-container {
-    margin-bottom: 0;
-    width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
-    flex-grow: 0;
-    flex-shrink: 0;
-    /* ↓↓↓ ここを修正: 導入画像コンテナの最大高さを1.5倍に ↓↓↓ */
-    max-height: 120px; /* 以前の80pxの1.5倍 */
+    width: 100%;
+    /* ↓↓↓ ここを修正: 導入画像コンテナの最大高さを調整 ↓↓↓ */
+    max-height: 90px; /* 以前の100pxから調整 */
     /* ↑↑↑ ここを修正 ↑↑↑ */
-    overflow: hidden;
+    /* ↓↓↓ ここを修正: gapでスペースを制御するためmargin-bottomを0に ↓↓↓ */
+    margin-bottom: 0; /* 以前の15pxから0に */
+    /* ↑↑↑ ここを修正 ↑↑↑ */
+    overflow: hidden; /* 画像がはみ出さないように */
 }
 
 /* 導入画像のスタイル */
 #introImage {
+    max-width: 100%;
+    height: auto;
+    object-fit: contain; /* アスペクト比を維持してコンテナに収める */
+    /* ↓↓↓ ここを修正: 導入画像自体の最大高さを調整 ↓↓↓ */
+    max-height: 90px; /* 以前の100pxから調整 */
+    /* ↑↑↑ ここを修正 ↑↑↑ */
+    display: block; /* 余白をなくす */
+}
+
+/* 抽選結果表示エリアのスタイル */
+.display-area {
+    flex-grow: 0; /* スペースを占有させない */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative; /* 子要素のabsolute配置の基準 */
+    gap: 5px; /* 子要素間のスペース */
+    /* ↓↓↓ ここを修正: gapでスペースを制御するためmargin-bottomを0に ↓↓↓ */
+    margin-bottom: 0; /* 以前の10pxから0に */
+    /* ↑↑↑ ここを修正 ↑↑↑ */
+    min-height: 160px; /* 結果表示画面の最小高さを設定 (開始画面には影響しない) */
+    max-width: 300px; /* 結果表示画面の最大幅を設定 (開始画面には影響しない) */
+    width: 100%; /* 親要素に対する幅 */
+    overflow: hidden; /* はみ出しを隠す */
+}
+
+/* おめでとうメッセージのスタイル */
+#congratulationsMessage {
+    font-size: 1.5em; /* フォントサイズ */
+    color: #333;
+    font-weight: bold;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    margin-bottom: 0; /* gapで制御するためマージンなし */
+    /* position: absolute; */ /* Flexアイテムとしての配置に変更したため不要 */
+    /* top: 10px; */ /* Flexアイテムとしての配置に変更したため不要 */
+    position: relative; /* transformを使うためにrelativeに */
+    transform: scale(1); /* 常に表示 */
+    opacity: 1; /* 常に表示 */
+    transition: transform 0.5s ease-out, opacity 0.5s ease-in; /* アニメーション */
+    white-space: nowrap; /* テキストが改行されないように */
+}
+
+/* 選ばれた画像のスタイル */
+#selectedImage {
     max-width: 100%;
     height: auto;
     display: block;
@@ -61,104 +106,78 @@ body {
     max-height: 120px; /* 以前の80pxの1.5倍 */
     /* ↑↑↑ ここを修正 ↑↑↑ */
     object-fit: contain;
-}
-
-
-.display-area {
-    flex-grow: 0;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    position: relative;
-    gap: 5px;
-    margin-bottom: 0;
-    min-height: 160px; /* 結果表示画面の最小高さを設定 (開始画面には影響しない) */
-    max-width: 300px; /* 結果表示画面の最大幅を設定 (開始画面には影響しない) */
-    width: 100%;
-}
-
-#congratulationsMessage {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    font-size: 1.2em;
-    color: #4CAF50;
-    font-weight: bold;
-    z-index: 2;
-    opacity: 0;
-    transition: opacity 1.0s ease-in-out;
-    text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
-    white-space: nowrap;
-}
-
-#selectedImage {
-    max-width: 60%;
-    height: auto;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     transition: transform 1.0s ease-out, opacity 1.0s ease-in;
-    transform: scale(0);
-    opacity: 0;
-    z-index: 1;
+    transform: scale(0); /* 初期状態は非表示 */
+    opacity: 0;          /* 初期状態は非表示 */
+    z-index: 1; /* 手前に表示 */
 }
 
+/* 結果アクション（名前画像、「さん」）のコンテナ */
 .result-actions {
     display: flex;
-    flex-direction: column;
     align-items: center;
-    margin-top: 5px;
-    width: 100%;
-    opacity: 0;
-    transition: opacity 1.0s ease-in-out;
+    justify-content: center;
+    gap: 5px; /* 名前画像と「さん」の間の隙間 */
+    opacity: 0; /* 初期状態は非表示 */
+    transition: opacity 0.5s ease-in; /* フェードインアニメーション */
+    margin-top: 0; /* gapで制御するためマージンなし */
 }
 
+/* 選ばれた名前画像のスタイル */
 #selectedName {
-    max-width: 50%;
+    max-width: 100%;
     height: auto;
-    margin-top: 5px;
-    opacity: 0;
-    transition: opacity 1.0s ease-in-out;
+    max-height: 40px; /* 名前の画像の高さを制限 */
+    object-fit: contain;
 }
 
+/* 「さん」のスタイル */
 #honorific {
-    font-size: 1em;
-    margin-top: 0px;
+    font-size: 1.2em;
     color: #333;
 }
 
+/* 抽選開始/もう一度抽選ボタンのコンテナ */
 .start-button-container {
     width: 100%;
     text-align: center;
+    /* gapで制御するためmargin-topを0に */
     margin-top: 0;
-    flex-shrink: 0;
 }
 
+/* ボタンのスタイル */
 .action-button {
     background-color: #4CAF50;
     color: white;
-    padding: 6px 12px;
+    padding: 10px 20px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    font-size: 0.9em;
+    font-size: 1.2em;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     transition: background-color 0.3s ease;
-    width: auto;
+    width: 80%; /* ボタンの幅 */
+    max-width: 250px; /* ボタンの最大幅 */
 }
 
 .action-button:hover {
     background-color: #45a049;
 }
 
-/* hidden クラス */
+.action-button:active {
+    background-color: #3e8e41;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    transform: translateY(1px);
+}
+
+/* 隠すためのクラス */
 .hidden {
-    display: none !important;
+    display: none !important; /* !important で強制的に非表示 */
 }
 
 /* スピニング中の表示クラス */
-.spinning .display-area #selectedImage {
-    display: block;
+.spinning #selectedImage {
+    display: block; /* スピニング中はselectedImageを表示 */
 }
 
 
@@ -197,41 +216,41 @@ body {
     }
 
     .display-area {
-        min-height: 180px;
-        max-width: 350px;
+        min-height: 180px; /* PCでの表示エリアの最小高さを調整 */
+        max-width: 350px; /* PCでの表示エリアの最大幅を調整 */
         padding: 10px;
         gap: 5px;
         margin-bottom: 0;
     }
 
     #congratulationsMessage {
-        font-size: 1.5em;
+        font-size: 2em; /* PC向けのフォントサイズを調整 */
+        margin-bottom: 0;
     }
 
     #selectedImage {
-        max-width: 180px;
-        max-height: 180px;
+        /* ↓↓↓ ここを修正: PCでの画像自体の最大高さを1.5倍に ↓↓↓ */
+        max-height: 180px; /* 以前の120pxの1.5倍 */
+        /* ↑↑↑ ここを修正 ↑↑↑ */
+        max-width: 100%;
     }
 
     .result-actions {
-        margin-top: 5px;
+        gap: 5px; /* PCでの名前画像と「さん」の間の隙間 */
+        margin-top: 0;
     }
 
     #selectedName {
-        max-width: 130px;
-        margin-top: 5px;
-    }
-    
-    #honorific {
-        font-size: 1.1em;
+        max-height: 60px; /* PCでの名前の画像の高さを制限 */
     }
 
-    .start-button-container {
-        margin-top: 0;
+    #honorific {
+        font-size: 1.5em; /* PCでの「さん」のフォントサイズ */
     }
-    
+
     .action-button {
-        padding: 8px 18px;
-        font-size: 1.0em;
+        padding: 12px 25px; /* PCでのボタンのパディング */
+        font-size: 1.4em; /* PCでのボタンのフォントサイズ */
+        max-width: 300px; /* PCでのボタンの最大幅 */
     }
 }
