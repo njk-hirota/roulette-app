@@ -131,8 +131,8 @@ const allParticipants = [
 ];
 
 let currentParticipants = [...allParticipants]; // シャッフル用
-const spinningDuration = 3000; // スピニングの時間（ミリ秒）
-const initialSpinDuration = 5000; // 初回抽選のスピニング時間
+const spinningDuration = 2000; // スピニングの時間（ミリ秒）
+const initialSpinDuration = 2000; // 初回抽選のスピニング時間
 const imageChangeInterval = 50; // 画像が変わる間隔（ミリ秒）
 let spinInterval; // setIntervalのIDを保持
 
