@@ -152,13 +152,27 @@ let honorific;
 function preloadAllImages() {
     const imageUrls = allParticipants.map(p => `images/${p.image}`);
     const nameImageUrls = allParticipants.map(p => `images/${p.nameImage}`);
-    const allUrls = [...imageUrls, ...nameImageUrls, 'images/background.jpg']; // 導入画像もプリロード
+    const allUrls = [...imageUrls, ...nameImageUrls, 'images/background.jpg'];
 
-    allUrls.forEach(url => {
-        const img = new Image();
-        img.src = url;
+    // Promise.allを使って全ての画像が読み込まれるのを待つ（オプションだが堅牢性を高める）
+    const imagePromises = allUrls.map(url => {
+        return new Promise((resolve, reject) => {
+            const img = new Image();
+            img.src = url;
+            img.onload = () => {
+                console.log(`Image loaded: ${url}`); // 読み込み成功ログ
+                resolve();
+            };
+            img.onerror = () => {
+                console.error(`Failed to load image: ${url}`); // 読み込み失敗ログ
+                reject();
+            };
+        });
     });
-    console.log("All images preloaded.");
+
+    Promise.all(imagePromises)
+        .then(() => console.log("All images preloaded successfully."))
+        .catch(() => console.warn("Some images failed to preload."));
 }
 
 // display-areaとその子要素を生成してコンテナに追加する関数
@@ -215,7 +229,6 @@ function removeDisplayArea() {
     }
 }
 
-
 // 全ての抽選結果要素を非表示にする関数
 function hideAllResults() {
     if (displayArea) {
@@ -230,7 +243,6 @@ function hideAllResults() {
     }
     console.log("All result elements hidden.");
 }
-
 
 // 結果要素を表示する関数
 function showResultElements() {
@@ -248,12 +260,22 @@ function showResultElements() {
 // スピニング中の画像を切り替える関数
 function spinImages() {
     const randomIndex = Math.floor(Math.random() * allParticipants.length);
-    selectedImage.src = `images/${allParticipants[randomIndex].image}`;
-    // console.log(`Spinning: ${allParticipants[randomIndex].name}`); // デバッグ用
+    const imageUrl = `images/${allParticipants[randomIndex].image}`;
+    selectedImage.src = imageUrl;
+    console.log(`Spinning: Setting image src to: ${imageUrl}`); // ★追加ログ
+    // 画像が実際にロードされたか確認するためのリスナー (デバッグ用)
+    selectedImage.onload = () => {
+        console.log(`Spinning: Image loaded: ${imageUrl}`);
+    };
+    selectedImage.onerror = () => {
+        console.error(`Spinning: Failed to load image: ${imageUrl}`);
+    };
 }
 
 // 抽選開始ボタンのクリックハンドラ
 function handleStartButtonClick() {
+    console.log("Start button clicked."); // ★追加ログ
+
     if (currentParticipants.length === 0) {
         alert("全員抽選済みです！");
         return;
@@ -262,30 +284,48 @@ function handleStartButtonClick() {
     // 開始画面の要素を非表示にし、抽選画面の要素を表示
     if (introImage) {
         introImage.classList.add('hidden');
+        console.log("Intro image hidden."); // ★追加ログ
     }
     startButton.classList.add('hidden'); // ボタンを非表示に
 
     // displayAreaがまだない場合は生成して追加
     if (!displayArea) {
         createDisplayArea();
+        console.log("Display area was not present, created now."); // ★追加ログ
     } else {
         // 既存のdisplayAreaがある場合は初期状態に戻す
         hideAllResults();
+        console.log("Existing display area reset."); // ★追加ログ
     }
 
     // displayAreaを表示状態にする（CSSのhiddenクラスを削除）
     displayArea.classList.remove('hidden'); // hiddenクラスを削除して表示
+    console.log("Display area unhidden."); // ★追加ログ
+
+    // ★★★ ここから前回の修正 ★★★
+    // 抽選中の画像を表示状態にする
+    selectedImage.style.transition = 'none'; // アニメーションを一旦無効化
+    selectedImage.style.transform = 'scale(1)'; // 表示サイズに
+    selectedImage.style.opacity = '1';          // 不透明に
+    selectedImage.src = `images/${allParticipants[0].image}`; // 初回は適当な画像をセット
+    selectedImage.offsetHeight; // 強制リフロー (スタイル適用のため)
+    console.log("selectedImage styles set for spinning."); // ★追加ログ
+    // ★★★ ここまで前回の修正 ★★★
 
     // スピニング開始
     displayArea.classList.add('spinning'); // .display-area に .spinning クラスを追加
+    console.log("Spinning class added to displayArea."); // ★追加ログ
     spinInterval = setInterval(spinImages, imageChangeInterval);
+    console.log(`Spin interval started: ${spinInterval}`); // ★追加ログ
 
     // スピニングを停止し、結果を表示
     // 初回のみ長く回るロジックを修正
     const isFirstSpin = (currentParticipants.length === allParticipants.length); // 全員残っている場合を初回とする
     const actualSpinDuration = isFirstSpin ? initialSpinDuration : spinningDuration;
+    console.log(`Spin duration: ${actualSpinDuration}ms`); // ★追加ログ
 
     setTimeout(() => {
+        console.log("Spinning duration ended. Clearing interval."); // ★追加ログ
         clearInterval(spinInterval); // スピニング停止
         displayFinalResult(); // 最終結果を表示
     }, actualSpinDuration);
@@ -293,11 +333,13 @@ function handleStartButtonClick() {
 
 // 最終結果を表示する関数
 function displayFinalResult() {
+    console.log("displayFinalResult called."); // ★追加ログ
     const selected = getRandomParticipant(); // ランダムに一人選ぶ
 
     if (selected) {
         // display-areaからspinningクラスを削除
         displayArea.classList.remove('spinning'); // ★ここを修正: spinningクラスを削除
+        console.log("Spinning class removed from displayArea."); // ★追加ログ
 
         // selectedImageのアニメーション準備
         selectedImage.style.transition = 'none'; // 一時的にtransitionを無効化
@@ -305,6 +347,7 @@ function displayFinalResult() {
         selectedImage.style.opacity = '0';
         selectedImage.src = `images/${selected.image}`; // 最終画像をセット
         selectedName.src = `images/${selected.nameImage}`; // 最終名前画像をセット
+        console.log(`Final result: ${selected.name}, image: ${selected.image}`); // ★追加ログ
 
         // 強制リフロー: これにより、上記 'none' と scale(0)/opacity(0) の状態がブラウザに適用される
         selectedImage.offsetHeight;
@@ -314,7 +357,7 @@ function displayFinalResult() {
             selectedImage.style.transition = 'transform 1.0s ease-out, opacity 1.0s ease-in'; // transitionを有効に戻す
             selectedImage.style.transform = 'scale(1)';
             selectedImage.style.opacity = '1';
-            // console.log("Final image animation started."); // デバッグ用
+            console.log("Final image animation started."); // デバッグ用
         }, 50); // 短い遅延
 
         // selectedImageのアニメーション完了を待つ（またはフォールバック）
@@ -324,7 +367,7 @@ function displayFinalResult() {
             startButton.textContent = "もう一度抽選";
             startButton.classList.remove('hidden'); // ボタンを表示
             startButton.style.pointerEvents = 'auto'; // クリック可能に
-            // console.log("Result elements and button shown."); // デバッグ用
+            console.log("Result elements and button shown."); // デバッグ用
         }, 1200); // selectedImageのtransformアニメーション時間より少し長く
 
     } else {
@@ -335,7 +378,7 @@ function displayFinalResult() {
         startButton.style.pointerEvents = 'none';
         if (introImage) introImage.classList.add('hidden'); // 念のため非表示
         removeDisplayArea(); // displayAreaも削除
-        // console.log("No participants left. All hidden."); // デバッグ用
+        console.log("No participants left. All hidden."); // デバッグ用
     }
 }
 
@@ -350,7 +393,7 @@ function getRandomParticipant() {
     return selected;
 }
 
-// ★★★★ この行をDOMContentLoadedの外に出す！ ★★★★
+// ★この行はDOMContentLoadedの外に配置済み
 startButton.addEventListener('click', handleStartButtonClick);
 
 // ページロード時に導入画像を表示 (初期状態)
@@ -365,5 +408,5 @@ document.addEventListener('DOMContentLoaded', () => {
         // CSSでz-indexを調整するか、position: relative; + z-index: 1; などで調整
         console.log("DOMContentLoaded: introImage displayed.");
     }
-    // 初期状態で抽選結果関連の要素は...
+    console.log("DOMContentLoaded: Initial state set.");
 });
