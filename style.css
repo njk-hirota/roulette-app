@@ -147,45 +147,44 @@ body {
 
 /* ボタンのスタイル */
 .action-button {
-    background-color: #4CAF50;
-    color: white;
-    padding: 10px 20px;
+    background-color: transparent;
+    color: transparent;
+    padding: 0;
     border: none;
-    border-radius: 5px;
+    border-radius: 0;
     cursor: pointer;
-    font-size: 1.2em;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-    transition: background-color 0.3s ease;
-    width: 80%; /* ボタンの幅 */
-    max-width: 250px; /* ボタンの最大幅 */
+    transition: box-shadow 0.3s ease, transform 0.3s ease;;
     
-    /* ★ここから追加・修正（ボタンを画像にするためのスタイル）★ */
     background-image: url('images/startbutton.png'); /* ⬅︎ここに使う画像へのパスを指定 */
     background-size: contain; /* 画像をボタンサイズに合わせて表示 */
     background-repeat: no-repeat; /* 画像の繰り返しをしない */
     background-position: center; /* 画像を中央に配置 */
-    background-color: transparent; /* 背景色を透明にする（画像が隠れないように） */
-    color: transparent; /* ボタンの文字を透明にする */
-    text-indent: -9999px; /* ボタンの文字を画面外に飛ばす (SEO的にも良い) */
-    overflow: hidden; /* 画面外に飛ばした文字がはみ出さないように */
 
     /* ボタンのサイズを画像に合わせて調整（例：画像が横200px、縦80pxの場合） */
     width: 250px; /* max-widthと合わせて調整 */
     height: 80px; /* 画像の縦のサイズに合わせる */
-    padding: 0; /* パディングを0にする（画像サイズに合わせるため） */
-    border: none; /* もし枠線が不要なら */
-    box-shadow: none; /* もし影が不要なら */
-    /* ★ここまで追加・修正★ */
+    text-indent: -9999px; /* ボタンの文字を画面外に飛ばす */
+    overflow: hidden; /* 画面外に飛ばした文字がはみ出さないように */
 }
 
 .action-button:hover {
-    background-color: #45a049;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* 影を濃くする例 */
+    transform: translateY(-1px); /* 少し上に動かす例 */
 }
 
 .action-button:active {
-    background-color: #3e8e41;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
-    transform: translateY(1px);
+    transform: translateY(1px); /* 少し下に動かす例 */
+}
+
+/* ★「もう一度抽選」ボタン用の画像スタイル★ */
+/* .action-button に .rerun-button クラスが追加された時に適用 */
+.action-button.rerun-button {
+    background-image: url('images/nextbutton.png'); /* 「もう一度抽選」ボタン画像へのパス */
+    /* もし「もう一度抽選」画像が「抽選開始」画像とサイズが異なる場合は、ここで width/height を上書きしてください */
+    /* width: 260px; */
+    /* height: 90px; */
 }
 
 /* 隠すためのクラス */
