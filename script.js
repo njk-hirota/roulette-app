@@ -349,12 +349,21 @@ function getRandomParticipant() {
     currentParticipants.splice(randomIndex, 1); // 選ばれた人を配列から削除
     return selected;
 }
+
+// ★★★★ この行をDOMContentLoadedの外に出す！ ★★★★
+startButton.addEventListener('click', handleStartButtonClick);
+
 // ページロード時に導入画像を表示 (初期状態)
 document.addEventListener('DOMContentLoaded', () => {
     // プリロードを開始
     preloadAllImages();
 
-    // 初期状態ではintroImageとstartButtonのみが表示される
-    // displayAreaはまだDOMに存在しない
-    console.log("DOMContentLoaded: Initial state set.");
+    // 導入画像を初期表示
+    if (introImage) {
+        introImage.classList.remove('hidden');
+        // introImageがZ-indexでボタンの上に重ならないように注意
+        // CSSでz-indexを調整するか、position: relative; + z-index: 1; などで調整
+        console.log("DOMContentLoaded: introImage displayed.");
+    }
+    // 初期状態で抽選結果関連の要素は...
 });
