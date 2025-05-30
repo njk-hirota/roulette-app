@@ -135,6 +135,7 @@ body {
 #honorific {
     font-size: 1.2em;
     color: #333;
+    display:none;
 }
 
 /* 抽選開始/もう一度抽選ボタンのコンテナ */
