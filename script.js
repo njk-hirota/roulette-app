@@ -131,8 +131,8 @@ const allParticipants = [
 ];
 
 let currentParticipants = [...allParticipants]; // シャッフル用
-const spinningDuration = 2000; // スピニングの時間（ミリ秒）
-const initialSpinDuration = 2000; // 初回抽選のスピニング時間
+const spinningDuration = 2000; // スピニングの時間（ミリ秒） 2秒に調整済み
+const initialSpinDuration = 2000; // 初回抽選のスピニング時間 2秒に調整済み
 const imageChangeInterval = 50; // 画像が変わる間隔（ミリ秒）
 let spinInterval; // setIntervalのIDを保持
 
@@ -180,8 +180,7 @@ function createDisplayArea() {
     displayArea = document.createElement('div');
     displayArea.id = 'displayArea'; // IDを追加
     displayArea.classList.add('display-area');
-    // 初期状態では hidden にしておき、handleStartButtonClick で解除
-    displayArea.classList.add('hidden'); // ★ここを追加または確認
+    displayArea.classList.add('hidden'); // 初期状態はhidden
 
     congratulationsMessage = document.createElement('span');
     congratulationsMessage.id = 'congratulationsMessage';
@@ -210,6 +209,7 @@ function createDisplayArea() {
     resultActions.appendChild(honorific);
 
     // .container の start-button-container の前に displayArea を挿入
+    // index.htmlの構造に合わせて、startButtonの親要素の前に挿入
     container.insertBefore(displayArea, startButton.parentNode);
 
     // アニメーションのために初期状態を設定
@@ -265,7 +265,7 @@ function spinImages() {
     console.log(`Spinning: Setting image src to: ${imageUrl}`); // ★追加ログ
     // 画像が実際にロードされたか確認するためのリスナー (デバッグ用)
     selectedImage.onload = () => {
-        console.log(`Spinning: Image loaded: ${imageUrl}`);
+        // console.log(`Spinning: Image loaded: ${imageUrl}`); // 大量ログになるのでコメントアウト
     };
     selectedImage.onerror = () => {
         console.error(`Spinning: Failed to load image: ${imageUrl}`);
@@ -274,7 +274,7 @@ function spinImages() {
 
 // 抽選開始ボタンのクリックハンドラ
 function handleStartButtonClick() {
-    console.log("Start button clicked."); // ★追加ログ
+    console.log("Start button clicked.");
 
     if (currentParticipants.length === 0) {
         alert("全員抽選済みです！");
@@ -284,48 +284,51 @@ function handleStartButtonClick() {
     // 開始画面の要素を非表示にし、抽選画面の要素を表示
     if (introImage) {
         introImage.classList.add('hidden');
-        console.log("Intro image hidden."); // ★追加ログ
+        console.log("Intro image hidden.");
     }
     startButton.classList.add('hidden'); // ボタンを非表示に
+
+    // ★追加: ボタンがクリックされたら、まずrerun-buttonクラスを削除しておく
+    // （もし「もう一度抽選」ボタンからクリックされた場合のため）
+    startButton.classList.remove('rerun-button');
+    // startButton.textContent = "抽選開始"; // テキストは透明なので、内部的に「抽選開始」状態に戻す必要は低いが、念のため
 
     // displayAreaがまだない場合は生成して追加
     if (!displayArea) {
         createDisplayArea();
-        console.log("Display area was not present, created now."); // ★追加ログ
+        console.log("Display area was not present, created now.");
     } else {
         // 既存のdisplayAreaがある場合は初期状態に戻す
         hideAllResults();
-        console.log("Existing display area reset."); // ★追加ログ
+        console.log("Existing display area reset.");
     }
 
     // displayAreaを表示状態にする（CSSのhiddenクラスを削除）
     displayArea.classList.remove('hidden'); // hiddenクラスを削除して表示
-    console.log("Display area unhidden."); // ★追加ログ
+    console.log("Display area unhidden.");
 
-    // ★★★ ここから前回の修正 ★★★
     // 抽選中の画像を表示状態にする
     selectedImage.style.transition = 'none'; // アニメーションを一旦無効化
     selectedImage.style.transform = 'scale(1)'; // 表示サイズに
     selectedImage.style.opacity = '1';          // 不透明に
     selectedImage.src = `images/${allParticipants[0].image}`; // 初回は適当な画像をセット
     selectedImage.offsetHeight; // 強制リフロー (スタイル適用のため)
-    console.log("selectedImage styles set for spinning."); // ★追加ログ
-    // ★★★ ここまで前回の修正 ★★★
+    console.log("selectedImage styles set for spinning.");
 
     // スピニング開始
     displayArea.classList.add('spinning'); // .display-area に .spinning クラスを追加
-    console.log("Spinning class added to displayArea."); // ★追加ログ
+    console.log("Spinning class added to displayArea.");
     spinInterval = setInterval(spinImages, imageChangeInterval);
-    console.log(`Spin interval started: ${spinInterval}`); // ★追加ログ
+    console.log(`Spin interval started: ${spinInterval}`);
 
     // スピニングを停止し、結果を表示
     // 初回のみ長く回るロジックを修正
     const isFirstSpin = (currentParticipants.length === allParticipants.length); // 全員残っている場合を初回とする
     const actualSpinDuration = isFirstSpin ? initialSpinDuration : spinningDuration;
-    console.log(`Spin duration: ${actualSpinDuration}ms`); // ★追加ログ
+    console.log(`Spin duration: ${actualSpinDuration}ms`);
 
     setTimeout(() => {
-        console.log("Spinning duration ended. Clearing interval."); // ★追加ログ
+        console.log("Spinning duration ended. Clearing interval.");
         clearInterval(spinInterval); // スピニング停止
         displayFinalResult(); // 最終結果を表示
     }, actualSpinDuration);
@@ -333,13 +336,13 @@ function handleStartButtonClick() {
 
 // 最終結果を表示する関数
 function displayFinalResult() {
-    console.log("displayFinalResult called."); // ★追加ログ
-    const selected = getRandomParticipant(); // ランダムに一人選ぶ
+    console.log("displayFinalResult called.");
+    const selected = getRandomParticipant();
 
     if (selected) {
         // display-areaからspinningクラスを削除
-        displayArea.classList.remove('spinning'); // ★ここを修正: spinningクラスを削除
-        console.log("Spinning class removed from displayArea."); // ★追加ログ
+        displayArea.classList.remove('spinning');
+        console.log("Spinning class removed from displayArea.");
 
         // selectedImageのアニメーション準備
         selectedImage.style.transition = 'none'; // 一時的にtransitionを無効化
@@ -347,7 +350,7 @@ function displayFinalResult() {
         selectedImage.style.opacity = '0';
         selectedImage.src = `images/${selected.image}`; // 最終画像をセット
         selectedName.src = `images/${selected.nameImage}`; // 最終名前画像をセット
-        console.log(`Final result: ${selected.name}, image: ${selected.image}`); // ★追加ログ
+        console.log(`Final result: ${selected.name}, image: ${selected.image}`);
 
         // 強制リフロー: これにより、上記 'none' と scale(0)/opacity(0) の状態がブラウザに適用される
         selectedImage.offsetHeight;
@@ -357,17 +360,21 @@ function displayFinalResult() {
             selectedImage.style.transition = 'transform 1.0s ease-out, opacity 1.0s ease-in'; // transitionを有効に戻す
             selectedImage.style.transform = 'scale(1)';
             selectedImage.style.opacity = '1';
-            console.log("Final image animation started."); // デバッグ用
+            console.log("Final image animation started.");
         }, 50); // 短い遅延
 
         // selectedImageのアニメーション完了を待つ（またはフォールバック）
         setTimeout(() => {
             showResultElements(); // 結果のメッセージと名前画像を表示
             // 次の抽選開始ボタンを表示
-            startButton.textContent = "もう一度抽選";
+            startButton.textContent = "もう一度抽選"; // テキストは透明だが、変更
             startButton.classList.remove('hidden'); // ボタンを表示
             startButton.style.pointerEvents = 'auto'; // クリック可能に
-            console.log("Result elements and button shown."); // デバッグ用
+
+            // ★追加: 「もう一度抽選」ボタンの画像に切り替えるためのクラスを追加
+            startButton.classList.add('rerun-button');
+            console.log("Button text set to 'もう一度抽選' and rerun-button class added.");
+
         }, 1200); // selectedImageのtransformアニメーション時間より少し長く
 
     } else {
@@ -378,7 +385,9 @@ function displayFinalResult() {
         startButton.style.pointerEvents = 'none';
         if (introImage) introImage.classList.add('hidden'); // 念のため非表示
         removeDisplayArea(); // displayAreaも削除
-        console.log("No participants left. All hidden."); // デバッグ用
+        // ★追加: 全員抽選済みの場合は、念のため .rerun-button クラスを削除
+        startButton.classList.remove('rerun-button');
+        console.log("No participants left. All hidden. Rerun class removed.");
     }
 }
 
@@ -393,20 +402,19 @@ function getRandomParticipant() {
     return selected;
 }
 
-// ★この行はDOMContentLoadedの外に配置済み
-startButton.addEventListener('click', handleStartButtonClick);
+// startButton.addEventListener('click', handleStartButtonClick); // DOMContentLoaded内へ移動
 
 // ページロード時に導入画像を表示 (初期状態)
 document.addEventListener('DOMContentLoaded', () => {
-    // プリロードを開始
     preloadAllImages();
-
-    // 導入画像を初期表示
     if (introImage) {
         introImage.classList.remove('hidden');
-        // introImageがZ-indexでボタンの上に重ならないように注意
-        // CSSでz-indexを調整するか、position: relative; + z-index: 1; などで調整
         console.log("DOMContentLoaded: introImage displayed.");
     }
-    console.log("DOMContentLoaded: Initial state set.");
+    // 初期状態ではstartButtonに.rerun-buttonクラスがないことを確認
+    startButton.classList.remove('rerun-button'); // 念のため
+    console.log("DOMContentLoaded: Initial state set. Rerun class ensured absent.");
+
+    // DOMContentLoaded内でイベントリスナーを設定
+    startButton.addEventListener('click', handleStartButtonClick);
 });
