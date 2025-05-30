@@ -183,9 +183,9 @@ body {
 /* .action-button に .rerun-button クラスが追加された時に適用 */
 .action-button.rerun-button {
     background-image: url('images/nextbutton.png'); /* 「もう一度抽選」ボタン画像へのパス */
-    /* もし「もう一度抽選」画像が「抽選開始」画像とサイズが異なる場合は、ここで width/height を上書きしてください */
-    /* width: 260px; */
-    /* height: 90px; */
+    /*「もう一度抽選」画像が「抽選開始」画像とサイズが異なる場合は、ここで width/height を上書きしてください */
+    width: 125px;
+    height: 40px;
 }
 
 /* 隠すためのクラス */
