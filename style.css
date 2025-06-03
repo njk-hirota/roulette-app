@@ -152,6 +152,7 @@ body {
 
 /* 抽選開始/もう一度抽選ボタンのコンテナ */
 .start-button-container {
+    background-color:white;
     display: flex; /* Flexboxを有効にする */
     justify-content: center; /* 要素を中央に配置 */
     align-items: center; /* 要素を垂直方向の中央に配置 */
