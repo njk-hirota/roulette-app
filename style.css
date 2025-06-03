@@ -148,6 +148,7 @@ body {
 }
 
 /* 抽選開始/もう一度抽選ボタンのコンテナ */
+/* start-button-container のスタイルを修正 */
 .start-button-container {
     display: flex; /* Flexboxを有効にする */
     justify-content: center; /* 要素を中央に配置 */
@@ -158,56 +159,47 @@ body {
     /* flex-wrap: wrap; /* 画面幅が狭い場合に折り返す */
 }
 
-/* ボタンのスタイル */
+/* 抽選ボタンのスタイル */
 .action-button {
-    background-color: transparent;
-    color: transparent;
-    padding: 0;
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
     border: none;
-    border-radius: 0;
-     -webkit-tap-highlight-color: transparent; /* モバイルでのタップ時のハイライトを削除 */
+    border-radius: 5px;
     cursor: pointer;
-    box-shadow: none;
-    transition: transform 0.2s ease;;
-    
-    background-image: url('images/startbutton.png'); /* ⬅︎ここに使う画像へのパスを指定 */
-    background-size: contain; /* 画像をボタンサイズに合わせて表示 */
-    background-repeat: no-repeat; /* 画像の繰り返しをしない */
-    background-position: center; /* 画像を中央に配置 */
-
-    /* ボタンのサイズを画像に合わせて調整（例：画像が横200px、縦80pxの場合） */
-    width: 250px; /* max-widthと合わせて調整 */
-    height: 80px; /* 画像の縦のサイズに合わせる */
-    text-indent: -9999px; /* ボタンの文字を画面外に飛ばす */
-    overflow: hidden; /* 画面外に飛ばした文字がはみ出さないように */
+    font-size: 1.2em;
+    transition: background-color 0.3s ease;
+    text-align: center; /* テキスト中央寄せ */
+    flex-grow: 1; /* 親要素の残りのスペースを均等に埋める */
+    max-width: 200px; /* 必要に応じて最大幅を設定 */
+    min-height: 40px; /* ボタンの最小高さに合わせて設定 */
+    display: flex; /* 内部テキストを中央寄せするため */
+    justify-content: center;
+    align-items: center;
 }
 
 .action-button:hover {
-    box-shadow: none; /* 影を濃くする例 */
-    transform: translateY(-1px); /* 少し上に動かす例 */
+    background-color: #45a049;
 }
 
-.action-button:active {
-    box-shadow: none;
-    transform: translateY(1px); /* 少し下に動かす例 */
-}
-
-/* ★「もう一度抽選」ボタン用の画像スタイル★ */
-/* .action-button に .rerun-button クラスが追加された時に適用 */
+/* もう一度抽選ボタンのスタイル */
 .action-button.rerun-button {
-    background-image: url('images/nextbutton.png'); /* 「もう一度抽選」ボタン画像へのパス */
-    /*「もう一度抽選」画像が「抽選開始」画像とサイズが異なる場合は、ここで width/height を上書きしてください */
-    width: 125px;
-    height: 40px;
+    background-color: #008CBA; /* 青色に変更 */
 }
 
-/* 隠すためのクラス */
+.action-button.rerun-button:hover {
+    background-color: #007bb5;
+}
+
+/* hidden クラス */
 .hidden {
-    display: none !important; /* !important で強制的に非表示 */
+    display: none !important; /* 最優先で非表示にする */
 }
 
-/* スピニング中の表示クラス */
-.spinning #selectedImage {
+/* display-areaがスピニング中のスタイル */
+.display-area.spinning #selectedImage {
+    opacity: 1; /* スピニング中は常に画像を表示 */
+    transform: scale(1); /* スピニング中は画像サイズを通常に保つ */
     display: block; /* スピニング中はselectedImageを表示 */
 }
 
