@@ -163,7 +163,7 @@ body {
 
 /* 抽選ボタンのスタイル */
 .action-button {
-　　background-color: transparent; /* 背景色を透明にする */
+　　background-color: white; /* 背景色を透明にする */
     color: transparent; /* テキストを透明にする (画像で表示するため) */
     padding: 0; /* パディングをリセット (画像サイズに合わせるため) */
     border: none;
@@ -180,7 +180,7 @@ body {
     align-items: center;
     /* ★修正: 抽選開始ボタン（通常時）の背景画像のみ設定。ホバー時の設定は不要 */
     background-image: url('images/startbutton.png'); /* 画像のパスを正確に指定 */
-    background-size: cover; /* 画像をボタンサイズに合わせて表示 */
+    background-size: countain; /* 画像をボタンサイズに合わせて表示 */
     background-repeat: no-repeat;
     background-position: center; /* 画像を中央に配置 */
 }
