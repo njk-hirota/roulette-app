@@ -168,6 +168,8 @@ body {
 　　background-color: white; /* 背景色を透明にする */
     color: transparent; /* テキストを透明にする (画像で表示するため) */
     padding: 0; /* パディングをリセット (画像サイズに合わせるため) */
+    border: none; /* ★ここを追加: ボーダーを削除 */
+    border-radius: 5px; /* (元のCSSにあったので残す) */
     cursor: pointer;
     font-size: 1.2em;
     transition: all 0.3s ease; /* transitionは残しておく (他のプロパティに影響するため) */
@@ -183,6 +185,7 @@ body {
     background-size: contain; /* 画像をボタンサイズに合わせて表示 */
     background-repeat: no-repeat;
     background-position: center; /* 画像を中央に配置 */
+    outline:none;
 }
 
 /* もう一度抽選ボタンのスタイル */
