@@ -121,7 +121,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 15px; /* ボタンと残り回数表示の隙間 */
+    gap: 3px; /* ボタンと残り回数表示の隙間 */
     width: 100%;
 }
 
@@ -189,7 +189,7 @@ body {
     padding: 10px 0; /* 左右のパディングは不要なので0に */
     border: none; /* ボーダーなし */
     border-radius: 0; /* 角丸なし */
-    font-size: 1.2em; /* フォントサイズ */
+    font-size: 0.5em; /* フォントサイズ */
     text-align: center;
     flex-grow: 1; /* ボタンと同じようにスペースを埋める */
     max-width: 200px; /* ボタンと同じ最大幅 */
