@@ -199,18 +199,12 @@ function createDisplayArea() {
     selectedName.alt = '選ばれた名前';
     selectedName.src = ''; // 初期値は空
 
-    honorific = document.createElement('span');
-    honorific.id = 'honorific';
-    honorific.classList.add('hidden'); // 初期は非表示
-    honorific.textContent = 'さん';
-
     // ★修正: remainingCountDisplayはHTMLに直接配置するため、ここでの作成は削除
     // remainingCountDisplay = document.createElement('div');
     // remainingCountDisplay.id = 'remainingCountDisplay';
     // remainingCountDisplay.classList.add('hidden'); // 初期は非表示
 
     resultActionsDiv.appendChild(selectedName);
-    resultActionsDiv.appendChild(honorific);
 
     displayArea.appendChild(congratulationsMessage);
     displayArea.appendChild(selectedImage);
@@ -239,7 +233,6 @@ function removeDisplayArea() {
         congratulationsMessage = null;
         selectedImage = null;
         selectedName = null;
-        honorific = null;
         // remainingCountDisplayはHTMLに直接配置されるので、ここではnullにしない
         console.log("Display area removed and references cleared.");
     }
@@ -255,7 +248,6 @@ function hideAllResults() {
         selectedImage.style.opacity = '0'; // For animation
     }
     if (selectedName) selectedName.classList.add('hidden');
-    if (honorific) honorific.classList.add('hidden');
     // ★修正: remainingCountDisplayは常にHTMLにあるため、nullチェックは不要だが、表示/非表示の制御は引き続き行う
     if (remainingCountDisplay) remainingCountDisplay.classList.add('hidden'); // 非表示にする
     console.log("All result elements hidden.");
@@ -267,7 +259,6 @@ function showResultElements() {
     if (congratulationsMessage) congratulationsMessage.classList.remove('hidden');
     if (selectedImage) selectedImage.classList.remove('hidden');
     if (selectedName) selectedName.classList.remove('hidden');
-    if (honorific) honorific.classList.remove('hidden'); // 「さん」も表示
     console.log("Result elements shown.");
 }
 
