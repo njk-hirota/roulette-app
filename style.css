@@ -99,16 +99,10 @@ body {
 
 /* ★追加: 残りの抽選回数表示のスタイル */
 #remainingCountDisplay {
-    background-color: #6c757d;
+    background-color: transparent;
     color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    font-size: 1.2em;
+    font-size: 0.5em;
     text-align: center;
-    flex-grow: 1;
-    max-width: 200px;
-    min-height: 40px;
     display: flex;
     justify-content: center;
     align-items: center;
