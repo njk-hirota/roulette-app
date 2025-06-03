@@ -297,11 +297,15 @@ function handleStartButtonClick() {
     }
 
     // スピニング開始時の画像表示準備
-    selectedImage.style.transition = 'none'; // アニメーションを一時停止
-    selectedImage.style.transform = 'scale(1)';
-    selectedImage.style.opacity = '1';
-    selectedImage.src = `images/${allParticipants[0].image}`; // 初期画像を表示（どれでもOK）
-    selectedImage.offsetHeight; // 強制的にリフローさせてtransitionをリセット
+   if (selectedImage) { // selectedImageがnullでないことを確認
+        selectedImage.classList.remove('hidden'); // 必ずhiddenクラスを削除して表示状態にする
+        selectedImage.style.transition = 'none';
+        selectedImage.style.transform = 'scale(1)';
+        selectedImage.style.opacity = '1';
+        // 最初のスピンでは、誰か一人の画像が表示されるように
+        selectedImage.src = `images/${allParticipants[0].image}`;
+        selectedImage.offsetHeight; // 強制リフロー
+    }
 
     displayArea.classList.add('spinning'); // スピニングアニメーションのクラスを追加
     console.log("Spinning class added to displayArea.");
