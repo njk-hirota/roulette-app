@@ -214,16 +214,9 @@ body {
 #remainingCountDisplay {
     /* .action-buttonのスタイルを継承するため、クラスを付与 */
     /* 元々hiddenクラスを持つので、必要に応じてJSで解除 */
-    background-color: #6c757d; /* グレー系の色 */
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    font-size: 1.2em;
+    color: black;
+    font-size: 0.5em;
     text-align: center;
-    flex-grow: 1; /* startButtonと同じようにスペースを埋める */
-    max-width: 200px; /* startButtonと同じ最大幅 */
-    min-height: 40px; /* startButtonと同じ最小高さ */
     display: flex; /* 内部テキストを中央寄せするため */
     justify-content: center;
     align-items: center;
