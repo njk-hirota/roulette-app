@@ -135,7 +135,6 @@ const spinningDuration = 2000; // スピニングの時間（ミリ秒） 2秒�
 const initialSpinDuration = 2000; // 初回抽選のスピニング時間 2秒に調整済み
 const imageChangeInterval = 50; // 画像が変わる間隔（ミリ秒）
 let spinInterval; // setIntervalのIDを保持
-let lotteryCount = 0; // ★追加: 抽選回数をカウントする変数
 
 // DOM要素の取得
 const container = document.querySelector('.container');
@@ -286,26 +285,8 @@ function spinImages() {
 function handleStartButtonClick() {
     console.log("Start button clicked.");
 
-// まず、抽選回数が上限に達していないかチェック
-// lotteryCountはdisplayFinalResultでインクリメントされるため、
-// ここでcurrentParticipants.lengthが0の場合も考慮する必要がある
-    if (currentParticipants.length === 0) { // 全員抽選済みの場合
-        alert("全員抽選済みです！これ以上抽選できません。");
-        // ボタンを無効化する処理はdisplayFinalResultで既に行われているか、ここで再度確実にする
-        startButton.classList.add('hidden'); // ボタンを非表示に
-        startButton.style.pointerEvents = 'none'; // クリック不可に
-        return;
-    }
-    
-    // ★追加: 抽選回数が31回に達しているかチェック
-    if (lotteryCount >= 31) {
-        alert("抽選回数が上限の31回に達しました。これ以上抽選できません。");
-        startButton.classList.add('hidden'); // ボタンを非表示に
-        startButton.style.pointerEvents = 'none'; // クリック不可に
-        // displayAreaが表示されている場合は、それも隠す
-        if (displayArea) {
-            removeDisplayArea(); // displayAreaを削除
-        }
+    if (currentParticipants.length === 0) {
+        alert("全員抽選済みです！");
         return;
     }
 
@@ -374,13 +355,10 @@ function displayFinalResult() {
     const selected = getRandomParticipant();
 
     if (selected) {
-        // ★追加: 抽選回数をインクリメント
-        lotteryCount++;
-        console.log(`Current lottery count: ${lotteryCount}`);
-
+        // display-areaからspinningクラスを削除
         displayArea.classList.remove('spinning');
         console.log("Spinning class removed from displayArea.");
-  
+
         // selectedImageのアニメーション準備
         selectedImage.style.transition = 'none'; // 一時的にtransitionを無効化
         selectedImage.style.transform = 'scale(0)';
@@ -412,24 +390,17 @@ function displayFinalResult() {
                 remainingCountDisplay.classList.remove('hidden'); // 表示する
             }
             console.log(`Remaining participants: ${remainingCount}`);
+            
+            // 次の抽選開始ボタンを表示
+            startButton.textContent = "もう一度抽選"; // テキストは透明だが、変更
+            startButton.classList.remove('hidden'); // ボタンを表示
+            startButton.style.pointerEvents = 'auto'; // クリック可能に
 
-        // ★修正: 抽選回数が31回に達したらボタンを無効化
-            if (lotteryCount >= 31) {
-                startButton.textContent = "抽選終了"; // ボタンのテキストも変更
-                startButton.classList.remove('hidden'); // ボタンは表示する
-                startButton.style.pointerEvents = 'none'; // クリック不可にする
-                startButton.classList.remove('rerun-button'); // スタイルも戻す
-                alert("抽選回数が上限の31回に達しました。"); // アラートで通知
-                console.log("Lottery limit reached (31 times). Button disabled.");
-            } else {
-                startButton.textContent = "もう一度抽選";
-                startButton.classList.remove('hidden');
-                startButton.style.pointerEvents = 'auto';
-                startButton.classList.add('rerun-button');
-                console.log("Button text set to 'もう一度抽選' and rerun-button class added.");
-            }
+            // ★追加: 「もう一度抽選」ボタンの画像に切り替えるためのクラスを追加
+            startButton.classList.add('rerun-button');
+            console.log("Button text set to 'もう一度抽選' and rerun-button class added.");
 
-        }, 1200);
+        }, 1200); // selectedImageのtransformアニメーション時間より少し長く
 
     } else {
         // 抽選する人がいない場合
