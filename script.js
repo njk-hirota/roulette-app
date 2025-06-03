@@ -380,7 +380,7 @@ function displayFinalResult() {
             const displayRemainingCount = MAX_DISPLAY_COUNT - lotteryCount;
             if (remainingCountDisplay) {
                 if (displayRemainingCount > 0) {
-                    remainingCountDisplay.textContent = `あと${displayRemainingCount}回抽選できます`;
+                    remainingCountDisplay.textContent = `あと${displayRemainingCount}個`;
                     remainingCountDisplay.classList.remove('hidden'); // 残り回数を表示
                     console.log(`Displayed remaining count: ${displayRemainingCount}`);
                 } else {
