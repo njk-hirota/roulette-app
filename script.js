@@ -163,6 +163,12 @@ function preloadAllImages() {
         const nameImg = new Image();
         nameImg.src = `images/${p.nameImage}`;
     });
+    // ★修正: ボタンの背景画像（ホバー用は不要）
+    const startNormal = new Image();
+    startNormal.src = 'images/startbutton.png'; // 抽選開始ボタンの通常画像
+    const rerunNormal = new Image();
+    rerunNormal.src = 'images/nextbutton.png'; // もう一度抽選ボタンの通常画像
+  
     // 背景画像もプリロード
     const bgImg = new Image();
     bgImg.src = 'images/background.jpg';
