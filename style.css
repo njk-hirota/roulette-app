@@ -155,7 +155,7 @@ body {
     display: flex; /* Flexboxを有効にする */
     justify-content: center; /* 要素を中央に配置 */
     align-items: center; /* 要素を垂直方向の中央に配置 */
-    gap: 15px; /* ボタンと抽選回数表示の間の隙間を設定 */
+    gap: 0px; /* ボタンと抽選回数表示の間の隙間を設定 */
     width: 100%; /* 親要素の幅いっぱいに広げる */
     /* margin-topなどを調整して、他の要素との間隔を制御 */
     /* flex-wrap: wrap; /* 画面幅が狭い場合に折り返す */
@@ -173,7 +173,7 @@ body {
     transition: all 0.3s ease; /* transitionは残しておく (他のプロパティに影響するため) */
     text-align: center;
     flex-grow: 1;
-    max-width: 180px; /* ボタンの最大幅 */
+    max-width: 160px; /* ボタンの最大幅 */
     min-height: 60px; /* ボタンの最小高さ */
     display: flex;
     justify-content: center;
