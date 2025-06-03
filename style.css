@@ -111,7 +111,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 5px;
+    gap: 0px;
     opacity: 0;
     transition: opacity 0.5s ease-in;
     margin-top: 0;
