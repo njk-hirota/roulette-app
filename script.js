@@ -143,7 +143,6 @@ const MAX_DISPLAY_COUNT = 31; // 表示する抽選回数の上限（この回�
 const container = document.querySelector('.container');
 const introImage = document.getElementById('introImage');
 const startButton = document.getElementById('startButton');
-// ★修正: remainingCountDisplayをグローバルスコープで取得するように変更
 const remainingCountDisplay = document.getElementById('remainingCountDisplay');
 
 
@@ -152,7 +151,7 @@ let displayArea;
 let congratulationsMessage;
 let selectedImage;
 let selectedName;
-let honorific; // 「さん」要素
+let resultActionsDiv; // result-actionsへの参照を保持
 
 
 // すべての画像をプリロードする関数
@@ -163,7 +162,7 @@ function preloadAllImages() {
         const nameImg = new Image();
         nameImg.src = `images/${p.nameImage}`;
     });
-    // ★修正: ボタンの背景画像（ホバー用は不要）
+    // ボタンの背景画像
     const startNormal = new Image();
     startNormal.src = 'images/startbutton.png'; // 抽選開始ボタンの通常画像
     const rerunNormal = new Image();
@@ -191,7 +190,7 @@ function createDisplayArea() {
     selectedImage.alt = '選ばれた画像';
     selectedImage.src = ''; // 初期値は空
 
-    const resultActionsDiv = document.createElement('div');
+    resultActionsDiv = document.createElement('div'); // resultActionsDivを初期化
     resultActionsDiv.classList.add('result-actions'); // style.cssで定義されたスタイルを適用
 
     selectedName = document.createElement('img');
@@ -199,18 +198,11 @@ function createDisplayArea() {
     selectedName.alt = '選ばれた名前';
     selectedName.src = ''; // 初期値は空
 
-    // ★修正: remainingCountDisplayはHTMLに直接配置するため、ここでの作成は削除
-    // remainingCountDisplay = document.createElement('div');
-    // remainingCountDisplay.id = 'remainingCountDisplay';
-    // remainingCountDisplay.classList.add('hidden'); // 初期は非表示
-
     resultActionsDiv.appendChild(selectedName);
 
     displayArea.appendChild(congratulationsMessage);
     displayArea.appendChild(selectedImage);
     displayArea.appendChild(resultActionsDiv);
-    // ★修正: remainingCountDisplayはHTMLに直接配置するため、ここでの追加は削除
-    // displayArea.appendChild(remainingCountDisplay);
 
     // .top-image-container の直後に追加
     const topImageContainer = document.querySelector('.top-image-container');
@@ -233,7 +225,7 @@ function removeDisplayArea() {
         congratulationsMessage = null;
         selectedImage = null;
         selectedName = null;
-        // remainingCountDisplayはHTMLに直接配置されるので、ここではnullにしない
+        resultActionsDiv = null; // この参照もクリア
         console.log("Display area removed and references cleared.");
     }
 }
@@ -243,12 +235,13 @@ function hideAllResults() {
     // これらの要素はdisplayAreaが作成された後に参照が設定されるため、nullチェックが必要
     if (congratulationsMessage) congratulationsMessage.classList.add('hidden');
     if (selectedImage) {
-        selectedImage.classList.add('hidden'); // This is the culprit for the blank screen
-        selectedImage.style.transform = 'scale(0)'; // For animation
-        selectedImage.style.opacity = '0'; // For animation
+        selectedImage.classList.add('hidden');
+        selectedImage.style.transform = 'scale(0)'; // アニメーション用
+        selectedImage.style.opacity = '0'; // アニメーション用
     }
     if (selectedName) selectedName.classList.add('hidden');
-    // ★修正: remainingCountDisplayは常にHTMLにあるため、nullチェックは不要だが、表示/非表示の制御は引き続き行う
+    if (resultActionsDiv) resultActionsDiv.classList.add('hidden'); // resultActionsDivを非表示
+    // remainingCountDisplayは常にHTMLにあるため、nullチェックは不要だが、表示/非表示の制御は引き続き行う
     if (remainingCountDisplay) remainingCountDisplay.classList.add('hidden'); // 非表示にする
     console.log("All result elements hidden.");
 }
@@ -259,6 +252,8 @@ function showResultElements() {
     if (congratulationsMessage) congratulationsMessage.classList.remove('hidden');
     if (selectedImage) selectedImage.classList.remove('hidden');
     if (selectedName) selectedName.classList.remove('hidden');
+    if (resultActionsDiv) resultActionsDiv.classList.remove('hidden'); // resultActionsDivを表示
+    if (resultActionsDiv) resultActionsDiv.style.opacity = '1'; // 透明度を1に設定
     console.log("Result elements shown.");
 }
 
@@ -283,7 +278,7 @@ function handleStartButtonClick() {
         startButton.style.pointerEvents = 'none';
         if (displayArea) { removeDisplayArea(); } // displayAreaも削除
         if (introImage) { introImage.classList.add('hidden'); }
-        // ★修正: remainingCountDisplayはHTMLに常に存在するため、hiddenクラスで非表示
+        // remainingCountDisplayはHTMLに常に存在するため、hiddenクラスで非表示
         if (remainingCountDisplay) { remainingCountDisplay.classList.add('hidden'); }
         return;
     }
@@ -310,7 +305,7 @@ function handleStartButtonClick() {
     displayArea.classList.remove('hidden');
 
     // スピニング開始時には、残り回数表示を一旦非表示にする (結果表示時に再表示)
-    // ★修正: remainingCountDisplayはHTMLに常に存在するため、hiddenクラスで非表示
+    // remainingCountDisplayはHTMLに常に存在するため、hiddenクラスで非表示
     if (remainingCountDisplay) {
         remainingCountDisplay.classList.add('hidden');
     }
@@ -354,7 +349,7 @@ function displayFinalResult() {
         startButton.style.pointerEvents = 'none'; // クリック不可にする
         startButton.classList.remove('rerun-button'); // スタイルも戻す
         if (displayArea) { removeDisplayArea(); }
-        // ★修正: remainingCountDisplayはHTMLに常に存在するため、hiddenクラスで非表示
+        // remainingCountDisplayはHTMLに常に存在するため、hiddenクラスで非表示
         if (remainingCountDisplay) { remainingCountDisplay.classList.add('hidden'); }
         return;
     }
@@ -389,7 +384,7 @@ function displayFinalResult() {
 
             // 残りの表示回数を計算し、31回目以降は非表示にするロジック
             const displayRemainingCount = MAX_DISPLAY_COUNT - lotteryCount;
-            // ★修正: remainingCountDisplayがnullでないことを確認
+            // remainingCountDisplayがnullでないことを確認
             if (remainingCountDisplay) {
                 if (displayRemainingCount > 0) {
                     remainingCountDisplay.textContent = `あと${displayRemainingCount}個`;
@@ -447,7 +442,7 @@ document.addEventListener('DOMContentLoaded', () => {
     startButton.classList.remove('rerun-button');
     console.log("DOMContentLoaded: Initial state set. Rerun class ensured absent.");
 
-    // ★修正: remainingCountDisplayはHTMLに直接配置されるので、ここで初期状態をhiddenにする
+    // remainingCountDisplayはHTMLに直接配置されるので、ここで初期状態をhiddenにする
     if (remainingCountDisplay) {
         remainingCountDisplay.classList.add('hidden');
         console.log("DOMContentLoaded: remainingCountDisplay initially hidden.");
