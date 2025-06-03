@@ -148,7 +148,6 @@ body {
 }
 
 /* 抽選開始/もう一度抽選ボタンのコンテナ */
-/* start-button-container のスタイルを修正 */
 .start-button-container {
     display: flex; /* Flexboxを有効にする */
     justify-content: center; /* 要素を中央に配置 */
@@ -161,34 +160,33 @@ body {
 
 /* 抽選ボタンのスタイル */
 .action-button {
-    background-color: #4CAF50;
-    color: white;
-    padding: 10px 20px;
+　　background-color: transparent; /* 背景色を透明にする */
+    color: transparent; /* テキストを透明にする (画像で表示するため) */
+    padding: 0; /* パディングをリセット (画像サイズに合わせるため) */
     border: none;
     border-radius: 5px;
     cursor: pointer;
     font-size: 1.2em;
-    transition: background-color 0.3s ease;
-    text-align: center; /* テキスト中央寄せ */
-    flex-grow: 1; /* 親要素の残りのスペースを均等に埋める */
-    max-width: 200px; /* 必要に応じて最大幅を設定 */
-    min-height: 40px; /* ボタンの最小高さに合わせて設定 */
-    display: flex; /* 内部テキストを中央寄せするため */
+    transition: all 0.3s ease; /* transitionは残しておく (他のプロパティに影響するため) */
+    text-align: center;
+    flex-grow: 1;
+    max-width: 200px; /* ボタンの最大幅 */
+    min-height: 40px; /* ボタンの最小高さ */
+    display: flex;
     justify-content: center;
     align-items: center;
-}
-
-.action-button:hover {
-    background-color: #45a049;
+    /* ★修正: 抽選開始ボタン（通常時）の背景画像のみ設定。ホバー時の設定は不要 */
+    background-image: url('images/startButton_normal.png'); /* 画像のパスを正確に指定 */
+    background-size: contain; /* 画像をボタンサイズに合わせて表示 */
+    background-repeat: no-repeat;
+    background-position: center; /* 画像を中央に配置 */
 }
 
 /* もう一度抽選ボタンのスタイル */
 .action-button.rerun-button {
-    background-color: #008CBA; /* 青色に変更 */
-}
-
-.action-button.rerun-button:hover {
-    background-color: #007bb5;
+    /* ★修正: もう一度抽選ボタン（通常時）の背景画像のみ設定。ホバー時の設定は不要 */
+    background-image: url('images/rerunButton_normal.png'); /* 「もう一度抽選」画像のパスを正確に指定 */
+    background-color: transparent;
 }
 
 /* hidden クラス */
