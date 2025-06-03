@@ -98,7 +98,7 @@ body {
     max-width: 100%;
     height: auto;
     display: block;
-    max-height: 120px;
+    max-height: 140px;
     object-fit: contain;
     transition: transform 1.0s ease-out, opacity 1.0s ease-in;
     transform: scale(0);
