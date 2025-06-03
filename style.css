@@ -157,6 +157,7 @@ body {
     align-items: center; /* 要素を垂直方向の中央に配置 */
     gap: 0px; /* ボタンと抽選回数表示の間の隙間を設定 */
     width: 100%; /* 親要素の幅いっぱいに広げる */
+    max-width:150px;
     /* margin-topなどを調整して、他の要素との間隔を制御 */
     /* flex-wrap: wrap; /* 画面幅が狭い場合に折り返す */
 }
