@@ -141,6 +141,9 @@ const container = document.querySelector('.container');
 const introImage = document.getElementById('introImage');
 const startButton = document.getElementById('startButton');
 
+// 残りの抽選回数を表示する要素の宣言
+let remainingCountDisplay; // ★追加
+
 // display-areaとその子要素は動的に生成するため、初期状態では存在しない
 let displayArea;
 let congratulationsMessage;
@@ -188,6 +191,12 @@ function createDisplayArea() {
     congratulationsMessage.textContent = 'おめでとうございます！';
     displayArea.appendChild(congratulationsMessage);
 
+     // ★追加: 残りの抽選回数を表示する要素
+    remainingCountDisplay = document.createElement('span');
+    remainingCountDisplay.id = 'remainingCountDisplay';
+    remainingCountDisplay.classList.add('hidden'); // 初期状態は非表示
+    displayArea.appendChild(remainingCountDisplay); // congratulationMessage の下に追加
+    
     selectedImage = document.createElement('img');
     selectedImage.id = 'selectedImage';
     selectedImage.alt = '選ばれた画像';
@@ -307,6 +316,12 @@ function handleStartButtonClick() {
     displayArea.classList.remove('hidden'); // hiddenクラスを削除して表示
     console.log("Display area unhidden.");
 
+    // ★追加: 抽選開始時に残りの回数表示を非表示にする
+    if (remainingCountDisplay) { // 要素が生成されているか確認
+        remainingCountDisplay.classList.add('hidden');
+    }
+
+    
     // 抽選中の画像を表示状態にする
     selectedImage.style.transition = 'none'; // アニメーションを一旦無効化
     selectedImage.style.transform = 'scale(1)'; // 表示サイズに
@@ -366,6 +381,16 @@ function displayFinalResult() {
         // selectedImageのアニメーション完了を待つ（またはフォールバック）
         setTimeout(() => {
             showResultElements(); // 結果のメッセージと名前画像を表示
+            
+        // ★追加: 残りの抽選回数を表示する
+            const remainingCount = currentParticipants.length;
+            const totalParticipants = allParticipants.length;
+            if (remainingCountDisplay) {
+                remainingCountDisplay.textContent = `残り：${remainingCount}回`;
+                remainingCountDisplay.classList.remove('hidden'); // 表示する
+            }
+            console.log(`Remaining participants: ${remainingCount}`);
+            
             // 次の抽選開始ボタンを表示
             startButton.textContent = "もう一度抽選"; // テキストは透明だが、変更
             startButton.classList.remove('hidden'); // ボタンを表示
@@ -388,6 +413,11 @@ function displayFinalResult() {
         // ★追加: 全員抽選済みの場合は、念のため .rerun-button クラスを削除
         startButton.classList.remove('rerun-button');
         console.log("No participants left. All hidden. Rerun class removed.");
+
+        // ★追加: 全員抽選済みの場合は、残り回数表示も非表示にする
+        if (remainingCountDisplay) {
+            remainingCountDisplay.classList.add('hidden');
+        }
     }
 }
 
