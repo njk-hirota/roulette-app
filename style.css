@@ -99,11 +99,23 @@ body {
 
 /* ★追加: 残りの抽選回数表示のスタイル */
 #remainingCountDisplay {
-    font-size: 1.2em; /* フォントサイズを調整 */
-    color: #666; /* 色を調整 */
-    margin-bottom: 15px; /* 選ばれた画像との間に少し余白 */
-    display: block; /* 独立したブロックとして表示 */
-    text-align: center; /* 中央寄せ */
+.remaining-count-display { /* 新しいクラス名も追加 */
+    background-color: transparent; /* 背景を透明に */
+    color: #333; /* 文字色を濃いグレーなどに (見やすい色に調整してください) */
+    padding: 10px 0; /* 左右のパディングは不要なので0に */
+    border: none; /* ボーダーなし */
+    border-radius: 0; /* 角丸なし */
+    font-size: 1.2em; /* フォントサイズ */
+    text-align: center;
+    /* Flexboxのアイテムとしての振る舞い */
+    flex-grow: 1; /* ボタンと同じようにスペースを埋める */
+    max-width: 200px; /* ボタンと同じ最大幅 */
+    min-height: 40px; /* ボタンと同じ最小高さ */
+    display: flex; /* 内部テキストを中央寄せするため */
+    justify-content: center;
+    align-items: center;
+    cursor: default; /* クリックできないようにカーソルを変更 */
+    font-weight: bold; /* テキストを太字にするなど、見やすく調整 */
 }
 
 /* 選ばれた画像のスタイル */
