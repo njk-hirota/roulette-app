@@ -149,10 +149,13 @@ body {
 
 /* 抽選開始/もう一度抽選ボタンのコンテナ */
 .start-button-container {
-    width: 100%;
-    text-align: center;
-    /* gapで制御するためmargin-topを0に */
-    margin-top: 0;
+    display: flex; /* Flexboxを有効にする */
+    justify-content: center; /* 要素を中央に配置 */
+    align-items: center; /* 要素を垂直方向の中央に配置 */
+    gap: 15px; /* ボタンと抽選回数表示の間の隙間を設定 */
+    width: 100%; /* 親要素の幅いっぱいに広げる */
+    /* margin-topなどを調整して、他の要素との間隔を制御 */
+    /* flex-wrap: wrap; /* 画面幅が狭い場合に折り返す */
 }
 
 /* ボタンのスタイル */
@@ -208,6 +211,25 @@ body {
     display: block; /* スピニング中はselectedImageを表示 */
 }
 
+/* ★追加・修正: 残りの抽選回数表示のスタイル */
+#remainingCountDisplay {
+    /* .action-buttonのスタイルを継承するため、クラスを付与 */
+    /* 元々hiddenクラスを持つので、必要に応じてJSで解除 */
+    background-color: #6c757d; /* グレー系の色 */
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1.2em;
+    text-align: center;
+    flex-grow: 1; /* startButtonと同じようにスペースを埋める */
+    max-width: 200px; /* startButtonと同じ最大幅 */
+    min-height: 40px; /* startButtonと同じ最小高さ */
+    display: flex; /* 内部テキストを中央寄せするため */
+    justify-content: center;
+    align-items: center;
+    cursor: default; /* クリックできないようにカーソルを変更 */
+}
 
 /* ------------------------------------------------ */
 /* PC/タブレット向けのスタイル (769px以上の画面幅に適用) */
