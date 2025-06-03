@@ -176,7 +176,7 @@ body {
     justify-content: center;
     align-items: center;
     /* ★修正: 抽選開始ボタン（通常時）の背景画像のみ設定。ホバー時の設定は不要 */
-    background-image: url('images/startButton_normal.png'); /* 画像のパスを正確に指定 */
+    background-image: url('images/startbutton.png'); /* 画像のパスを正確に指定 */
     background-size: contain; /* 画像をボタンサイズに合わせて表示 */
     background-repeat: no-repeat;
     background-position: center; /* 画像を中央に配置 */
@@ -185,7 +185,7 @@ body {
 /* もう一度抽選ボタンのスタイル */
 .action-button.rerun-button {
     /* ★修正: もう一度抽選ボタン（通常時）の背景画像のみ設定。ホバー時の設定は不要 */
-    background-image: url('images/rerunButton_normal.png'); /* 「もう一度抽選」画像のパスを正確に指定 */
+    background-image: url('images/nextbutton.png'); /* 「もう一度抽選」画像のパスを正確に指定 */
     background-color: transparent;
 }
 
