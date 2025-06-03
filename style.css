@@ -16,9 +16,7 @@ body {
 
 .container {
     background-color: white;
-    /* ↓↓↓ ここを修正: 上下のパディングを調整 ↓↓↓ */
-    padding: 10px 20px 10px; /* 上下10px (以前は5px) */
-    /* ↑↑↑ ここを修正 ↑↑↑ */
+    padding: 10px 20px 10px;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     text-align: center;
@@ -26,150 +24,110 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    /* ↓↓↓ ここを修正: gapを調整 ↓↓↓ */
-    gap: 15px; /* 各要素間の隙間を15pxに設定 (以前は10px) */
-    /* ↑↑↑ ここを修正 ↑↑↑ */
+    gap: 15px;
     max-width: 500px; /* コンテナの最大幅 */
-    width: 90%; /* コンテナの幅 */
-    /* ↓↓↓ ここを修正: min-heightを調整 ↓↓↓ */
-    min-height: 250px; /* 以前の300pxから小さく */
-    /* ↑↑↑ ここを修正 ↑↑↑ */
+    width: 90%; /* レスポンシブ対応 */
 }
 
 /* 導入画像のコンテナスタイル */
 .top-image-container {
+    width: 100%;
+    margin-bottom: 5px; /* 下部との余白を調整 */
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 100%;
-    /* ↓↓↓ ここを修正: 導入画像コンテナの最大高さを調整 ↓↓↓ */
-    max-height: 90px; /* 以前の100pxから調整 */
-    /* ↑↑↑ ここを修正 ↑↑↑ */
-    /* ↓↓↓ ここを修正: gapでスペースを制御するためmargin-bottomを0に ↓↓↓ */
-    margin-bottom: 0; /* 以前の15pxから0に */
-    /* ↑↑↑ ここを修正 ↑↑↑ */
-    overflow: hidden; /* 画像がはみ出さないように */
+    max-height: 90px; /* 導入画像のコンテナの最大高さ */
+    overflow: hidden; /* コンテナからはみ出る部分を隠す */
 }
 
 /* 導入画像のスタイル */
 #introImage {
-    max-width: 100%;
+    max-width: 100%; /* コンテナに合わせて画像を縮小 */
     height: auto;
-    object-fit: contain; /* アスペクト比を維持してコンテナに収める */
-    /* ↓↓↓ ここを修正: 導入画像自体の最大高さを調整 ↓↓↓ */
-    max-height: 90px; /* 以前の100pxから調整 */
-    /* ↑↑↑ ここを修正 ↑↑↑ */
-    display: block; /* 余白をなくす */
+    display: block; /* 余分なスペースをなくす */
+    max-height: 90px; /* 導入画像の最大高さ */
+    object-fit: contain; /* 画像がコンテナに収まるように調整 */
+    transition: opacity 0.5s ease; /* フェードアウト用 */
 }
 
 /* 抽選結果表示エリアのスタイル */
 .display-area {
-    flex-grow: 0; /* スペースを占有させない */
+    width: 100%;
+    min-height: 120px; /* ある程度の高さを確保 */
+    background-color: #e9ecef;
+    border-radius: 8px;
+    padding: 10px;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    position: relative; /* 子要素のabsolute配置の基準 */
-    gap: 5px; /* 子要素間のスペース */
-    /* ↓↓↓ ここを修正: gapでスペースを制御するためmargin-bottomを0に ↓↓↓ */
-    margin-bottom: 0; /* 以前の10pxから0に */
-    /* ↑↑↑ ここを修正 ↑↑↑ */
-    min-height: 160px; /* 結果表示画面の最小高さを設定 (開始画面には影響しない) */
-    max-width: 300px; /* 結果表示画面の最大幅を設定 (開始画面には影響しない) */
-    width: 100%; /* 親要素に対する幅 */
-    overflow: hidden; /* はみ出しを隠す */
+    gap: 5px;
+    margin-bottom: 10px;
+    transition: min-height 0.5s ease; /* スピニング中の高さ変化用 */
 }
 
-/* おめでとうメッセージのスタイル */
+/* スピニング中のdisplay-areaのスタイル */
+.display-area.spinning {
+    min-height: 120px; /* スピニング中は高さ固定 */
+}
+
+/* 「おめでとうございます！」メッセージのスタイル */
 #congratulationsMessage {
-    font-size: 1.8em; /* フォントサイズ */
-    color: gold;
+    font-size: 1.5em;
+    color: #28a745; /* 緑色 */
     font-weight: bold;
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
-    text-align: center;
-    margin-bottom: 5px; /* gapで制御するためマージンなし */
-    /* position: absolute; */ /* Flexアイテムとしての配置に変更したため不要 */
-    /* top: 10px; */ /* Flexアイテムとしての配置に変更したため不要 */
-    position: relative; /* transformを使うためにrelativeに */
-    transform: scale(1); /* 常に表示 */
-    opacity: 1; /* 常に表示 */
-    transition: transform 0.5s ease-out, opacity 0.5s ease-in; /* アニメーション */
-    white-space: nowrap; /* テキストが改行されないように */
-}
-
-/* ★追加: 残りの抽選回数表示のスタイル */
-#remainingCountDisplay {
-    background-color: #6c757d;
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    font-size: 1.2em;
-    text-align: center;
-    flex-grow: 1;
-    max-width: 200px;
-    min-height: 40px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: default;
+    margin-bottom: 5px;
 }
 
 /* 選ばれた画像のスタイル */
 #selectedImage {
-    max-width: 100%;
-    height: auto;
-    display: block;
-    /* ↓↓↓ ここを修正: 画像自体の最大高さを1.5倍に ↓↓↓ */
-    max-height: 120px; /* 以前の80pxの1.5倍 */
-    /* ↑↑↑ ここを修正 ↑↑↑ */
+    max-width: 80%;
+    max-height: 100px;
     object-fit: contain;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+    display: none; /* 初期状態は非表示 */
+    opacity: 0;
+    transform: scale(0);
     transition: transform 1.0s ease-out, opacity 1.0s ease-in;
-    transform: scale(0); /* 初期状態は非表示 */
-    opacity: 0;          /* 初期状態は非表示 */
-    z-index: 1; /* 手前に表示 */
 }
 
-/* 結果アクション（名前画像、「さん」）のコンテナ */
+/* 結果表示エリアの行動ボタン（名前と「さん」） */
 .result-actions {
     display: flex;
-    align-items: center;
     justify-content: center;
-    gap: 5px; /* 名前画像と「さん」の間の隙間 */
-    opacity: 0; /* 初期状態は非表示 */
-    transition: opacity 0.5s ease-in; /* フェードインアニメーション */
-    margin-top: 0; /* gapで制御するためマージンなし */
+    align-items: center;
+    gap: 5px;
+    margin-top: 5px;
 }
 
 /* 選ばれた名前画像のスタイル */
 #selectedName {
-    max-width: 100%;
+    max-height: 30px; /* 名前の画像サイズ調整 */
     height: auto;
-    max-height: 40px; /* 名前の画像の高さを制限 */
     object-fit: contain;
 }
 
 /* 「さん」のスタイル */
 #honorific {
     font-size: 1.2em;
-    color: #333;
-    display:none;
+    color: #555;
+    font-weight: bold;
 }
 
-/* 抽選開始/もう一度抽選ボタンのコンテナ */
+/* ボタンコンテナのスタイル */
 .start-button-container {
-    display: flex; /* Flexboxを有効にする */
-    justify-content: center; /* 要素を中央に配置 */
-    align-items: center; /* 要素を垂直方向の中央に配置 */
-    gap: 15px; /* ボタンと抽選回数表示の間の隙間を設定 */
-    width: 100%; /* 親要素の幅いっぱいに広げる */
-    /* margin-topなどを調整して、他の要素との間隔を制御 */
-    /* flex-wrap: wrap; /* 画面幅が狭い場合に折り返す */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px; /* ボタンと残り回数表示の隙間 */
+    width: 100%;
 }
 
 /* 抽選ボタンのスタイル */
 .action-button {
-　　background-color: transparent; /* 背景色を透明にする */
+    background-color: transparent; /* 背景色を透明にする */
     color: transparent; /* テキストを透明にする (画像で表示するため) */
     padding: 0; /* パディングをリセット (画像サイズに合わせるため) */
     border: none;
@@ -184,129 +142,108 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    /* ★修正: 抽選開始ボタン（通常時）の背景画像のみ設定。ホバー時の設定は不要 */
+
+    /* ★抽選開始ボタン（通常時）の背景画像のみ設定 */
     background-image: url('images/startbutton.png'); /* 画像のパスを正確に指定 */
     background-size: contain; /* 画像をボタンサイズに合わせて表示 */
     background-repeat: no-repeat;
     background-position: center; /* 画像を中央に配置 */
 }
 
+/* ★削除: ホバー時の設定は不要 */
+/* .action-button:hover {
+    background-image: url('images/startButton_hover.png');
+    background-color: transparent;
+} */
+
 /* もう一度抽選ボタンのスタイル */
 .action-button.rerun-button {
-    /* ★修正: もう一度抽選ボタン（通常時）の背景画像のみ設定。ホバー時の設定は不要 */
+    /* ★修正: もう一度抽選ボタン（通常時）の背景画像のみ設定 */
     background-image: url('images/nextbutton.png'); /* 「もう一度抽選」画像のパスを正確に指定 */
     background-color: transparent;
 }
 
+/* ★削除: もう一度抽選ボタンのホバー時のスタイルは不要 */
+/* .action-button.rerun-button:hover {
+    background-image: url('images/rerunButton_hover.png');
+    background-color: transparent;
+} */
+
+
 /* hidden クラス */
 .hidden {
-    display: none !important; /* 最優先で非表示にする */
+    display: none !important;
 }
 
-/* display-areaがスピニング中のスタイル */
+/* display-areaがスピニング中のスタイル (変更なし) */
 .display-area.spinning #selectedImage {
-    opacity: 1; /* スピニング中は常に画像を表示 */
-    transform: scale(1); /* スピニング中は画像サイズを通常に保つ */
-    display: block; /* スピニング中はselectedImageを表示 */
+    opacity: 1;
+    transform: scale(1);
+    display: block;
 }
 
-/* ★追加・修正: 残りの抽選回数表示のスタイル */
-#remainingCountDisplay {
-    /* .action-buttonのスタイルを継承するため、クラスを付与 */
-    /* 元々hiddenクラスを持つので、必要に応じてJSで解除 */
-    background-color: #6c757d; /* グレー系の色 */
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    font-size: 1.2em;
+/* ★修正: 残りの抽選回数表示のスタイルをテキスト向けに再定義 */
+.remaining-count-display { /* 新しいクラス名で指定 */
+    background-color: transparent; /* 背景を透明に */
+    color: #333; /* 文字色を濃いグレーなどに (見やすい色に調整してください) */
+    padding: 10px 0; /* 左右のパディングは不要なので0に */
+    border: none; /* ボーダーなし */
+    border-radius: 0; /* 角丸なし */
+    font-size: 1.2em; /* フォントサイズ */
     text-align: center;
-    flex-grow: 1; /* startButtonと同じようにスペースを埋める */
-    max-width: 200px; /* startButtonと同じ最大幅 */
-    min-height: 40px; /* startButtonと同じ最小高さ */
+    flex-grow: 1; /* ボタンと同じようにスペースを埋める */
+    max-width: 200px; /* ボタンと同じ最大幅 */
+    min-height: 40px; /* ボタンと同じ最小高さ */
     display: flex; /* 内部テキストを中央寄せするため */
     justify-content: center;
     align-items: center;
     cursor: default; /* クリックできないようにカーソルを変更 */
+    font-weight: bold; /* テキストを太字にするなど、見やすく調整 */
 }
 
-/* ------------------------------------------------ */
-/* PC/タブレット向けのスタイル (769px以上の画面幅に適用) */
-/* ------------------------------------------------ */
-
+/* PC向けのメディアクエリ内での調整 */
 @media (min-width: 769px) {
     .container {
-        /* ↓↓↓ ここを修正: 上下のパディングを調整 ↓↓↓ */
-        padding: 15px 30px 15px; /* 上下15px (以前は10px) */
-        /* ↑↑↑ ここを修正 ↑↑↑ */
+        padding: 15px 30px 15px;
         max-width: 450px;
-        /* ↓↓↓ ここを修正: min-heightを調整 ↓↓↓ */
-        min-height: 320px; /* 以前の250pxから大きく */
-        /* ↑↑↑ ここを修正 ↑↑↑ */
-        /* ↓↓↓ ここを修正: gapを調整 ↓↓↓ */
-        gap: 20px; /* PCでの要素間の隙間を20pxに設定 (以前は10px) */
-        /* ↑↑↑ ここを修正 ↑↑↑ */
+        min-height: 320px;
+        gap: 20px;
     }
 
-    /* 導入画像のコンテナスタイル (PC向け) */
     .top-image-container {
         margin-bottom: 0;
-        /* ↓↓↓ ここを修正: 導入画像コンテナの最大高さを1.5倍に ↓↓↓ */
-        max-height: 135px; /* 以前の90pxの1.5倍 */
-        /* ↑↑↑ ここを修正 ↑↑↑ */
+        max-height: 135px;
     }
 
-    /* 導入画像のスタイル (PC向け) */
     #introImage {
-        /* ↓↓↓ ここを修正: 画像自体の最大高さを1.5倍に ↓↓↓ */
-        max-height: 135px; /* 以前の90pxの1.5倍 */
-        /* ↑↑↑ ここを修正 ↑↑↑ */
+        max-height: 135px;
         max-width: 90%;
     }
 
     .display-area {
-        min-height: 180px; /* PCでの表示エリアの最小高さを調整 */
-        max-width: 350px; /* PCでの表示エリアの最大幅を調整 */
+        min-height: 180px;
+        max-width: 350px;
         padding: 10px;
         gap: 5px;
         margin-bottom: 0;
     }
 
     #congratulationsMessage {
-        font-size: 2em; /* PC向けのフォントサイズを調整 */
+        font-size: 2em;
         margin-bottom: 8px;
     }
-    
-    /* ★追加: PC向けの残りの抽選回数表示のスタイル */
-    #remainingCountDisplay {
-        font-size: 1.5em; /* PC向けフォントサイズ */
-        margin-bottom: 20px; /* PC向け余白 */
-    }
 
-    #selectedImage {
-        /* ↓↓↓ ここを修正: PCでの画像自体の最大高さを1.5倍に ↓↓↓ */
-        max-height: 180px; /* 以前の120pxの1.5倍 */
-        /* ↑↑↑ ここを修正 ↑↑↑ */
-        max-width: 100%;
+    /* PC向けのボタンと残り回数表示の調整 */
+    .start-button-container {
+        gap: 20px; /* PCでのボタンと残り回数表示の隙間 */
     }
-
-    .result-actions {
-        gap: 5px; /* PCでの名前画像と「さん」の間の隙間 */
-        margin-top: 0;
-    }
-
-    #selectedName {
-        max-height: 60px; /* PCでの名前の画像の高さを制限 */
-    }
-
-    #honorific {
-        font-size: 1.5em; /* PCでの「さん」のフォントサイズ */
-    }
-
     .action-button {
-        width: 300px; /* PCでのボタンの最大幅に合わせて調整 */
-        height: 100px; /* PC向けの画像サイズに合わせる */
-        padding: 0; /* PC向けもパディングを0に */
-        font-size: 0; /* PCでも文字を非表示に */
+        min-height: 50px; /* PCでのボタンの高さ */
+    }
+    /* ★修正: remaining-count-display のPC向けスタイル */
+    .remaining-count-display {
+        font-size: 1.3em; /* PCでのフォントサイズ調整 */
+        min-height: 50px; /* PCでの最小高さ調整 */
+        padding: 12px 0; /* PCでのパディングも調整 */
     }
 }
