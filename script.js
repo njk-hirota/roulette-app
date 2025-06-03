@@ -139,10 +139,11 @@ let spinInterval; // setIntervalのIDを保持
 let lotteryCount = 0; // 抽選回数をカウントする変数
 const MAX_DISPLAY_COUNT = 31; // 表示する抽選回数の上限（この回数までカウントダウン表示）
 
-// DOM要素の取得
+// DOM要素の取得 (一部はDOMContentLoaded内で初期化)
 const container = document.querySelector('.container');
 const introImage = document.getElementById('introImage');
 const startButton = document.getElementById('startButton');
+// ★修正: remainingCountDisplayをグローバルスコープで取得するように変更
 const remainingCountDisplay = document.getElementById('remainingCountDisplay');
 
 
@@ -162,12 +163,12 @@ function preloadAllImages() {
         const nameImg = new Image();
         nameImg.src = `images/${p.nameImage}`;
     });
-    // ボタンの背景画像もプリロード (ホバー用は不要)
+    // ★修正: ボタンの背景画像（ホバー用は不要）
     const startNormal = new Image();
-    startNormal.src = 'images/startbutton.png';
+    startNormal.src = 'images/startbutton.png'; // 抽選開始ボタンの通常画像
     const rerunNormal = new Image();
-    rerunNormal.src = 'images/nextbutton.png';
-
+    rerunNormal.src = 'images/nextbutton.png'; // もう一度抽選ボタンの通常画像
+  
     // 背景画像もプリロード
     const bgImg = new Image();
     bgImg.src = 'images/background.jpg';
@@ -178,30 +179,35 @@ function preloadAllImages() {
 function createDisplayArea() {
     displayArea = document.createElement('div');
     displayArea.id = 'display-area';
-    displayArea.classList.add('display-area');
+    displayArea.classList.add('display-area'); // style.cssで定義されたスタイルを適用
 
     congratulationsMessage = document.createElement('span');
     congratulationsMessage.id = 'congratulationsMessage';
-    congratulationsMessage.classList.add('hidden');
+    congratulationsMessage.classList.add('hidden'); // 初期は非表示
     congratulationsMessage.textContent = 'おめでとうございます！';
 
     selectedImage = document.createElement('img');
     selectedImage.id = 'selectedImage';
     selectedImage.alt = '選ばれた画像';
-    selectedImage.src = '';
+    selectedImage.src = ''; // 初期値は空
 
     const resultActionsDiv = document.createElement('div');
-    resultActionsDiv.classList.add('result-actions');
+    resultActionsDiv.classList.add('result-actions'); // style.cssで定義されたスタイルを適用
 
     selectedName = document.createElement('img');
     selectedName.id = 'selectedName';
     selectedName.alt = '選ばれた名前';
-    selectedName.src = '';
+    selectedName.src = ''; // 初期値は空
 
     honorific = document.createElement('span');
     honorific.id = 'honorific';
-    honorific.classList.add('hidden');
+    honorific.classList.add('hidden'); // 初期は非表示
     honorific.textContent = 'さん';
+
+    // ★修正: remainingCountDisplayはHTMLに直接配置するため、ここでの作成は削除
+    // remainingCountDisplay = document.createElement('div');
+    // remainingCountDisplay.id = 'remainingCountDisplay';
+    // remainingCountDisplay.classList.add('hidden'); // 初期は非表示
 
     resultActionsDiv.appendChild(selectedName);
     resultActionsDiv.appendChild(honorific);
@@ -209,56 +215,65 @@ function createDisplayArea() {
     displayArea.appendChild(congratulationsMessage);
     displayArea.appendChild(selectedImage);
     displayArea.appendChild(resultActionsDiv);
+    // ★修正: remainingCountDisplayはHTMLに直接配置するため、ここでの追加は削除
+    // displayArea.appendChild(remainingCountDisplay);
 
+    // .top-image-container の直後に追加
     const topImageContainer = document.querySelector('.top-image-container');
     if (topImageContainer) {
         topImageContainer.after(displayArea);
     } else {
+        // topImageContainer が見つからない場合は、startButtonのparentNodeに挿入
         container.insertBefore(displayArea, startButton.parentNode);
     }
     console.log("Display area created and appended.");
 }
 
 
-// display-areaを削除する関数
+// display-areaを削除する関数 (初期状態に戻すため)
 function removeDisplayArea() {
     if (displayArea && displayArea.parentNode) {
         displayArea.parentNode.removeChild(displayArea);
-        displayArea = null;
+        displayArea = null; // 参照をクリア
+        // displayAreaが削除されたら、中の要素への参照もクリア
         congratulationsMessage = null;
         selectedImage = null;
         selectedName = null;
         honorific = null;
+        // remainingCountDisplayはHTMLに直接配置されるので、ここではnullにしない
         console.log("Display area removed and references cleared.");
     }
 }
 
 // 抽選結果関連の要素を非表示にする関数
 function hideAllResults() {
+    // これらの要素はdisplayAreaが作成された後に参照が設定されるため、nullチェックが必要
     if (congratulationsMessage) congratulationsMessage.classList.add('hidden');
     if (selectedImage) {
-        selectedImage.classList.add('hidden');
-        selectedImage.style.transform = 'scale(0)';
-        selectedImage.style.opacity = '0';
+        selectedImage.classList.add('hidden'); // This is the culprit for the blank screen
+        selectedImage.style.transform = 'scale(0)'; // For animation
+        selectedImage.style.opacity = '0'; // For animation
     }
     if (selectedName) selectedName.classList.add('hidden');
     if (honorific) honorific.classList.add('hidden');
-    // remainingCountDisplayはhandleStartButtonClickで隠すのでここでは不要
-    // if (remainingCountDisplay) remainingCountDisplay.classList.add('hidden');
+    // ★修正: remainingCountDisplayは常にHTMLにあるため、nullチェックは不要だが、表示/非表示の制御は引き続き行う
+    if (remainingCountDisplay) remainingCountDisplay.classList.add('hidden'); // 非表示にする
     console.log("All result elements hidden.");
 }
 
 // 抽選結果関連の要素を表示する関数
 function showResultElements() {
+    // これらの要素はdisplayAreaが作成された後に参照が設定されるため、nullチェックが必要
     if (congratulationsMessage) congratulationsMessage.classList.remove('hidden');
     if (selectedImage) selectedImage.classList.remove('hidden');
     if (selectedName) selectedName.classList.remove('hidden');
-    if (honorific) honorific.classList.remove('hidden');
+    if (honorific) honorific.classList.remove('hidden'); // 「さん」も表示
     console.log("Result elements shown.");
 }
 
 // スピニング中の画像切り替え
 function spinImages() {
+    // allParticipants配列からランダムに画像を選んで表示
     const randomIndex = Math.floor(Math.random() * allParticipants.length);
     const participant = allParticipants[randomIndex];
     if (selectedImage) {
@@ -270,48 +285,54 @@ function spinImages() {
 function handleStartButtonClick() {
     console.log("Start button clicked.");
 
+    // 全員抽選済みの場合のチェック（127回抽選した後）
     if (currentParticipants.length === 0) {
         alert("全員抽選済みです！これ以上抽選できません。");
-        // 全員抽選済みの場合は、startButtonのtextContentを明確にし、スタイルも適切に戻す
-        startButton.textContent = "全員抽選終了"; // ボタンのテキストを設定
-        startButton.classList.remove('hidden'); // ボタンは表示
-        startButton.style.pointerEvents = 'none'; // クリック不可に
-        startButton.classList.remove('rerun-button'); // スタイルも戻す
-        if (displayArea) { removeDisplayArea(); }
+        startButton.classList.add('hidden');
+        startButton.style.pointerEvents = 'none';
+        if (displayArea) { removeDisplayArea(); } // displayAreaも削除
         if (introImage) { introImage.classList.add('hidden'); }
-        if (remainingCountDisplay) { remainingCountDisplay.classList.add('hidden'); } // 残り回数も非表示
+        // ★修正: remainingCountDisplayはHTMLに常に存在するため、hiddenクラスで非表示
+        if (remainingCountDisplay) { remainingCountDisplay.classList.add('hidden'); }
         return;
     }
 
+    // 導入画像と開始ボタンを隠す
     if (introImage) {
         introImage.classList.add('hidden');
         console.log("Intro image hidden.");
     }
-    startButton.classList.add('hidden'); // スピニング中はボタンを非表示
-    startButton.classList.remove('rerun-button'); // 念のため、rerun-button クラスを削除
+    startButton.classList.add('hidden');
+    startButton.classList.remove('rerun-button');
 
+    // display-areaがまだ存在しない場合に作成
+    // 2回目以降の抽選では、displayAreaが存在するため、このブロックはスキップされ、
+    // hideAllResults() が実行されて既存の要素がリセットされる。
     if (!displayArea) {
         createDisplayArea();
         console.log("Display area was not present, created now.");
     } else {
-        hideAllResults();
+        hideAllResults(); // 既存の表示エリアの内容をリセット
         console.log("Existing display area reset.");
     }
 
     displayArea.classList.remove('hidden');
 
-    // ★修正: remainingCountDisplay は抽選開始時に必ず非表示にする
+    // スピニング開始時には、残り回数表示を一旦非表示にする (結果表示時に再表示)
+    // ★修正: remainingCountDisplayはHTMLに常に存在するため、hiddenクラスで非表示
     if (remainingCountDisplay) {
         remainingCountDisplay.classList.add('hidden');
     }
 
-    if (selectedImage) {
-        selectedImage.classList.remove('hidden');
+    // スピニング開始時の画像表示準備
+    if (selectedImage) { // selectedImageがnullでないことを確認
+        selectedImage.classList.remove('hidden'); // 必ずhiddenクラスを削除して表示状態にする
         selectedImage.style.transition = 'none';
         selectedImage.style.transform = 'scale(1)';
         selectedImage.style.opacity = '1';
-        selectedImage.src = `images/${allParticipants[0].image}`; // 初回は仮の画像を表示
-        selectedImage.offsetHeight; // 強制的にリフローさせてtransitionをリセット
+        // 最初のスピンでは、誰か一人の画像が表示されるように
+        selectedImage.src = `images/${allParticipants[0].image}`;
+        selectedImage.offsetHeight; // 強制リフロー
     }
 
     displayArea.classList.add('spinning');
@@ -337,13 +358,13 @@ function displayFinalResult() {
 
     if (currentParticipants.length === 0) {
         alert("全員抽選済みです！これ以上抽選できません。");
-        // 全員抽選済みの場合は、startButtonのtextContentを明確にし、スタイルも適切に戻す
         startButton.textContent = "全員抽選終了";
-        startButton.classList.remove('hidden');
-        startButton.style.pointerEvents = 'none';
+        startButton.classList.remove('hidden'); // ボタンは表示する
+        startButton.style.pointerEvents = 'none'; // クリック不可にする
         startButton.classList.remove('rerun-button'); // スタイルも戻す
         if (displayArea) { removeDisplayArea(); }
-        if (remainingCountDisplay) { remainingCountDisplay.classList.add('hidden'); } // 残り回数も非表示
+        // ★修正: remainingCountDisplayはHTMLに常に存在するため、hiddenクラスで非表示
+        if (remainingCountDisplay) { remainingCountDisplay.classList.add('hidden'); }
         return;
     }
 
@@ -356,7 +377,6 @@ function displayFinalResult() {
         displayArea.classList.remove('spinning');
         console.log("Spinning class removed from displayArea.");
 
-        // selectedImageのアニメーションをリセット
         selectedImage.style.transition = 'none';
         selectedImage.style.transform = 'scale(0)';
         selectedImage.style.opacity = '0';
@@ -364,27 +384,29 @@ function displayFinalResult() {
         selectedName.src = `images/${selected.nameImage}`;
         console.log(`Final result: ${selected.name}, image: ${selected.image}`);
 
-        selectedImage.offsetHeight; // 強制的にリフローさせてtransitionを再適用準備
+        selectedImage.offsetHeight;
 
         setTimeout(() => {
             selectedImage.style.transition = 'transform 1.0s ease-out, opacity 1.0s ease-in';
             selectedImage.style.transform = 'scale(1)';
             selectedImage.style.opacity = '1';
             console.log("Final image animation started.");
-        }, 50); // 短い遅延
+        }, 50);
 
-        // selectedImageのアニメーション完了を待つ（またはフォールバック）
         setTimeout(() => {
-            showResultElements(); // 結果のメッセージと名前画像を表示
+            showResultElements();
 
+            // 残りの表示回数を計算し、31回目以降は非表示にするロジック
             const displayRemainingCount = MAX_DISPLAY_COUNT - lotteryCount;
+            // ★修正: remainingCountDisplayがnullでないことを確認
             if (remainingCountDisplay) {
                 if (displayRemainingCount > 0) {
-                    remainingCountDisplay.textContent = `あと${displayRemainingCount}個`;
-                    remainingCountDisplay.classList.remove('hidden'); // 残り回数を表示
+                    remainingCountDisplay.textContent = `あと${displayRemainingCount}回抽選できます`;
+                    remainingCountDisplay.classList.remove('hidden'); // 表示
                     console.log(`Displayed remaining count: ${displayRemainingCount}`);
                 } else {
-                    remainingCountDisplay.classList.add('hidden'); // 残り回数表示を非表示
+                    // 表示すべき回数が0以下になった場合 (31回目以降)
+                    remainingCountDisplay.classList.add('hidden'); // 非表示
                     console.log("Displayed remaining count is 0 or less. Hiding display.");
                 }
             }
@@ -392,23 +414,21 @@ function displayFinalResult() {
 
             // ボタンの状態は、全員抽選済みになった場合のみ変更
             if (currentParticipants.length === 0) {
-                // 全員抽選済みの場合は、startButtonのtextContentを明確にし、スタイルも適切に戻す
-                startButton.textContent = "全員抽選終了"; // ボタンのテキストを設定
+                startButton.textContent = "全員抽選終了"; // 全員抽選済みのメッセージ
                 startButton.classList.remove('hidden'); // ボタンは表示する
                 startButton.style.pointerEvents = 'none'; // クリック不可にする
                 startButton.classList.remove('rerun-button'); // スタイルも戻す
-                alert("全員抽選済みです！");
+                alert("全員抽選済みです！"); // アラートで通知
                 console.log("All participants drawn. Button disabled.");
             } else {
-                // 次の抽選へ促すテキスト（透明なので表示されない）
-                startButton.textContent = "もう一度抽選";
+                startButton.textContent = "もう一度抽選"; // 次の抽選へ促すテキスト
                 startButton.classList.remove('hidden'); // ボタンを表示
                 startButton.style.pointerEvents = 'auto'; // クリック可能に
                 startButton.classList.add('rerun-button'); // "もう一度抽選"ボタンのスタイルを適用
                 console.log("Button text set to 'もう一度抽選' and rerun-button class added.");
             }
 
-        }, 1200); // selectedImageのtransformアニメーション時間より少し長く
+        }, 1200);
     }
 }
 
@@ -442,5 +462,6 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log("DOMContentLoaded: remainingCountDisplay initially hidden.");
     }
 
+    // 開始ボタンにイベントリスナーを設定
     startButton.addEventListener('click', handleStartButtonClick);
 });
