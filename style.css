@@ -6,43 +6,44 @@
 
 body {
     font-family: 'Arial', sans-serif;
-    display: flex; /* ★修正: bodyもflexにして全体を中央寄せ */
+    display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100vh; /* 画面全体の高さを確保 */
     margin: 0;
     background-color: white; /* 背景色を設定 */
-    overflow-x: hidden; /* ★追加: 横スクロール防止 */
+    overflow-x: hidden; /* 横スクロール防止 */
 }
 
-/* ★追加: メインコンテンツ全体を囲むラッパー */
+/* メインコンテンツ全体を囲むラッパー */
 .main-content-wrapper {
-    display: flex; /* ★追加: flexboxで横並びにする */
-    justify-content: center; /* 中央寄せ */
-    align-items: center; /* 垂直方向中央寄せ */
-    width: 100%; /* 親の幅いっぱいに */
-    max-width: 1200px; /* ★調整: 全体の最大幅を設定 (適宜変更) */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    max-width: 1200px; /* 全体の最大幅を設定 (適宜変更) */
     margin: 0 auto; /* 中央寄せ */
-    padding: 0 5px; /* ★調整: 画面端に少し余白 */
+    padding: 0 10px; /* ★修正: 画面端に少し余白を増やす */
     box-sizing: border-box; /* paddingをwidthに含める */
 }
 
 .container {
     background-color: white;
-    padding: 10px 20px; /* ★修正: bottom paddingを調整 */
+    padding: 20px; /* ★修正: 上下のパディングを増やす (画像見切れ対策) */
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     text-align: center;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center; /* ★修正: 垂直方向も中央寄せ */
+    justify-content: center;
     gap: 15px;
-    max-width: 500px; /* ★そのまま: メインコンテンツの幅 */
+    max-width: 500px; /* メインコンテンツの幅 */
     width: 100%; /* 親（main-content-wrapper）の幅に対して100% */
     min-height: 250px;
-    flex-shrink: 0; /* ★追加: 縮まないようにする */
-    z-index: 1; /* ★維持: 左右の画像より手前に来るように */
+    flex-shrink: 0;
+    z-index: 10; /* ★修正: ボタンが押せるようにz-indexを高くする */
+    position: relative; /* z-indexを有効にするため */
 }
 
 /* 導入画像のコンテナスタイル */
@@ -51,14 +52,15 @@ body {
     justify-content: center;
     align-items: center;
     width: 100%;
-    max-height: 90px;
+    /* max-height: 90px; ★削除または調整: これが画像見切れの原因になる可能性あり */
     margin-bottom: 0;
     overflow: hidden;
+    /* height: auto; ★追加: 親の高さに合わせて自動調整 */
 }
 
 #introImage {
     max-width: 100%;
-    height: auto;
+    height: auto; /* ★維持: アスペクト比を維持 */
     display: block;
 }
 
@@ -69,22 +71,27 @@ body {
     align-items: center;
     width: 100%;
     gap: 10px;
-    margin-top: 10px;
-    margin-bottom: 10px;
+    margin-top: 20px; /* ★修正: ボタンの上部のマージンを増やす */
+    margin-bottom: 20px; /* ★修正: ボタンの下部のマージンを増やす */
 }
 
 /* 共通ボタンのスタイル */
 .action-button {
-    width: 250px;
-    height: 60px;
+    width: 250px; /* ★維持: 幅を固定 */
+    height: 60px; /* ★維持: 高さを固定 */
     border: none;
     cursor: pointer;
-    background-size: cover;
+    background-size: contain; /* ★修正: 画像全体が見えるようにcontainにする */
     background-repeat: no-repeat;
     background-position: center;
     outline: none;
     font-size: 1.2em;
     color: transparent;
+    transition: transform 0.2s ease; /* ★追加: ホバーエフェクト用 */
+}
+
+.action-button:hover { /* ★追加: ホバーエフェクト */
+    transform: scale(1.05);
 }
 
 /* 抽選開始ボタンのスタイル */
@@ -129,24 +136,21 @@ body {
 /* 左右の装飾画像のコンテナ */
 .left-image-container,
 .right-image-container {
-    /* position: absolute; は不要になる */
-    /* top, transformも不要 */
-    z-index: 0; /* ★維持: containerより下 */
-    opacity: 0; /* 最初は非表示 */
-    transition: opacity 0.5s ease-in-out; /* フェードイン・アウトのアニメーション */
-    pointer-events: none; /* クリックイベントを無効化 */
-    overflow: hidden; /* 画像がはみ出さないように */
-    display: flex; /* 画像を中央に配置するためにflexを使う */
-    align-items: center; /* 垂直方向中央揃え */
-    justify-content: center; /* 水平方向中央揃え */
-    flex-grow: 1; /* ★追加: 残りのスペースを埋めるように幅を広げる */
-    height: 100%; /* ★追加: 親（main-content-wrapper）の高さに合わせる */
-    max-width: 25vw; /* ★調整: 画面幅の最大25%まで（左右合わせて50%） */
-    min-width: 50px; /* ★調整: 最小幅 */
+    z-index: 0;
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+    pointer-events: none;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-grow: 1; /* 残りのスペースを埋めるように幅を広げる */
+    height: 100%; /* 親（main-content-wrapper）の高さに合わせる */
+    max-width: 25vw; /* 画面幅の最大25%まで（左右合わせて50%） */
+    min-width: 50px; /* 最小幅 */
 }
 
 /* show-decoration-images クラスが付いたら表示 */
-/* .show-decoration-images は、.main-content-wrapper に付く想定 */
 .main-content-wrapper.show-decoration-images .left-image-container,
 .main-content-wrapper.show-decoration-images .right-image-container {
     opacity: 1;
@@ -157,7 +161,7 @@ body {
 .right-image-container img {
     height: 100%; /* 親コンテナの高さに合わせる */
     width: auto; /* アスペクト比を維持 */
-    object-fit: cover; /* ★修正: コンテナを埋めるように（はみ出してもOK） */
+    object-fit: contain; /* ★修正: 画像全体が表示されるようにcontainに戻す */
     object-position: center; /* 中央に配置 */
 }
 
@@ -218,8 +222,8 @@ body {
     }
 
     .start-button-container {
-        margin-top: 20px;
-        margin-bottom: 20px;
+        margin-top: 30px; /* PCではボタンの上部のマージンをさらに増やす */
+        margin-bottom: 30px; /* PCではボタンの下部のマージンをさらに増やす */
     }
 
     .action-button {
@@ -256,8 +260,8 @@ body {
     /* PCでの左右の装飾画像の調整 */
     .left-image-container,
     .right-image-container {
-        max-width: 200px; /* ★調整: PCでは左右の画像の最大幅を固定 */
-        min-width: 100px; /* ★調整: 最小幅も確保 */
+        max-width: 200px; /* PCでは左右の画像の最大幅を固定 */
+        min-width: 100px;
     }
 }
 
@@ -266,34 +270,46 @@ body {
 /* ------------------------------------------------ */
 @media (max-width: 767px) {
     .main-content-wrapper {
-        flex-direction: column; /* ★修正: 小さい画面では縦並びにする */
-        padding: 10px; /* 全体のパディングを調整 */
+        flex-direction: column; /* 小さい画面では縦並びにする */
+        padding: 5px; /* 全体のパディングをさらに調整 */
     }
 
     .left-image-container,
     .right-image-container {
         width: 100%; /* 横幅いっぱいに */
-        height: 100px; /* ★調整: スマホでは上下に短い高さを設定 */
-        max-width: none; /* 幅の制限を解除 */
+        height: 80px; /* ★修正: スマホでは上下に短い高さを設定 */
+        max-width: none;
         min-width: unset;
-        flex-grow: 0; /* 縮まないように */
-        order: -1; /* ★追加: 上部配置 (left-image-container) */
+        flex-grow: 0;
+        order: -1; /* 上部配置 (left-image-container) */
     }
 
     .right-image-container {
-        order: 1; /* ★追加: 下部配置 (right-image-container) */
+        order: 1; /* 下部配置 (right-image-container) */
     }
 
     .container {
-        width: 100%; /* スマホではコンテナも幅いっぱいに */
-        max-width: none; /* 最大幅の制限を解除 */
+        width: 100%;
+        max-width: none;
+        padding: 15px; /* ★修正: スマホでのコンテナのパディングを調整 */
+        gap: 10px; /* ★修正: 要素間の間隔を調整 */
     }
 
-    /* スマホで装飾画像を表示しない場合はコメントアウト */
-    /*
-    .main-content-wrapper.show-decoration-images .left-image-container,
-    .main-content-wrapper.show-decoration-images .right-image-container {
-        display: none;
+    .start-button-container {
+        margin-top: 15px; /* スマホでのボタンのマージンを調整 */
+        margin-bottom: 15px;
     }
-    */
+
+    .action-button {
+        width: 200px; /* スマホではボタンを少し小さく */
+        height: 50px;
+        font-size: 1em;
+    }
+    #introImage {
+        max-height: 70px; /* ★修正: スマホでの導入画像の最大高さを調整 */
+        object-fit: contain;
+    }
+    #selectedImage {
+        max-height: 80px; /* スマホでの選ばれた画像の最大高さを調整 */
+    }
 }
