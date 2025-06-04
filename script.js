@@ -155,6 +155,17 @@ let selectedImage;
 let selectedName;
 let resultActionsDiv; // result-actionsへの参照を保持
 
+// コンテナの高さをCSS変数に設定する関数
+function setContainerHeightAsCssVar() {
+    // containerがまだ存在しない場合は何もしない
+    if (!container) return;
+
+    // containerの現在の計算された高さを取得
+    const containerHeight = container.offsetHeight; // borderやpaddingを含む要素の高さ
+    // CSSカスタムプロパティ --container-height に設定
+    document.documentElement.style.setProperty('--container-height', `${containerHeight}px`);
+    console.log(`Container height set to CSS var: ${containerHeight}px`);
+}
 
 // すべての画像をプリロードする関数
 function preloadAllImages() {
@@ -279,7 +290,7 @@ function spinImages() {
 
 // 左右の装飾画像を表示する関数
 function showDecorationImages() {
-    // parentNode経由でコンテナにクラスを追加
+    // ★ここ修正: 親要素にクラスを追加
     if (leftDecorationImage && leftDecorationImage.parentNode) leftDecorationImage.parentNode.classList.add('show-decoration-images');
     if (rightDecorationImage && rightDecorationImage.parentNode) rightDecorationImage.parentNode.classList.add('show-decoration-images');
     console.log("Decoration images shown.");
@@ -287,12 +298,11 @@ function showDecorationImages() {
 
 // 左右の装飾画像を非表示にする関数
 function hideDecorationImages() {
-    // parentNode経由でコンテナからクラスを削除
+    // ★ここ修正: 親要素からクラスを削除
     if (leftDecorationImage && leftDecorationImage.parentNode) leftDecorationImage.parentNode.classList.remove('show-decoration-images');
     if (rightDecorationImage && rightDecorationImage.parentNode) rightDecorationImage.parentNode.classList.remove('show-decoration-images');
     console.log("Decoration images hidden.");
 }
-
 
 
 // 抽選開始ボタンのクリックハンドラ
@@ -482,7 +492,13 @@ document.addEventListener('DOMContentLoaded', () => {
         remainingCountDisplay.classList.add('hidden');
         console.log("DOMContentLoaded: remainingCountDisplay initially hidden.");
     }
-
+    
+    // ページロード時にコンテナの高さを設定
+    setContainerHeightAsCssVar();
+    
+    // ウィンドウサイズ変更時にも高さを再設定できるようにする
+    window.addEventListener('resize', setContainerHeightAsCssVar);
+    
     // 初期状態では左右の装飾画像を非表示にする
     hideDecorationImages();
     
