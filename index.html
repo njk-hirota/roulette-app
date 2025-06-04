@@ -7,6 +7,13 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <div class="left-image-container">
+        <img id="leftDecorationImage" src="images/left_decoration.png" alt="左装飾画像">
+    </div>
+    <div class="right-image-container">
+        <img id="rightDecorationImage" src="images/right_decoration.png" alt="右装飾画像">
+    </div>
+
     <div class="container">
         <div class="top-image-container">
             <img id="introImage" src="images/background.jpg" alt="導入画像">
@@ -17,7 +24,15 @@
             <div id="remainingCountDisplay" class="hidden"></div>
         </div>
 
-    </div>
+        <div class="display-area hidden">
+            <p id="congratulationsMessage" class="hidden">おめでとうございます！</p>
+            <img id="selectedImage" src="" alt="選ばれた画像" class="hidden">
+            <div class="result-actions hidden">
+                <img id="selectedName" src="" alt="選ばれた名前画像">
+                <span id="sanText">さん</span>
+            </div>
+        </div>
+        </div>
     <script src="script.js"></script>
 </body>
 </html>
