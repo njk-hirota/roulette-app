@@ -6,31 +6,43 @@
 
 body {
     font-family: 'Arial', sans-serif;
-    display: flex;
+    display: flex; /* ★修正: bodyもflexにして全体を中央寄せ */
     justify-content: center;
     align-items: center;
     min-height: 100vh; /* 画面全体の高さを確保 */
     margin: 0;
     background-color: white; /* 背景色を設定 */
-    position: relative; /* ★追加: containerに対してfixedな要素を置く場合に必要 */
+    overflow-x: hidden; /* ★追加: 横スクロール防止 */
+}
+
+/* ★追加: メインコンテンツ全体を囲むラッパー */
+.main-content-wrapper {
+    display: flex; /* ★追加: flexboxで横並びにする */
+    justify-content: center; /* 中央寄せ */
+    align-items: center; /* 垂直方向中央寄せ */
+    width: 100%; /* 親の幅いっぱいに */
+    max-width: 1200px; /* ★調整: 全体の最大幅を設定 (適宜変更) */
+    margin: 0 auto; /* 中央寄せ */
+    padding: 0 5px; /* ★調整: 画面端に少し余白 */
+    box-sizing: border-box; /* paddingをwidthに含める */
 }
 
 .container {
     background-color: white;
-    padding: 10px 20px 10px;
+    padding: 10px 20px; /* ★修正: bottom paddingを調整 */
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     text-align: center;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: center; /* ★修正: 垂直方向も中央寄せ */
     gap: 15px;
-    max-width: 500px;
-    width: 90%;
+    max-width: 500px; /* ★そのまま: メインコンテンツの幅 */
+    width: 100%; /* 親（main-content-wrapper）の幅に対して100% */
     min-height: 250px;
-    position: relative; /* ★追加: 左右の画像をabsoluteで配置する場合の基準 */
-    z-index: 1; /* ★追加: 左右の画像より手前に来るように */
+    flex-shrink: 0; /* ★追加: 縮まないようにする */
+    z-index: 1; /* ★維持: 左右の画像より手前に来るように */
 }
 
 /* 導入画像のコンテナスタイル */
@@ -57,22 +69,22 @@ body {
     align-items: center;
     width: 100%;
     gap: 10px;
-    margin-top: 10px; /* ★修正: 少し下げる */
-    margin-bottom: 10px; /* ★修正: 少し下げる */
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
 
 /* 共通ボタンのスタイル */
 .action-button {
-    width: 250px; /* ★修正: 幅を固定 */
-    height: 60px; /* ★修正: 高さを固定 */
+    width: 250px;
+    height: 60px;
     border: none;
     cursor: pointer;
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
     outline: none;
-    font-size: 1.2em; /* ★追加: フォントサイズ */
-    color: transparent; /* ★追加: テキストを透明にして画像だけ見せる */
+    font-size: 1.2em;
+    color: transparent;
 }
 
 /* 抽選開始ボタンのスタイル */
@@ -99,7 +111,6 @@ body {
     display: block;
 }
 
-/* ★修正: 残りの抽選回数表示のスタイル */
 #remainingCountDisplay {
     background-color: white;
     color: black;
@@ -109,54 +120,35 @@ body {
     justify-content: center;
     align-items: center;
     cursor: default;
-    /* ★追加: サイズ調整 */
-    width: 100px; /* 適切なサイズに調整 */
-    height: 30px; /* 適切なサイズに調整 */
+    width: 100px;
+    height: 30px;
     border-radius: 5px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 /* 左右の装飾画像のコンテナ */
-/* ★ここを大幅に修正するで！ */
-.left-image-container, /* クラス名を修正 */
+.left-image-container,
 .right-image-container {
-    position: absolute; /* ★修正: fixedからabsoluteへ */
-    top: 50%; /* 垂直方向中央 */
-    transform: translateY(-50%); /* 垂直方向中央に微調整 */
-    z-index: 0; /* ★修正: containerより下、bodyの背景より上くらい */
+    /* position: absolute; は不要になる */
+    /* top, transformも不要 */
+    z-index: 0; /* ★維持: containerより下 */
     opacity: 0; /* 最初は非表示 */
     transition: opacity 0.5s ease-in-out; /* フェードイン・アウトのアニメーション */
     pointer-events: none; /* クリックイベントを無効化 */
-    overflow: hidden; /* ★追加: 画像がはみ出さないように */
-    display: flex; /* ★追加: 画像を中央に配置するためにflexを使う */
-    align-items: center; /* ★追加: 垂直方向中央揃え */
-    justify-content: center; /* ★追加: 水平方向中央揃え */
-}
-
-.left-image-container {
-    left: 0; /* 左端に配置 */
-    /* ★追加: main-wrapperを使わない場合、containerの左に配置するための調整 */
-    /* bodyのdisplay:flex; と containerのmax-width: 500px; を考慮して調整 */
-    /* 例えば、containerの左端からの相対位置として計算 */
-    right: calc(50% + (500px / 2)); /* 画面中央 + containerの半分の幅 */
-    width: auto; /* ★修正: 幅は自動調整 */
-    height: var(--container-height, 250px); /* ★追加: JSで設定する高さを参照 */
-    max-height: 90vh; /* 画面高さの90%を上限に */
-}
-
-.right-image-container {
-    right: 0; /* 右端に配置 */
-    /* ★追加: main-wrapperを使わない場合、containerの右に配置するための調整 */
-    /* 例えば、containerの右端からの相対位置として計算 */
-    left: calc(50% + (500px / 2)); /* 画面中央 + containerの半分の幅 */
-    width: auto; /* ★修正: 幅は自動調整 */
-    height: var(--container-height, 250px); /* ★追加: JSで設定する高さを参照 */
-    max-height: 90vh; /* 画面高さの90%を上限に */
+    overflow: hidden; /* 画像がはみ出さないように */
+    display: flex; /* 画像を中央に配置するためにflexを使う */
+    align-items: center; /* 垂直方向中央揃え */
+    justify-content: center; /* 水平方向中央揃え */
+    flex-grow: 1; /* ★追加: 残りのスペースを埋めるように幅を広げる */
+    height: 100%; /* ★追加: 親（main-content-wrapper）の高さに合わせる */
+    max-width: 25vw; /* ★調整: 画面幅の最大25%まで（左右合わせて50%） */
+    min-width: 50px; /* ★調整: 最小幅 */
 }
 
 /* show-decoration-images クラスが付いたら表示 */
-.show-decoration-images .left-image-container, /* 親要素にクラスが付くので修正 */
-.show-decoration-images .right-image-container { /* 親要素にクラスが付くので修正 */
+/* .show-decoration-images は、.main-content-wrapper に付く想定 */
+.main-content-wrapper.show-decoration-images .left-image-container,
+.main-content-wrapper.show-decoration-images .right-image-container {
     opacity: 1;
 }
 
@@ -165,23 +157,24 @@ body {
 .right-image-container img {
     height: 100%; /* 親コンテナの高さに合わせる */
     width: auto; /* アスペクト比を維持 */
-    object-fit: contain; /* 画像全体が表示されるように調整 */
+    object-fit: cover; /* ★修正: コンテナを埋めるように（はみ出してもOK） */
+    object-position: center; /* 中央に配置 */
 }
 
-/* ★追加: display-areaのスタイルを調整 */
+/* display-areaのスタイル */
 #display-area {
-    min-height: 150px; /* 最低高さを確保 */
+    min-height: 150px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     gap: 10px;
-    width: 100%; /* 親要素の幅いっぱいに */
+    width: 100%;
 }
 
 #selectedImage {
     max-width: 100%;
-    max-height: 100px; /* 画像の最大高さを設定 */
+    max-height: 100px;
     height: auto;
     object-fit: contain;
     transition: transform 1.0s ease-out, opacity 1.0s ease-in;
@@ -198,12 +191,12 @@ body {
     align-items: center;
     justify-content: center;
     gap: 5px;
-    opacity: 0; /* 初期は透明 */
-    transition: opacity 0.5s ease-in; /* フェードインアニメーション */
+    opacity: 0;
+    transition: opacity 0.5s ease-in;
 }
 
 #selectedName {
-    max-width: 150px; /* 名前画像の最大幅 */
+    max-width: 150px;
     height: auto;
     object-fit: contain;
 }
@@ -230,7 +223,7 @@ body {
     }
 
     .action-button {
-        width: 300px; /* PCではボタンを少し大きく */
+        width: 300px;
         height: 70px;
     }
 
@@ -245,7 +238,7 @@ body {
     }
 
     #selectedImage {
-        max-height: 120px; /* PCでは画像も少し大きく */
+        max-height: 120px;
     }
 
     #congratulationsMessage {
@@ -253,30 +246,54 @@ body {
     }
 
     #selectedName {
-        max-width: 200px; /* PCでは名前画像も大きく */
+        max-width: 200px;
     }
 
     #sanText {
         font-size: 1.5em;
     }
 
-    /* 左右の装飾画像（PCでの調整） */
+    /* PCでの左右の装飾画像の調整 */
     .left-image-container,
     .right-image-container {
-        /* containerの最大幅(600px) + 左右のpadding(40px*2=80px) = 680px */
-        /* calc(50% - (680px / 2)) は、コンテナの左端（または右端）の位置 */
-        left: calc(50% - (600px / 2) - 100px); /* 例: containerの左端から100px左に配置 */
-        right: calc(50% - (600px / 2) - 100px); /* 例: containerの右端から100px右に配置 */
-        /* これでcontainerの横に配置されつつ、画面端から少し離れる */
-        width: 100px; /* 幅を固定して、画像がはみ出さないように */
-        height: var(--container-height, 300px); /* PC用の高さに合わせる */
+        max-width: 200px; /* ★調整: PCでは左右の画像の最大幅を固定 */
+        min-width: 100px; /* ★調整: 最小幅も確保 */
+    }
+}
+
+/* ------------------------------------------------ */
+/* スマートフォンなど、小さい画面向けの微調整 */
+/* ------------------------------------------------ */
+@media (max-width: 767px) {
+    .main-content-wrapper {
+        flex-direction: column; /* ★修正: 小さい画面では縦並びにする */
+        padding: 10px; /* 全体のパディングを調整 */
+    }
+
+    .left-image-container,
+    .right-image-container {
+        width: 100%; /* 横幅いっぱいに */
+        height: 100px; /* ★調整: スマホでは上下に短い高さを設定 */
+        max-width: none; /* 幅の制限を解除 */
+        min-width: unset;
+        flex-grow: 0; /* 縮まないように */
+        order: -1; /* ★追加: 上部配置 (left-image-container) */
     }
 
     .right-image-container {
-        left: calc(50% + (600px / 2) + 100px); /* containerの右端から100px右に配置 */
-        right: auto; /* rightプロパティを解除 */
+        order: 1; /* ★追加: 下部配置 (right-image-container) */
     }
-    .left-image-container {
-        right: auto; /* rightプロパティを解除 */
+
+    .container {
+        width: 100%; /* スマホではコンテナも幅いっぱいに */
+        max-width: none; /* 最大幅の制限を解除 */
     }
+
+    /* スマホで装飾画像を表示しない場合はコメントアウト */
+    /*
+    .main-content-wrapper.show-decoration-images .left-image-container,
+    .main-content-wrapper.show-decoration-images .right-image-container {
+        display: none;
+    }
+    */
 }
