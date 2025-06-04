@@ -144,6 +144,8 @@ const container = document.querySelector('.container');
 const introImage = document.getElementById('introImage');
 const startButton = document.getElementById('startButton');
 const remainingCountDisplay = document.getElementById('remainingCountDisplay');
+const leftDecorationImage = document.getElementById('leftDecorationImage'); 
+const rightDecorationImage = document.getElementById('rightDecorationImage');
 
 
 // 動的に追加される要素を保持するための変数 (display-areaと関連要素)
@@ -172,6 +174,14 @@ function preloadAllImages() {
     const bgImg = new Image();
     bgImg.src = 'images/background.jpg';
     console.log("All images preloaded.");
+        
+    // 左右の装飾画像をプリロード 
+    const leftDeco = new Image();
+    leftDeco.src = 'images/background_left.jpg';
+    const rightDeco = new Image();
+    rightDeco.src = 'images/background_right.jpg';
+    console.log("All images preloaded.");
+    
 }
 
 // display-areaを動的に作成する関数
@@ -267,6 +277,24 @@ function spinImages() {
     }
 }
 
+// 左右の装飾画像を表示する関数
+function showDecorationImages() {
+    // parentNode経由でコンテナにクラスを追加
+    if (leftDecorationImage && leftDecorationImage.parentNode) leftDecorationImage.parentNode.classList.add('show-decoration-images');
+    if (rightDecorationImage && rightDecorationImage.parentNode) rightDecorationImage.parentNode.classList.add('show-decoration-images');
+    console.log("Decoration images shown.");
+}
+
+// 左右の装飾画像を非表示にする関数
+function hideDecorationImages() {
+    // parentNode経由でコンテナからクラスを削除
+    if (leftDecorationImage && leftDecorationImage.parentNode) leftDecorationImage.parentNode.classList.remove('show-decoration-images');
+    if (rightDecorationImage && rightDecorationImage.parentNode) rightDecorationImage.parentNode.classList.remove('show-decoration-images');
+    console.log("Decoration images hidden.");
+}
+
+
+
 // 抽選開始ボタンのクリックハンドラ
 function handleStartButtonClick() {
     console.log("Start button clicked.");
@@ -324,6 +352,9 @@ function handleStartButtonClick() {
     displayArea.classList.add('spinning');
     console.log("Spinning class added to displayArea.");
 
+    //スピニング開始時に左右の装飾画像を表示
+    showDecorationImages();
+    
     spinInterval = setInterval(spinImages, imageChangeInterval);
     console.log(`Spin interval started: ${spinInterval}`);
 
@@ -351,6 +382,7 @@ function displayFinalResult() {
         if (displayArea) { removeDisplayArea(); }
         // remainingCountDisplayはHTMLに常に存在するため、hiddenクラスで非表示
         if (remainingCountDisplay) { remainingCountDisplay.classList.add('hidden'); }
+        hideDecorationImages(); // 全員抽選終了時は装飾画像を非表示
         return;
     }
 
@@ -406,6 +438,7 @@ function displayFinalResult() {
                 startButton.classList.remove('rerun-button'); // スタイルも戻す
                 alert("全員抽選済みです！"); // アラートで通知
                 console.log("All participants drawn. Button disabled.");
+                hideDecorationImages(); // 全員抽選終了時は装飾画像を非表示
             } else {
                 startButton.textContent = "もう一度抽選"; // 次の抽選へ促すテキスト
                 startButton.classList.remove('hidden'); // ボタンを表示
@@ -413,6 +446,8 @@ function displayFinalResult() {
                 startButton.classList.add('rerun-button'); // "もう一度抽選"ボタンのスタイルを適用
                 console.log("Button text set to 'もう一度抽選' and rerun-button class added.");
             }
+            // 抽選結果が表示されたら、左右の装飾画像を非表示にする
+            hideDecorationImages();
 
         }, 1200);
     }
@@ -448,6 +483,9 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log("DOMContentLoaded: remainingCountDisplay initially hidden.");
     }
 
+    // 初期状態では左右の装飾画像を非表示にする
+    hideDecorationImages();
+    
     // 開始ボタンにイベントリスナーを設定
     startButton.addEventListener('click', handleStartButtonClick);
 });
