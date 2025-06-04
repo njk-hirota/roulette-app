@@ -182,3 +182,38 @@ body {
     align-items: center;
     cursor: default;
 }
+
+/* 左右の装飾画像のコンテナ */
+.left-decoration-container,
+.right-decoration-container {
+    position: fixed; /* 画面に固定 */
+    top: 50%; /* 垂直方向中央 */
+    transform: translateY(-50%); /* 垂直方向中央に微調整 */
+    z-index: -1; /* 他のコンテンツの下に配置 */
+    /* 最初は非表示 */
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out; /* フェードイン/アウトのアニメーション */
+    pointer-events: none; /* クリックやタップを透過させる */
+}
+
+.left-decoration-container {
+    left: 0; /* 左端に配置 */
+}
+
+.right-decoration-container {
+    right: 0; /* 右端に配置 */
+}
+
+/* 左右の装飾画像自体のスタイル */
+#leftDecorationImage,
+#rightDecorationImage {
+    max-height: 80vh; /* 画面の高さの80%を最大値にする */
+    width: auto; /* 高さに合わせて幅を自動調整 */
+    display: block;
+    object-fit: contain;
+}
+
+/* 左右の装飾画像を表示するためのクラス */
+.show-decoration-images {
+    opacity: 1;
+}
