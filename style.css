@@ -24,7 +24,7 @@ body {
     text-align: center;
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: flex-start;
     justify-content: center;
     gap: 5px; /* 要素間のギャップを少し減らす */
     max-width: 500px;
