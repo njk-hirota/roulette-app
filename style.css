@@ -30,7 +30,7 @@ body {
     max-width: 500px;
     width: 67.5%; /* ここを 90% から 67.5% に変更（90%の75%） */
     height: 320px; /* 適切な固定値を設定。iPhone SE横画面での視認性を考慮 */
-    max-height: 95vh; /* 画面の高さの95%を上限とする */
+    max-height: 100vh; /* 画面の高さの95%を上限とする */
     overflow-y: hidden; /* コンテナ内でスクロールさせないようにする */
 }
 
