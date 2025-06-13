@@ -174,8 +174,8 @@ body {
 /* ★追加・修正: 残りの抽選回数表示のスタイル */
 #remainingCountDisplay {
     background-color: white; /* ★ここを白に設定 */
-    color: black;
-    font-size: 0.5em;
+    color: red;
+    font-size: 1.0em;
     text-align: center;
     display: flex;
     justify-content: center;
