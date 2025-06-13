@@ -181,15 +181,4 @@ body {
     justify-content: center;
     align-items: center;
     cursor: default;
-    animation: pulse 1s infinite alternate; /* pulseアニメーションを適用 */
-}
-
-/* pulse アニメーションの定義 */
-@keyframes pulse {
-    0% {
-        transform: scale(1);
-    }
-    100% {
-        transform: scale(1.2); /* 1.2倍に拡大 */
-    }
 }
