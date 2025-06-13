@@ -129,6 +129,18 @@ body {
     height: 70px; /* ボタンの高さも調整 */
 }
 
+@keyframes breathe {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05); /* 105%に拡大 */
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
 /* 抽選ボタンのスタイル */
 .action-button {
     background-color: white; /* 背景色を白にする */
@@ -151,6 +163,7 @@ body {
     background-repeat: no-repeat;
     background-position: center;
     outline:none;
+    animation: breathe 2s infinite alternate; /* breatheアニメーションを2秒で無限に繰り返し、順方向と逆方向を交互に再生 */
 }
 
 /* もう一度抽選ボタンのスタイル */
@@ -235,6 +248,7 @@ body {
     .action-button {
         max-width: 90px; /* 横画面でのボタンの最大幅を調整 */
         min-height: 35px; /* 横画面でのボタンの最小高さを調整 */
+        animation: breathe 2s infinite alternate; /* ここにもアニメーションを適用 */
     }
 
     #remainingCountDisplay {
