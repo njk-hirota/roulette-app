@@ -387,7 +387,7 @@ function displayFinalResult() {
             // remainingCountDisplayがnullでないことを確認
             if (remainingCountDisplay) {
                 if (displayRemainingCount > 0) {
-                    remainingCountDisplay.textContent = `Last... ${displayRemainingCount};
+                    remainingCountDisplay.textContent = `Last... ${displayRemainingCount} `;
                     remainingCountDisplay.classList.remove('hidden'); // 表示
                     console.log(`Displayed remaining count: ${displayRemainingCount}`);
                 } else {
