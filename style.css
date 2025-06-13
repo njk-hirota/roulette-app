@@ -8,7 +8,7 @@ body {
     font-family: 'Arial', sans-serif;
     display: flex;
     justify-content: center;
-    align-items: center; /* ここを 'flex-start' から 'center' に戻す */
+    align-items: flex-start; /* ここを 'flex-start' から 'center' に戻す */
     min-height: 100vh; /* 画面全体の高さを確保 */
     margin: 0;
     padding: 0; /* padding: 0; がなければ追加 */
@@ -24,7 +24,7 @@ body {
     text-align: center;
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
+    align-items: center;
     justify-content: center;
     gap: 5px; /* 要素間のギャップを少し減らす */
     max-width: 500px;
