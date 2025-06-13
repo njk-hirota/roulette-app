@@ -8,7 +8,7 @@ body {
     font-family: 'Arial', sans-serif;
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;
     min-height: 100vh; /* 画面全体の高さを確保 */
     margin: 0;
     padding: 0; /* ここを追加 */
