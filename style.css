@@ -11,6 +11,7 @@ body {
     align-items: center;
     min-height: 100vh; /* 画面全体の高さを確保 */
     margin: 0;
+    padding: 0; /* ここを追加 */
     background-color: white; /* 背景色を設定 */
     overflow: hidden; /* スクロールバーを非表示にする */
 }
