@@ -8,10 +8,10 @@ body {
     font-family: 'Arial', sans-serif;
     display: flex;
     justify-content: center;
-    align-items: flex-start;
+    align-items: center; /* ここを 'flex-start' から 'center' に戻す */
     min-height: 100vh; /* 画面全体の高さを確保 */
     margin: 0;
-    padding: 0; /* ここを追加 */
+    padding: 0; /* padding: 0; がなければ追加 */
     background-color: white; /* 背景色を設定 */
     overflow: hidden; /* スクロールバーを非表示にする */
 }
@@ -28,8 +28,7 @@ body {
     justify-content: center;
     gap: 5px; /* 要素間のギャップを少し減らす */
     max-width: 500px;
-    width: 70%;
-    /* ここを修正：max-heightを基準に高さを固定 */
+    width: 67.5%; /* ここを 90% から 67.5% に変更（90%の75%） */
     height: 320px; /* 適切な固定値を設定。iPhone SE横画面での視認性を考慮 */
     max-height: 95vh; /* 画面の高さの95%を上限とする */
     overflow-y: hidden; /* コンテナ内でスクロールさせないようにする */
@@ -193,7 +192,7 @@ body {
     }
 
     .container {
-        max-width: 70vw; /* 横画面での最大幅を調整 */
+        max-width: 71.25vw; /* 横画面での最大幅を調整 (95vwの75%) */
         height: 280px; /* iPhone SE横画面に合わせて高さを固定 */
         max-height: 95vh; /* 横画面での最大高さを調整 */
         padding: 5px 10px; /* パディングを減らす */
