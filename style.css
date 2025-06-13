@@ -28,7 +28,7 @@ body {
     justify-content: center;
     gap: 5px; /* 要素間のギャップを少し減らす */
     max-width: 500px;
-    width: 90%;
+    width: 70%;
     /* ここを修正：max-heightを基準に高さを固定 */
     height: 320px; /* 適切な固定値を設定。iPhone SE横画面での視認性を考慮 */
     max-height: 95vh; /* 画面の高さの95%を上限とする */
@@ -193,7 +193,7 @@ body {
     }
 
     .container {
-        max-width: 95vw; /* 横画面での最大幅を調整 */
+        max-width: 70vw; /* 横画面での最大幅を調整 */
         height: 280px; /* iPhone SE横画面に合わせて高さを固定 */
         max-height: 95vh; /* 横画面での最大高さを調整 */
         padding: 5px 10px; /* パディングを減らす */
