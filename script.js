@@ -370,7 +370,7 @@ function handleStartButtonClick() {
         introImage.classList.add('hidden');
         console.log("Intro image hidden.");
     }
-    startButton.classList.add('hidden');
+    //startButton.classList.add('hidden');//
     startButton.classList.remove('rerun-button');
 
     // display-areaがまだ存在しない場合に作成
