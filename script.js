@@ -152,6 +152,9 @@ let congratulationsMessage;
 let selectedImage;
 let selectedName;
 let resultActionsDiv; // result-actionsへの参照を保持
+let leftImage; // 新しく追加
+let rightImage; // 新しく追加
+let imageRow; // 新しく追加
 
 
 // すべての画像をプリロードする関数
@@ -171,6 +174,13 @@ function preloadAllImages() {
     // 背景画像もプリロード
     const bgImg = new Image();
     bgImg.src = 'images/background.jpg';
+ 
+    // 新しく追加する左右の画像をプリロード
+    const leftSideImg = new Image();
+    leftSideImg.src = 'images/left_side_image.png'; // 左の画像のパス
+    const rightSideImg = new Image();
+    rightSideImg.src = 'images/right_side_image.png'; // 右の画像のパス
+    
     console.log("All images preloaded.");
 }
 
@@ -185,10 +195,31 @@ function createDisplayArea() {
     congratulationsMessage.classList.add('hidden'); // 初期は非表示
     congratulationsMessage.textContent = 'おめでとうございます！';
 
+    imageRow = document.createElement('div'); // 新しいimage-rowコンテナを作成
+    imageRow.classList.add('image-row'); // CSSでスタイルを適用するためのクラス
+
+    leftImage = document.createElement('img'); // 左の画像要素を作成
+    leftImage.id = 'leftImage';
+    leftImage.alt = '左の画像';
+    leftImage.src = 'images/left_side_image.png'; // 左の画像のパスを設定
+    leftImage.classList.add('side-image'); // サイド画像の共通クラス
+    leftImage.classList.add('hidden'); // 最初は非表示
+
     selectedImage = document.createElement('img');
     selectedImage.id = 'selectedImage';
     selectedImage.alt = '選ばれた画像';
     selectedImage.src = ''; // 初期値は空
+
+    rightImage = document.createElement('img'); // 右の画像要素を作成
+    rightImage.id = 'rightImage';
+    rightImage.alt = '右の画像';
+    rightImage.src = 'images/right_side_image.png'; // 右の画像のパスを設定
+    rightImage.classList.add('side-image'); // サイド画像の共通クラス
+    rightImage.classList.add('hidden'); // 最初は非表示
+
+    imageRow.appendChild(leftImage); // image-rowに左の画像を追加
+    imageRow.appendChild(selectedImage);
+    imageRow.appendChild(rightImage); // image-rowに右の画像を追加
 
     resultActionsDiv = document.createElement('div'); // resultActionsDivを初期化
     resultActionsDiv.classList.add('result-actions'); // style.cssで定義されたスタイルを適用
@@ -201,7 +232,7 @@ function createDisplayArea() {
     resultActionsDiv.appendChild(selectedName);
 
     displayArea.appendChild(congratulationsMessage);
-    displayArea.appendChild(selectedImage);
+    displayArea.appendChild(imageRow); // displayAreaにimage-rowを追加
     displayArea.appendChild(resultActionsDiv);
 
     // .top-image-container の直後に追加
@@ -226,6 +257,9 @@ function removeDisplayArea() {
         selectedImage = null;
         selectedName = null;
         resultActionsDiv = null; // この参照もクリア
+        leftImage = null; // 参照をクリア
+        rightImage = null; // 参照をクリア
+        imageRow = null; // 参照をクリア
         console.log("Display area removed and references cleared.");
     }
 }
@@ -241,6 +275,8 @@ function hideAllResults() {
     }
     if (selectedName) selectedName.classList.add('hidden');
     if (resultActionsDiv) resultActionsDiv.classList.add('hidden'); // resultActionsDivを非表示
+    if (leftImage) leftImage.classList.add('hidden'); // 新しく追加した画像を非表示
+    if (rightImage) rightImage.classList.add('hidden'); // 新しく追加した画像を非表示
     // remainingCountDisplayは常にHTMLにあるため、nullチェックは不要だが、表示/非表示の制御は引き続き行う
     if (remainingCountDisplay) remainingCountDisplay.classList.add('hidden'); // 非表示にする
     console.log("All result elements hidden.");
@@ -254,6 +290,8 @@ function showResultElements() {
     if (selectedName) selectedName.classList.remove('hidden');
     if (resultActionsDiv) resultActionsDiv.classList.remove('hidden'); // resultActionsDivを表示
     if (resultActionsDiv) resultActionsDiv.style.opacity = '1'; // 透明度を1に設定
+    if (leftImage) leftImage.classList.remove('hidden'); // 新しく追加した画像を表示
+    if (rightImage) rightImage.classList.remove('hidden'); // 新しく追加した画像を表示
     console.log("Result elements shown.");
 }
 
