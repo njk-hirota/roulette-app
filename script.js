@@ -280,24 +280,38 @@ function hideAllResults() {
 }
 
 // スピニングアニメーションの実行
+let animationInterval; // ここで定義することで、setIntervalのIDを保持できるようにします。
+let totalSpinTime = 2000; // スピニングの合計時間（ミリ秒）
+
 function spinAnimation() {
-    hideAllResults(); // 最初は全て非表示にするが、サイド画像は後で表示する
-   
+    // 全ての要素を一度リセット
+    hideAllResults();
+
     // スピニング開始時にサイド画像を表示
     if (leftImage) leftImage.classList.remove('hidden');
     if (rightImage) rightImage.classList.remove('hidden');
 
-    // タイマーを開始
-    animationInterval = setInterval(() => {
-        spinImages();
-        spinningDuration += 100;
+    // selectedImageを非表示状態からアニメーション準備
+    if (selectedImage) {
+        selectedImage.classList.remove('hidden');
+        selectedImage.style.transition = 'none'; // アニメーションを一時的に無効
+        selectedImage.style.transform = 'scale(1)'; // 表示中の画像を瞬時に正しいサイズにする
+        selectedImage.style.opacity = '1';
+        selectedImage.offsetHeight; // 強制リフロー (スタイル変更を反映させる)
+    }
 
-        if (spinningDuration >= totalSpinTime) {
-            clearInterval(animationInterval);
-            // displayArea.classList.remove('spinning'); // スピニングクラスを削除
-            console.log("Spinning animation ended.");
-            // 最終結果表示
-            displayResult(selectedParticipant);
+    // スピニング中の画像切り替えタイマーを開始
+    animationInterval = setInterval(() => {
+        spinImages(); // スピニング中の画像切り替え
+    }, imageChangeInterval); // imageChangeInterval は50msに設定済み
+
+    // スピニング終了後の処理を遅延実行
+    setTimeout(() => {
+        clearInterval(animationInterval); // スピニングを停止
+        console.log("Spinning animation ended.");
+        displayFinalResult(); // 最終結果を表示する関数を呼び出す
+    }, totalSpinTime); // totalSpinTime は2000msに設定済み
+}
         }
     }, 100); // 100ミリ秒ごとに画像を切り替え
 
@@ -354,6 +368,8 @@ function handleStartButtonClick() {
         console.log("Display area was not present, created now.");
     } else {
         hideAllResults(); // 既存の表示エリアの内容をリセット
+        if (leftImage) leftImage.classList.remove('hidden'); // 明示的に表示を維持
+        if (rightImage) rightImage.classList.remove('hidden'); // 明示的に表示を維持
         console.log("Existing display area reset.");
     }
 
@@ -365,7 +381,17 @@ function handleStartButtonClick() {
         remainingCountDisplay.classList.add('hidden');
     }
 
-    // スピニング開始時の画像表示準備
+    // ここで新しいspinAnimation関数を呼び出す
+    spinAnimation();
+    console.log("Spinning animation initiated.");
+
+    // NOTE: spinAnimation関数がsetTimeoutでdisplayFinalResultを呼び出すため、
+    // このhandleStartButtonClick関数からは直接displayFinalResultを呼び出しません。
+    // また、この場所に以前あったsetTimeoutやsetIntervalのロジックは
+    // spinAnimation関数に移ったため、削除してください。
+}
+
+// スピニング開始時の画像表示準備
     if (selectedImage) { // selectedImageがnullでないことを確認
         selectedImage.classList.remove('hidden'); // 必ずhiddenクラスを削除して表示状態にする
         selectedImage.style.transition = 'none';
