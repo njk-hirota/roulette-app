@@ -245,7 +245,7 @@ body {
     }
 
     .top-image-container {
-        max-height: 70px; /* 横画面での導入画像の高さを調整 */
+        max-height: none; /* 横画面での導入画像の高さを調整 */
     }
 
     #introImage {
