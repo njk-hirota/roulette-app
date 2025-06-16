@@ -90,7 +90,7 @@ body {
     max-width: 100%;
     height: auto;
     display: block;
-    max-height: 130px; /* 選ばれた画像の高さを調整 */
+    max-height: 195px; /* 選ばれた画像の高さを調整 */
     object-fit: contain;
     transition: transform 1.0s ease-out, opacity 1.0s ease-in;
     transform: scale(0);
@@ -123,7 +123,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 0px; /* ボタンと抽選回数表示の間の隙間を設定 */
+    gap: 10px; /* ボタンと抽選回数表示の間の隙間を設定 */
     width: 100%; /* 親要素の幅いっぱいに広げる */
     max-width: 200px; /* ボタンの最大幅を調整 */
     height: 70px; /* ボタンの高さも調整 */
@@ -233,7 +233,7 @@ body {
     }
 
     #selectedImage {
-        max-height: 110px; /* 横画面での選ばれた画像の高さを調整 */
+        max-height: 165px; /* 横画面での選ばれた画像の高さを調整 */
     }
 
     #selectedName {
