@@ -288,8 +288,8 @@ body {
     }
 
     .action-button {
-        max-width: 90px; /* 横画面でのボタンの最大幅を調整 */
-        min-height: 35px; /* 横画面でのボタンの最小高さを調整 */
+        max-width: 120px; /* 横画面でのボタンの最大幅を調整 */
+        min-height: 60px; /* 横画面でのボタンの最小高さを調整 */
         animation: breathe 2s infinite alternate; /* ここにもアニメーションを適用 */
     }
 
