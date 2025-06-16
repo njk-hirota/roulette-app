@@ -8,7 +8,7 @@ body {
     font-family: 'Arial', sans-serif;
     display: flex;
     justify-content: center;
-    align-items: flex-start; /* ここを 'flex-start' から 'center' に戻す */
+    align-items: center;
     min-height: 100vh; /* 画面全体の高さを確保 */
     margin: 0;
     padding: 0; /* padding: 0; がなければ追加 */
@@ -26,12 +26,13 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 5px; /* 要素間のギャップを少し減らす */
+    gap: 5px;
     max-width: 500px;
-    width: 67.5%; /* ここを 90% から 67.5% に変更（90%の75%） */
-    height: 320px; /* 適切な固定値を設定。iPhone SE横画面での視認性を考慮 */
-    max-height: 100vh; /* 画面の高さの95%を上限とする */
-    overflow-y: hidden; /* コンテナ内でスクロールさせないようにする */
+    width: 67.5%;
+    /* height は display-area とボタンのスペースを確保するため削除またはコメントアウト */
+    /* height: 320px; */
+    min-height: 320px; /* ある程度の最小高さを確保 */
+    position: relative; /* display-areaを絶対配置する場合の基準にする */
 }
 
 /* 導入画像のコンテナスタイル */
@@ -41,7 +42,7 @@ body {
     align-items: center;
     width: 100%;
     max-height: 80px; /* 導入画像の高さを少し減らす */
-    margin-bottom: 0;
+    margin-bottom: 10;
     overflow: hidden;
 }
 
@@ -56,33 +57,25 @@ body {
 
 /* 抽選結果表示エリアのスタイル */
 .display-area {
-    flex-grow: 0;
-    display: flex;
-    flex-direction: column;
+   display: flex;
+    flex-direction: column; /* 要素を縦に並べる */
+    align-items: center;   /* 中央揃えにする */
     justify-content: center;
-    align-items: center;
-    position: relative;
-    gap: 5px;
-    margin-bottom: 0;
-    min-height: 120px; /* 最小高さを調整 */
-    max-width: 300px;
-    width: 100%;
-    overflow: hidden;
+    /* absolute/relative を使って配置する場合の調整 */
+    position: relative; /* 子要素のabsolute配置の基準にする */
+    /* width: 100%; */ /* コンテナ内で幅いっぱいに */
+    /* min-height: 250px; /* 表示エリアの最低限の高さ */ */
+    flex-grow: 1; /* コンテナ内で残りのスペースを埋める */
+    padding-bottom: 60px; /* ボタンが重ならないように下部にパディング */
 }
 
 /* おめでとうメッセージのスタイル */
 #congratulationsMessage {
-    font-size: 1.1em; /* フォントサイズを少し小さくする */
-    color: gold;
+    font-size: 1.5em;
     font-weight: bold;
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
-    text-align: center;
-    margin-bottom: 5px;
-    position: relative;
-    transform: scale(1);
-    opacity: 1;
-    transition: transform 0.5s ease-out, opacity 0.5s ease-in;
-    white-space: nowrap;
+    color: #ff4500; /* OrangeRed */
+    margin-bottom: 10px;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
 }
 
 /* 画像を横並びにする新しいコンテナ*/
@@ -96,25 +89,20 @@ body {
 
 /* 選ばれた画像のスタイル */
 #selectedImage {
-    max-width: none;/* 元のmax-width: 100% が邪魔をする場合があるので無効化 */
-    width: 200px;/* ★追加または変更★: 適切な固定幅を設定 */
-    max-height: 195px; /* 選ばれた画像の高さを調整 */
-    height: 200px;/* ★追加または変更★: 適切な固定幅を設定 */
-    display: block;
+    width: 200px;
+    height: 200px;
     object-fit: contain;
+    max-width: none;
     transition: transform 1.0s ease-out, opacity 1.0s ease-in;
-    transform: scale(0);
-    opacity: 0;
-    z-index: 1;
+    margin-bottom: 20px; /* ボタンとの間にスペース */
 }
 
 /* サイド画像のスタイル*/
 .side-image {
-    max-width: 60%; /* メイン画像のサイズに合わせて調整 */
     height: 180px;
+    width: auto;
     object-fit: contain;
-    opacity: 1.0; /* メイン画像より少し暗くするなどの効果 */
-    transition: opacity 0.5s ease-in;
+    transition: none;
 }
 
 /* hidden クラス */
@@ -132,20 +120,22 @@ body {
 /* 結果アクション（名前画像、「さん」）のコンテナ */
 .result-actions {
     display: flex;
+    flex-direction: column; /* 名前の画像とボタンが縦に並ぶように */
     align-items: center;
     justify-content: center;
-    gap: 0px;
-    opacity: 0;
-    transition: opacity 0.5s ease-in;
-    margin-top: 0;
+    width: 100%;
+    /* position: absolute; */ /* ボタンと残り回数をdisplay-area内に絶対配置 */
+    /* bottom: 10px; */ /* 下からの距離 */
+    /* left: 50%; */
+    /* transform: translateX(-50%); */
+    /* z-index: 10; */ /* 他の要素の上に表示 */
 }
 
 /* 選ばれた名前画像のスタイル */
 #selectedName {
-    max-width: 100%;
+    max-width: 150px;
     height: auto;
-    max-height: 35px; /* 選ばれた名前画像の高さを調整 */
-    object-fit: contain;
+    margin-top: 10px;
 }
 
 /* 抽選開始/もう一度抽選ボタンのコンテナ */
@@ -174,33 +164,26 @@ body {
 
 /* 抽選ボタンのスタイル */
 .action-button {
-    background-color: white; /* 背景色を白にする */
-    color: transparent;
-    padding: 0;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    font-size: 1.2em;
-    transition: all 0.3s ease;
-    text-align: center;
-    flex-grow: 1; /* コンテナのスペースを占有させる */
-    max-width: 100px; /* ボタンの最大幅（モバイル向け） - これが画像サイズと合っているか確認 */
-    min-height: 40px; /* ボタンの最小高さ（モバイル向け） - これが画像サイズと合っているか確認 */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-image: url('images/startbutton.png');
-    background-size: contain;
-    background-repeat: no-repeat;
+    background-size: cover;
     background-position: center;
-    outline:none;
-    animation: breathe 2s infinite alternate; /* breatheアニメーションを2秒で無限に繰り返し、順方向と逆方向を交互に再生 */
+    border: none;
+    cursor: pointer;
+    padding: 0; /* 背景画像を使用するためパディングをリセット */
+    width: 180px; /* 画像の幅に合わせて調整 */
+    height: 60px; /* 画像の高さに合わせて調整 */
+    margin-top: 15px; /* selectedNameとの距離を調整 */
+    background-image: url('images/startbutton.png'); /* 初期画像 */
+    transition: transform 0.2s, background-image 0.2s;
+    outline: none; /* フォーカス時のアウトラインを非表示 */
+}
+
+.action-button:hover {
+    transform: scale(1.05); /* ホバー時の拡大 */
 }
 
 /* もう一度抽選ボタンのスタイル */
 .action-button.rerun-button {
     background-image: url('images/nextbutton.png');
-    background-color: transparent;
 }
 
 /* hidden クラス */
@@ -217,15 +200,17 @@ body {
 
 /* 残りの抽選回数表示のスタイル */
 #remainingCountDisplay {
-    background-color: white;
-    color: black;
-    font-size: 0.4em; /* フォントサイズをさらに小さく */
-    text-align: center;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: default;
-    margin-top: 5px; /* 上部とのマージンを調整 */
+    position: absolute; /* display-area内で絶対配置 */
+    bottom: 20px; /* ボタンの下に少し余裕を持たせる */
+    right: 20px; /* 右端からの距離 */
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 0.9em;
+    color: #333;
+    font-weight: bold;
+    white-space: nowrap; /* テキストが改行されないように */
+    z-index: 11; /* ボタンより手前に */
 }
 
 /* iPhone SE 横画面用のメディアクエリ */
@@ -236,31 +221,26 @@ body {
     }
 
     .container {
-        max-width: 95vw; /* 横画面での最大幅を調整 (95vwの75%) */
-        height: 280px; /* iPhone SE横画面に合わせて高さを固定 */
-        max-height: 95vh; /* 横画面での最大高さを調整 */
-        padding: 5px 10px; /* パディングを減らす */
-        gap: 2px; /* ギャップをさらに減らす */
-        justify-content: space-around; /* 要素を均等に配置 */
+        width: 80%;
+        min-height: 280px; /* 調整 */
+        padding: 5px 10px;
+        gap: 3px;
     }
 
     .top-image-container {
-        max-height: 70px; /* 横画面での導入画像の高さを調整 */
+        max-height: 60px; /* 横画面での導入画像の高さを調整 */
     }
 
     #introImage {
-        max-height: 70px; /* 横画面での導入画像の高さを調整 */
+        max-height: 60px; /* 横画面での導入画像の高さを調整 */
     }
 
     .display-area {
-        min-height: 100px; /* 横画面での最小高さを調整 */
-        max-width: 450px; /* 横画面での表示エリアの最大幅を調整 */
-        gap: 2px;
+        padding-bottom: 50px; /* モバイルでのボタンの重なり防止 */
     }
 
     #congratulationsMessage {
-        font-size: 1em; /* 横画面でのフォントサイズを調整 */
-        margin-bottom: 2px;
+        font-size: 1.2em;
     }
 
     .image-row {
@@ -269,17 +249,17 @@ body {
     }
     
     #selectedImage {
-        max-height: 165px; /* 横画面での選ばれた画像の高さを調整 */
-        width:150px;
+        width: 150px;
+        height: 150px;
+        margin-bottom: 10px;
     }
 
     .side-image {
-        max-width: 25%; /* 横画面でのサイド画像の幅を調整*/
         height:130px;
     }
 
     #selectedName {
-        max-height: 30px; /* 横画面での選ばれた名前画像の高さを調整 */
+        max-width: 120px;
     }
 
     .start-button-container {
@@ -288,13 +268,14 @@ body {
     }
 
     .action-button {
-        max-width: 90px; /* 横画面でのボタンの最大幅を調整 */
-        min-height: 35px; /* 横画面でのボタンの最小高さを調整 */
-        animation: breathe 2s infinite alternate; /* ここにもアニメーションを適用 */
+        width: 150px; /* モバイル向けにサイズ調整 */
+        height: 50px;
+        margin-top: 10px;
     }
 
     #remainingCountDisplay {
-        font-size: 0.35em; /* 横画面でのフォントサイズを調整 */
-        margin-top: 2px;
+        font-size: 0.8em;
+        bottom: 10px; /* モバイルでの位置調整 */
+        right: 10px;
     }
 }
