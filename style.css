@@ -85,6 +85,15 @@ body {
     white-space: nowrap;
 }
 
+/* 画像を横並びにする新しいコンテナ*/
+.image-row {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px; /* 画像間の隙間を調整*/
+    width: 100%;
+}
+
 /* 選ばれた画像のスタイル */
 #selectedImage {
     max-width: 100%;
@@ -96,6 +105,27 @@ body {
     transform: scale(0);
     opacity: 0;
     z-index: 1;
+}
+
+/* サイド画像のスタイル*/
+.side-image {
+    max-width: 30%; /* メイン画像のサイズに合わせて調整 */
+    height: auto;
+    object-fit: contain;
+    opacity: 0.5; /* メイン画像より少し暗くするなどの効果 */
+    transition: opacity 0.5s ease-in;
+}
+
+/* hidden クラス */
+.hidden {
+    display: none !important;
+}
+
+/* display-areaがスピニング中のスタイル */
+.display-area.spinning #selectedImage {
+    opacity: 1;
+    transform: scale(1);
+    display: block;
 }
 
 /* 結果アクション（名前画像、「さん」）のコンテナ */
@@ -232,8 +262,16 @@ body {
         margin-bottom: 2px;
     }
 
+    .image-row {
+        gap: 3px; /* 横画面での画像間の隙間を調整*/
+    }
+    
     #selectedImage {
         max-height: 165px; /* 横画面での選ばれた画像の高さを調整 */
+    }
+
+    .side-image {
+        max-width: 25%; /* 横画面でのサイド画像の幅を調整*/
     }
 
     #selectedName {
