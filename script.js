@@ -246,7 +246,6 @@ function createDisplayArea() {
     console.log("Display area created and appended.");
 }
 
-
 // display-areaを削除する関数 (初期状態に戻すため)
 function removeDisplayArea() {
     if (displayArea && displayArea.parentNode) {
@@ -275,12 +274,32 @@ function hideAllResults() {
     }
     if (selectedName) selectedName.classList.add('hidden');
     if (resultActionsDiv) resultActionsDiv.classList.add('hidden'); // resultActionsDivを非表示
-    if (leftImage) leftImage.classList.add('hidden'); // 新しく追加した画像を非表示
-    if (rightImage) rightImage.classList.add('hidden'); // 新しく追加した画像を非表示
     // remainingCountDisplayは常にHTMLにあるため、nullチェックは不要だが、表示/非表示の制御は引き続き行う
     if (remainingCountDisplay) remainingCountDisplay.classList.add('hidden'); // 非表示にする
     console.log("All result elements hidden.");
 }
+
+// スピニングアニメーションの実行
+function spinAnimation() {
+    hideAllResults(); // 最初は全て非表示にするが、サイド画像は後で表示する
+   
+    // スピニング開始時にサイド画像を表示
+    if (leftImage) leftImage.classList.remove('hidden');
+    if (rightImage) rightImage.classList.remove('hidden');
+
+    // タイマーを開始
+    animationInterval = setInterval(() => {
+        spinImages();
+        spinningDuration += 100;
+
+        if (spinningDuration >= totalSpinTime) {
+            clearInterval(animationInterval);
+            // displayArea.classList.remove('spinning'); // スピニングクラスを削除
+            console.log("Spinning animation ended.");
+            // 最終結果表示
+            displayResult(selectedParticipant);
+        }
+    }, 100); // 100ミリ秒ごとに画像を切り替え
 
 // 抽選結果関連の要素を表示する関数
 function showResultElements() {
@@ -290,8 +309,6 @@ function showResultElements() {
     if (selectedName) selectedName.classList.remove('hidden');
     if (resultActionsDiv) resultActionsDiv.classList.remove('hidden'); // resultActionsDivを表示
     if (resultActionsDiv) resultActionsDiv.style.opacity = '1'; // 透明度を1に設定
-    if (leftImage) leftImage.classList.remove('hidden'); // 新しく追加した画像を表示
-    if (rightImage) rightImage.classList.remove('hidden'); // 新しく追加した画像を表示
     console.log("Result elements shown.");
 }
 
