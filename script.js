@@ -129,12 +129,13 @@ const allParticipants = [
     { name: "早坂 康佑", image: "126.jpg", "nameImage": "画像126.jpg" },
     { name: "隈川 雛奈子", image: "127.jpg", "nameImage": "画像127.jpg" },
 ];
-
 let currentParticipants = [...allParticipants]; // シャッフル用
-const spinningDuration = 2000; // スピニングの時間（ミリ秒） 2秒に調整済み
-const initialSpinDuration = 2000; // 初回抽選のスピニング時間 2秒に調整済み
+// const spinningDuration = 2000; // スピニングの時間（ミリ秒） - spinAnimation内のtotalSpinTimeで定義
+// const initialSpinDuration = 2000; // 初回抽選のスピニング時間 - spinAnimation内のtotalSpinTimeで定義
 const imageChangeInterval = 50; // 画像が変わる間隔（ミリ秒）
 let spinInterval; // setIntervalのIDを保持
+let animationInterval; // スピニングアニメーションのInterval ID
+let totalSpinTime = 2000; // スピニングの合計時間（ミリ秒）をグローバルで定義
 
 let lotteryCount = 0; // 抽選回数をカウントする変数
 const MAX_DISPLAY_COUNT = 31; // 表示する抽選回数の上限（この回数までカウントダウン表示）
@@ -163,18 +164,18 @@ function preloadAllImages() {
         const img = new Image();
         img.src = `images/${p.image}`;
         const nameImg = new Image();
-        nameImg.src = `images/${p.nameImage}`;
+        nameImg.src = `images/${p.nameImage`;
     });
     // ボタンの背景画像
     const startNormal = new Image();
     startNormal.src = 'images/startbutton.png'; // 抽選開始ボタンの通常画像
     const rerunNormal = new Image();
     rerunNormal.src = 'images/nextbutton.png'; // もう一度抽選ボタンの通常画像
-  
+    
     // 背景画像もプリロード
     const bgImg = new Image();
     bgImg.src = 'images/background.jpg';
- 
+
     // 新しく追加する左右の画像をプリロード
     const leftSideImg = new Image();
     leftSideImg.src = 'images/left_side_image.png'; // 左の画像のパス
@@ -274,17 +275,17 @@ function hideAllResults() {
     }
     if (selectedName) selectedName.classList.add('hidden');
     if (resultActionsDiv) resultActionsDiv.classList.add('hidden'); // resultActionsDivを非表示
-    // remainingCountDisplayは常にHTMLにあるため、nullチェックは不要だが、表示/非表示の制御は引き続き行う
+    // サイド画像はスピニング中も表示するため、これらの行はコメントアウトまたは削除
+    // if (leftImage) leftImage.classList.add('hidden');
+    // if (rightImage) rightImage.classList.add('hidden');
+    // remainingCountDisplayはHTMLに常に存在するため、nullチェックは不要だが、表示/非表示の制御は引き続き行う
     if (remainingCountDisplay) remainingCountDisplay.classList.add('hidden'); // 非表示にする
-    console.log("All result elements hidden.");
+    console.log("All result elements hidden. Side images will remain visible.");
 }
 
 // スピニングアニメーションの実行
-let animationInterval; // ここで定義することで、setIntervalのIDを保持できるようにします。
-let totalSpinTime = 2000; // スピニングの合計時間（ミリ秒）
-
 function spinAnimation() {
-    // 全ての要素を一度リセット
+    // 全ての要素を一度リセット (selectedImageとselectedNameを隠す)
     hideAllResults();
 
     // スピニング開始時にサイド画像を表示
@@ -293,7 +294,7 @@ function spinAnimation() {
 
     // selectedImageを非表示状態からアニメーション準備
     if (selectedImage) {
-        selectedImage.classList.remove('hidden');
+        selectedImage.classList.remove('hidden'); // hiddenクラスを削除して表示状態にする
         selectedImage.style.transition = 'none'; // アニメーションを一時的に無効
         selectedImage.style.transform = 'scale(1)'; // 表示中の画像を瞬時に正しいサイズにする
         selectedImage.style.opacity = '1';
@@ -312,8 +313,7 @@ function spinAnimation() {
         displayFinalResult(); // 最終結果を表示する関数を呼び出す
     }, totalSpinTime); // totalSpinTime は2000msに設定済み
 }
-        }
-    }, 100); // 100ミリ秒ごとに画像を切り替え
+
 
 // 抽選結果関連の要素を表示する関数
 function showResultElements() {
@@ -323,6 +323,9 @@ function showResultElements() {
     if (selectedName) selectedName.classList.remove('hidden');
     if (resultActionsDiv) resultActionsDiv.classList.remove('hidden'); // resultActionsDivを表示
     if (resultActionsDiv) resultActionsDiv.style.opacity = '1'; // 透明度を1に設定
+    // ここでサイド画像を再度表示する必要はない、なぜならスピニング開始時に既に表示しているため
+    // if (leftImage) leftImage.classList.remove('hidden');
+    // if (rightImage) rightImage.classList.remove('hidden');
     console.log("Result elements shown.");
 }
 
@@ -334,6 +337,16 @@ function spinImages() {
     if (selectedImage) {
         selectedImage.src = `images/${participant.image}`;
     }
+    // スピニング中も左右の画像を切り替える場合はここにロジックを追加
+    // 例:
+    // if (leftImage) {
+    //     const randomSideIndex = Math.floor(Math.random() * allParticipants.length);
+    //     leftImage.src = `images/${allParticipants[randomSideIndex].image}`;
+    // }
+    // if (rightImage) {
+    //     const randomSideIndex = Math.floor(Math.random() * allParticipants.length);
+    //     rightImage.src = `images/${allParticipants[randomSideIndex].image}`;
+    // }
 }
 
 // 抽選開始ボタンのクリックハンドラ
@@ -361,22 +374,21 @@ function handleStartButtonClick() {
     startButton.classList.remove('rerun-button');
 
     // display-areaがまだ存在しない場合に作成
-    // 2回目以降の抽選では、displayAreaが存在するため、このブロックはスキップされ、
-    // hideAllResults() が実行されて既存の要素がリセットされる。
     if (!displayArea) {
         createDisplayArea();
         console.log("Display area was not present, created now.");
     } else {
-        hideAllResults(); // 既存の表示エリアの内容をリセット
-        if (leftImage) leftImage.classList.remove('hidden'); // 明示的に表示を維持
-        if (rightImage) rightImage.classList.remove('hidden'); // 明示的に表示を維持
-        console.log("Existing display area reset.");
+        // displayAreaが既に存在する場合は、要素をリセットしつつサイド画像は表示を継続させる
+        hideAllResults(); // selectedImageなどは非表示になるが、サイド画像は非表示にならない
+        // ここでleftImageとrightImageにhiddenクラスがついていたら削除する（念のため）
+        if (leftImage) leftImage.classList.remove('hidden');
+        if (rightImage) rightImage.classList.remove('hidden');
+        console.log("Existing display area reset, side images kept visible.");
     }
 
     displayArea.classList.remove('hidden');
 
     // スピニング開始時には、残り回数表示を一旦非表示にする (結果表示時に再表示)
-    // remainingCountDisplayはHTMLに常に存在するため、hiddenクラスで非表示
     if (remainingCountDisplay) {
         remainingCountDisplay.classList.add('hidden');
     }
@@ -386,37 +398,8 @@ function handleStartButtonClick() {
     console.log("Spinning animation initiated.");
 
     // NOTE: spinAnimation関数がsetTimeoutでdisplayFinalResultを呼び出すため、
-    // このhandleStartButtonClick関数からは直接displayFinalResultを呼び出しません。
-    // また、この場所に以前あったsetTimeoutやsetIntervalのロジックは
-    // spinAnimation関数に移ったため、削除してください。
-}
-
-// スピニング開始時の画像表示準備
-    if (selectedImage) { // selectedImageがnullでないことを確認
-        selectedImage.classList.remove('hidden'); // 必ずhiddenクラスを削除して表示状態にする
-        selectedImage.style.transition = 'none';
-        selectedImage.style.transform = 'scale(1)';
-        selectedImage.style.opacity = '1';
-        // 最初のスピンでは、誰か一人の画像が表示されるように
-        selectedImage.src = `images/${allParticipants[0].image}`;
-        selectedImage.offsetHeight; // 強制リフロー
-    }
-
-    displayArea.classList.add('spinning');
-    console.log("Spinning class added to displayArea.");
-
-    spinInterval = setInterval(spinImages, imageChangeInterval);
-    console.log(`Spin interval started: ${spinInterval}`);
-
-    const isFirstSpin = (lotteryCount === 0);
-    const actualSpinDuration = isFirstSpin ? initialSpinDuration : spinningDuration;
-    console.log(`Spin duration: ${actualSpinDuration}ms`);
-
-    setTimeout(() => {
-        console.log("Spinning duration ended. Clearing interval.");
-        clearInterval(spinInterval);
-        displayFinalResult();
-    }, actualSpinDuration);
+    // このhandleStartButtonClick関数からは直接setTimeoutやsetIntervalのロジックを記述しません。
+    // そのため、この場所に以前あったsetTimeoutやsetIntervalのロジックは削除されています。
 }
 
 // 最終結果を表示する関数
@@ -425,7 +408,7 @@ function displayFinalResult() {
 
     if (currentParticipants.length === 0) {
         alert("全員抽選済みです！これ以上抽選できません。");
-        startButton.textContent = "全員抽選終了";
+        startButton.textContent = "全員抽選終了"; // 全員抽選済みのメッセージ
         startButton.classList.remove('hidden'); // ボタンは表示する
         startButton.style.pointerEvents = 'none'; // クリック不可にする
         startButton.classList.remove('rerun-button'); // スタイルも戻す
@@ -441,27 +424,26 @@ function displayFinalResult() {
         lotteryCount++;
         console.log(`Actual lottery count: ${lotteryCount}`);
 
-        displayArea.classList.remove('spinning');
-        console.log("Spinning class removed from displayArea.");
+        // displayArea.classList.remove('spinning'); // ここは不要、spinAnimation()が担当
 
-        selectedImage.style.transition = 'none';
+        selectedImage.style.transition = 'none'; // アニメーションを一時的に無効
         selectedImage.style.transform = 'scale(0)';
         selectedImage.style.opacity = '0';
         selectedImage.src = `images/${selected.image}`;
         selectedName.src = `images/${selected.nameImage}`;
         console.log(`Final result: ${selected.name}, image: ${selected.image}`);
 
-        selectedImage.offsetHeight;
+        selectedImage.offsetHeight; // 強制リフロー
 
         setTimeout(() => {
             selectedImage.style.transition = 'transform 1.0s ease-out, opacity 1.0s ease-in';
             selectedImage.style.transform = 'scale(1)';
             selectedImage.style.opacity = '1';
             console.log("Final image animation started.");
-        }, 50);
+        }, 50); // 短い遅延を置いてアニメーション開始
 
         setTimeout(() => {
-            showResultElements();
+            showResultElements(); // おめでとうメッセージや名前画像などを表示
 
             // 残りの表示回数を計算し、31回目以降は非表示にするロジック
             const displayRemainingCount = MAX_DISPLAY_COUNT - lotteryCount;
@@ -495,7 +477,7 @@ function displayFinalResult() {
                 console.log("Button text set to 'もう一度抽選' and rerun-button class added.");
             }
 
-        }, 1200);
+        }, 1200); // 最終画像の表示アニメーションが完了した後にボタンなどを表示
     }
 }
 
