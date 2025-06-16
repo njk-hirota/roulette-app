@@ -359,7 +359,10 @@ function handleStartButtonClick() {
         introImage.classList.add('hidden');
         console.log("Intro image hidden.");
     }
-    // startButton.classList.add('hidden'); // ボタンを非表示にする行をコメントアウト
+
+    startButton.classList.add('hidden'); // スピニング中はボタンを非表示に
+    startButton.style.pointerEvents = 'none'; // クリックできないようにする
+    
     startButton.classList.remove('rerun-button'); // 念のためrerun-buttonクラスを削除しておく
 
     // display-areaがまだ存在しない場合に作成
@@ -446,23 +449,12 @@ function displayFinalResult() {
                 }
             }
 
-
-            // ボタンの状態は、全員抽選済みになった場合のみ変更
-            if (currentParticipants.length === 0) {
-                startButton.textContent = "全員抽選終了"; // 全員抽選済みのメッセージ
-                startButton.classList.remove('hidden'); // ボタンは表示する
-                startButton.style.pointerEvents = 'none'; // クリック不可にする
-                startButton.classList.remove('rerun-button'); // スタイルも戻す
-                alert("全員抽選済みです！"); // アラートで通知
-                console.log("All participants drawn. Button disabled.");
-            } else {
                 startButton.textContent = "もう一度抽選"; // 次の抽選へ促すテキスト
                 startButton.classList.remove('hidden'); // ボタンを表示
                 startButton.style.pointerEvents = 'auto'; // クリック可能に
                 startButton.classList.add('rerun-button'); // "もう一度抽選"ボタンのスタイルを適用
                 console.log("Button text set to 'もう一度抽選' and rerun-button class added.");
-            }
-
+            
         }, 1200);
     }
 }
