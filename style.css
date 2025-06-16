@@ -36,21 +36,22 @@ body {
 
 /* 導入画像のコンテナスタイル */
 .top-image-container {
-    height: auto; /* 高さを自動調整 */
-    max-height: none; /* 既存の max-height 制限を解除 */
-    width: 100%; /* 親コンテナの幅いっぱいに広げる */
-    display: flex; /* 画像を中央に配置するため */
+    display: flex;
     justify-content: center;
     align-items: center;
-    flex-grow: 1; /* ★追加: .container内で残りの垂直スペースを占める★ */
+    width: 100%;
+    max-height: 80px; /* 導入画像の高さを少し減らす */
+    margin-bottom: 0;
+    overflow: hidden;
 }
 
 /* 導入画像のスタイル */
 #introImage {
-    width: 100%; /* 親要素の幅いっぱいに広げる */
-    height: auto; /* アスペクト比を維持 */
-    max-height: 100%; /* 親要素の高さの100%に制限 (top-image-containerの高さまで) */
-    object-fit: contain; /* 画像全体が表示されるように調整 */
+    max-width: 100%;
+    height: auto;
+    object-fit: contain;
+    max-height: 80px; /* 導入画像の高さを少し減らす */
+    display: block;
 }
 
 /* 抽選結果表示エリアのスタイル */
@@ -236,7 +237,7 @@ body {
 
     .container {
         max-width: 95vw; /* 横画面での最大幅を調整 (95vwの75%) */
-        height: aute; /* iPhone SE横画面に合わせて高さを固定 */
+        height: 280px; /* iPhone SE横画面に合わせて高さを固定 */
         max-height: 95vh; /* 横画面での最大高さを調整 */
         padding: 5px 10px; /* パディングを減らす */
         gap: 2px; /* ギャップをさらに減らす */
@@ -244,13 +245,11 @@ body {
     }
 
     .top-image-container {
-        max-height: none; /* 横画面での導入画像の高さを調整 */
+        max-height: 70px; /* 横画面での導入画像の高さを調整 */
     }
 
     #introImage {
-        width: 100%;
-        height: auto;
-        max-height: 100%; 
+        max-height: 70px; /* 横画面での導入画像の高さを調整 */
     }
 
     .display-area {
