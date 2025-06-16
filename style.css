@@ -89,7 +89,7 @@ body {
 .image-row {
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: flex-end;
     gap: 5px; /* 画像間の隙間を調整*/
     width: 100%;
 }
@@ -264,6 +264,7 @@ body {
 
     .image-row {
         gap: 3px; /* 横画面での画像間の隙間を調整*/
+        align-itmes: flex-end;
     }
     
     #selectedImage {
