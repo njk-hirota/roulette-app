@@ -96,10 +96,11 @@ body {
 
 /* 選ばれた画像のスタイル */
 #selectedImage {
-    max-width: 100%;
-    height: auto;
-    display: block;
+    max-width: none;/* 元のmax-width: 100% が邪魔をする場合があるので無効化 */
+    width: 200px;/* ★追加または変更★: 適切な固定幅を設定 */
     max-height: 195px; /* 選ばれた画像の高さを調整 */
+    height: 200px;/* ★追加または変更★: 適切な固定幅を設定 */
+    display: block;
     object-fit: contain;
     transition: transform 1.0s ease-out, opacity 1.0s ease-in;
     transform: scale(0);
@@ -110,7 +111,7 @@ body {
 /* サイド画像のスタイル*/
 .side-image {
     max-width: 60%; /* メイン画像のサイズに合わせて調整 */
-    height: auto;
+    height: 180px;
     object-fit: contain;
     opacity: 1.0; /* メイン画像より少し暗くするなどの効果 */
     transition: opacity 0.5s ease-in;
@@ -269,10 +270,12 @@ body {
     
     #selectedImage {
         max-height: 165px; /* 横画面での選ばれた画像の高さを調整 */
+        width:150px;
     }
 
     .side-image {
         max-width: 25%; /* 横画面でのサイド画像の幅を調整*/
+        height:130px;
     }
 
     #selectedName {
