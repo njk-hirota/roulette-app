@@ -129,13 +129,12 @@ const allParticipants = [
     { name: "早坂 康佑", image: "126.jpg", "nameImage": "画像126.jpg" },
     { name: "隈川 雛奈子", image: "127.jpg", "nameImage": "画像127.jpg" },
 ];
+
 let currentParticipants = [...allParticipants]; // シャッフル用
-// const spinningDuration = 2000; // スピニングの時間（ミリ秒） - spinAnimation内のtotalSpinTimeで定義
-// const initialSpinDuration = 2000; // 初回抽選のスピニング時間 - spinAnimation内のtotalSpinTimeで定義
+// スピニング時間とアニメーション関連の変数
+let animationInterval; // setIntervalのIDを保持
+let totalSpinTime = 2000; // スピニングの合計時間（ミリ秒）
 const imageChangeInterval = 50; // 画像が変わる間隔（ミリ秒）
-let spinInterval; // setIntervalのIDを保持
-let animationInterval; // スピニングアニメーションのInterval ID
-let totalSpinTime = 2000; // スピニングの合計時間（ミリ秒）をグローバルで定義
 
 let lotteryCount = 0; // 抽選回数をカウントする変数
 const MAX_DISPLAY_COUNT = 31; // 表示する抽選回数の上限（この回数までカウントダウン表示）
@@ -164,7 +163,7 @@ function preloadAllImages() {
         const img = new Image();
         img.src = `images/${p.image}`;
         const nameImg = new Image();
-        nameImg.src = `images/${p.nameImage`;
+        nameImg.src = `images/${p.nameImage}`;
     });
     // ボタンの背景画像
     const startNormal = new Image();
@@ -337,16 +336,6 @@ function spinImages() {
     if (selectedImage) {
         selectedImage.src = `images/${participant.image}`;
     }
-    // スピニング中も左右の画像を切り替える場合はここにロジックを追加
-    // 例:
-    // if (leftImage) {
-    //     const randomSideIndex = Math.floor(Math.random() * allParticipants.length);
-    //     leftImage.src = `images/${allParticipants[randomSideIndex].image}`;
-    // }
-    // if (rightImage) {
-    //     const randomSideIndex = Math.floor(Math.random() * allParticipants.length);
-    //     rightImage.src = `images/${allParticipants[randomSideIndex].image}`;
-    // }
 }
 
 // 抽選開始ボタンのクリックハンドラ
@@ -370,8 +359,8 @@ function handleStartButtonClick() {
         introImage.classList.add('hidden');
         console.log("Intro image hidden.");
     }
-    //startButton.classList.add('hidden');//
-    startButton.classList.remove('rerun-button');
+    // startButton.classList.add('hidden'); // ボタンを非表示にする行をコメントアウト
+    startButton.classList.remove('rerun-button'); // 念のためrerun-buttonクラスを削除しておく
 
     // display-areaがまだ存在しない場合に作成
     if (!displayArea) {
@@ -396,10 +385,6 @@ function handleStartButtonClick() {
     // ここで新しいspinAnimation関数を呼び出す
     spinAnimation();
     console.log("Spinning animation initiated.");
-
-    // NOTE: spinAnimation関数がsetTimeoutでdisplayFinalResultを呼び出すため、
-    // このhandleStartButtonClick関数からは直接setTimeoutやsetIntervalのロジックを記述しません。
-    // そのため、この場所に以前あったsetTimeoutやsetIntervalのロジックは削除されています。
 }
 
 // 最終結果を表示する関数
@@ -424,8 +409,7 @@ function displayFinalResult() {
         lotteryCount++;
         console.log(`Actual lottery count: ${lotteryCount}`);
 
-        // displayArea.classList.remove('spinning'); // ここは不要、spinAnimation()が担当
-
+        // selectedImageの最終結果表示アニメーション準備
         selectedImage.style.transition = 'none'; // アニメーションを一時的に無効
         selectedImage.style.transform = 'scale(0)';
         selectedImage.style.opacity = '0';
@@ -433,15 +417,17 @@ function displayFinalResult() {
         selectedName.src = `images/${selected.nameImage}`;
         console.log(`Final result: ${selected.name}, image: ${selected.image}`);
 
-        selectedImage.offsetHeight; // 強制リフロー
+        selectedImage.offsetHeight; // 強制リフロー (ブラウザにスタイル変更をすぐに適用させる)
 
+        // 短い遅延を置いてアニメーション開始
         setTimeout(() => {
             selectedImage.style.transition = 'transform 1.0s ease-out, opacity 1.0s ease-in';
             selectedImage.style.transform = 'scale(1)';
             selectedImage.style.opacity = '1';
             console.log("Final image animation started.");
-        }, 50); // 短い遅延を置いてアニメーション開始
+        }, 50);
 
+        // 最終画像の表示アニメーションが完了した後にボタンなどを表示
         setTimeout(() => {
             showResultElements(); // おめでとうメッセージや名前画像などを表示
 
@@ -477,7 +463,7 @@ function displayFinalResult() {
                 console.log("Button text set to 'もう一度抽選' and rerun-button class added.");
             }
 
-        }, 1200); // 最終画像の表示アニメーションが完了した後にボタンなどを表示
+        }, 1200);
     }
 }
 
