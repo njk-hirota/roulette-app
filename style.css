@@ -253,7 +253,7 @@ body {
 
     .display-area {
         min-height: 100px; /* 横画面での最小高さを調整 */
-        max-width: 250px; /* 横画面での表示エリアの最大幅を調整 */
+        max-width: 450px; /* 横画面での表示エリアの最大幅を調整 */
         gap: 2px;
     }
 
