@@ -12,12 +12,12 @@ body {
     min-height: 100vh; /* 画面全体の高さを確保 */
     margin: 0;
     padding: 0; /* padding: 0; がなければ追加 */
-    background: linear-gradient(#ff7f50, #dcdcdc); /* 背景色を設定 */
+    background-color: white; /* 背景色を設定 */
     overflow: hidden; /* スクロールバーを非表示にする */
 }
 
 .container {
-    background: linear-gradient(#ff7f50, #dcdcdc);;
+    background-color: white;
     padding: 10px 20px 10px;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
