@@ -298,3 +298,72 @@ body {
         margin-top: 2px;
     }
 }
+
+/* PC画面用のメディアクエリ */
+@media screen and (min-width: 1024px) { /* 例: 1024px以上の画面に適用 */
+    body {
+        align-items: center; /* 中央揃えに戻す */
+    }
+
+    .container {
+        max-width: 600px; /* PC画面でのコンテナの最大幅を調整 */
+        width: 80%; /* 幅を少し広げる */
+        height: 400px; /* PC画面に合わせて高さを調整 */
+        padding: 20px 30px; /* パディングを増やす */
+        gap: 10px; /* ギャップを増やす */
+    }
+
+    .top-image-container {
+        max-height: 100px; /* 導入画像の高さを調整 */
+    }
+
+    #introImage {
+        max-height: 100px; /* 導入画像の高さを調整 */
+    }
+
+    .display-area {
+        min-height: 180px; /* 表示エリアの最小高さを調整 */
+        max-width: 400px; /* 表示エリアの最大幅を調整 */
+        gap: 10px;
+    }
+
+    #congratulationsMessage {
+        font-size: 1.3em; /* フォントサイズを大きくする */
+        margin-bottom: 10px;
+    }
+
+    .image-row {
+        gap: 10px; /* 画像間の隙間を調整 */
+    }
+    
+    #selectedImage {
+        width: 250px; /* 選ばれた画像の幅を調整 */
+        height: 250px; /* 選ばれた画像の高さを調整 */
+        max-height: 250px; /* 選ばれた画像の高さを調整 */
+    }
+
+    .side-image {
+        max-width: 40%; /* サイド画像の幅を調整 */
+        height: 200px;
+    }
+
+    #selectedName {
+        max-height: 45px; /* 選ばれた名前画像の高さを調整 */
+    }
+
+    .start-button-container {
+        max-width: 250px; /* ボタンコンテナの最大幅を調整 */
+        height: 80px; /* ボタンコンテナの高さを調整 */
+    }
+
+    .action-button {
+        max-width: 150px; /* ボタンの最大幅を調整 */
+        min-height: 60px; /* ボタンの最小高さを調整 */
+        font-size: 1.5em; /* ボタンのフォントサイズを大きくする */
+    }
+
+    #remainingCountDisplay {
+        font-size: 0.5em; /* フォントサイズを調整 */
+        margin-top: 10px;
+    }
+}
