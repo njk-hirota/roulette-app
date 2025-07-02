@@ -314,11 +314,11 @@ body {
     }
 
     .top-image-container {
-        max-height: 600px; /* 導入画像の高さを調整 */
+        max-height: 500px; /* 導入画像の高さを調整 */
     }
 
     #introImage {
-        max-height: 600px; /* 導入画像の高さを調整 */
+        max-height: 500px; /* 導入画像の高さを調整 */
     }
 
     .display-area {
@@ -328,7 +328,7 @@ body {
     }
 
     #congratulationsMessage {
-        font-size: 1.3em; /* フォントサイズを大きくする */
+        font-size: 2.6em; /* フォントサイズを大きくする */
         margin-bottom: 10px;
     }
 
@@ -337,23 +337,23 @@ body {
     }
     
     #selectedImage {
-        width: 500px; /* 選ばれた画像の幅を調整 */
-        height: 600px; /* 選ばれた画像の高さを調整 */
-        max-height: 600px; /* 選ばれた画像の高さを調整 */
+        width: 450px; /* 選ばれた画像の幅を調整 */
+        height: 550px; /* 選ばれた画像の高さを調整 */
+        max-height: 550px; /* 選ばれた画像の高さを調整 */
     }
 
     .side-image {
-        max-width: 40%; /* サイド画像の幅を調整 */
-        height: 200px;
+        max-width: 60%; /* サイド画像の幅を調整 */
+        height: 300px;
     }
 
     #selectedName {
-        max-height: 45px; /* 選ばれた名前画像の高さを調整 */
+        max-height: 30px; /* 選ばれた名前画像の高さを調整 */
     }
 
     .start-button-container {
-        max-width: 250px; /* ボタンコンテナの最大幅を調整 */
-        height: 80px; /* ボタンコンテナの高さを調整 */
+        max-width: 400px; /* ボタンコンテナの最大幅を調整 */
+        height: 200px; /* ボタンコンテナの高さを調整 */
     }
 
     .action-button {
