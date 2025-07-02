@@ -357,8 +357,8 @@ body {
     }
 
     .action-button {
-        max-width: 150px; /* ボタンの最大幅を調整 */
-        min-height: 60px; /* ボタンの最小高さを調整 */
+        max-width: 200px; /* ボタンの最大幅を調整 */
+        min-height: 150px; /* ボタンの最小高さを調整 */
         font-size: 1.5em; /* ボタンのフォントサイズを大きくする */
     }
 
