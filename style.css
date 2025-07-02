@@ -349,7 +349,7 @@ body {
     }
 
     #selectedName {
-        max-height: 70px; /* 選ばれた名前画像の高さを調整 */
+        max-height: 60px; /* 選ばれた名前画像の高さを調整 */
     }
 
     .start-button-container {
