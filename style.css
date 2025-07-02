@@ -5,7 +5,7 @@
 /* ------------------------------------------------ */
 
 body {
-    font-family: 'Arial', sans-serif;
+    font-family:"Yu Gothic", "游ゴシック", YuGothic, "游ゴシック体";
     display: flex;
     justify-content: center;
     align-items: flex-start; /* ここを 'flex-start' から 'center' に戻す */
@@ -221,6 +221,7 @@ body {
     background-color: white;
     color: black;
     font-size: 0.4em; /* フォントサイズをさらに小さく */
+    font-family:"Yu Gothic", "游ゴシック", YuGothic, "游ゴシック体";
     text-align: center;
     display: flex;
     justify-content: center;
@@ -261,6 +262,7 @@ body {
 
     #congratulationsMessage {
         font-size: 1em; /* 横画面でのフォントサイズを調整 */
+        font-family:"Yu Gothic", "游ゴシック", YuGothic, "游ゴシック体";
         margin-bottom: 2px;
     }
 
@@ -330,6 +332,7 @@ body {
 
     #congratulationsMessage {
         font-size: 2.6em; /* フォントサイズを大きくする */
+        font-family:"Yu Gothic", "游ゴシック", YuGothic, "游ゴシック体";
         margin-bottom: 10px;
     }
 
