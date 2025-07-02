@@ -323,7 +323,7 @@ body {
     }
 
     .display-area {
-        min-height: 600px; /* 表示エリアの最小高さを調整 */
+        min-height: 650px; /* 表示エリアの最小高さを調整 */
         max-width: 1520px; /* 表示エリアの最大幅を調整 */
         gap: 10px;
     }
