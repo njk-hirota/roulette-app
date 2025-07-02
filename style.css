@@ -338,8 +338,8 @@ body {
     
     #selectedImage {
         width: 450px; /* 選ばれた画像の幅を調整 */
-        height: 500px; /* 選ばれた画像の高さを調整 */
-        max-height: 500px; /* 選ばれた画像の高さを調整 */
+        height: 470px; /* 選ばれた画像の高さを調整 */
+        max-height: 470px; /* 選ばれた画像の高さを調整 */
     }
 
     .side-image {
@@ -348,7 +348,7 @@ body {
     }
 
     #selectedName {
-        max-height: 20px; /* 選ばれた名前画像の高さを調整 */
+        max-height: 50px; /* 選ばれた名前画像の高さを調整 */
     }
 
     .start-button-container {
@@ -363,7 +363,7 @@ body {
     }
 
     #remainingCountDisplay {
-        font-size: 0.5em; /* フォントサイズを調整 */
+        font-size: 1.0em; /* フォントサイズを調整 */
         margin-top: 10px;
     }
 }
