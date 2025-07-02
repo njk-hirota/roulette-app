@@ -333,7 +333,7 @@ body {
     }
 
     .image-row {
-        gap: 10px; /* 画像間の隙間を調整 */
+        gap: 30px; /* 画像間の隙間を調整 */
     }
     
     #selectedImage {
