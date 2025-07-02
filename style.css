@@ -318,7 +318,7 @@ body {
     }
 
     #introImage {
-        max-height: 100px; /* 導入画像の高さを調整 */
+        max-height: 600px; /* 導入画像の高さを調整 */
     }
 
     .display-area {
@@ -337,9 +337,9 @@ body {
     }
     
     #selectedImage {
-        width: 250px; /* 選ばれた画像の幅を調整 */
-        height: 200px; /* 選ばれた画像の高さを調整 */
-        max-height: 200px; /* 選ばれた画像の高さを調整 */
+        width: 500px; /* 選ばれた画像の幅を調整 */
+        height: 600px; /* 選ばれた画像の高さを調整 */
+        max-height: 600px; /* 選ばれた画像の高さを調整 */
     }
 
     .side-image {
