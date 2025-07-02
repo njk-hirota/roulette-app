@@ -306,9 +306,9 @@ body {
     }
 
     .container {
-        max-width: 800px; /* PC画面でのコンテナの最大幅を調整 */
+        max-width: 1800px; /* PC画面でのコンテナの最大幅を調整 */
         width: 80%; /* 幅を少し広げる */
-        height: 500px; /* PC画面に合わせて高さを調整 */
+        height: 900px; /* PC画面に合わせて高さを調整 */
         padding: 20px 30px; /* パディングを増やす */
         gap: 10px; /* ギャップを増やす */
     }
